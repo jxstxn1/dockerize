@@ -8,7 +8,7 @@ import 'package:shelf_router/shelf_router.dart';
 import 'package:shelf_static/shelf_static.dart';
 
 // For Google Cloud Run, set _hostname to '0.0.0.0'.
-const String _hostname = 'localhost';
+const String _hostname = '0.0.0.0';
 
 final appDirectory = Platform.environment['APP_DIRECTORY'] ?? 'www';
 
@@ -34,7 +34,6 @@ void main(List<String> args) async {
     port!,
     poweredByHeader: null,
   );
-  print('Serving at http://${server.address.host}:${server.port}');
 }
 ''';
 
@@ -44,11 +43,11 @@ FROM dart:stable AS build
 # Copy shared submodule package
 WORKDIR /app
 COPY pubspec.* ./
+COPY /bin/ ./bin/
+
 RUN dart pub get
 # Ensure packages are still up-to-date if anything has changed
 RUN dart pub get --offline
-COPY server.dart ./bin/server.dart
-RUN touch server
 RUN dart compile exe bin/server.dart -o bin/server
 # Build minimal serving image from AOT-compiled `/server` and required system
 # libraries and configuration files stored in `/runtime/` from the build stage.
@@ -56,13 +55,14 @@ FROM scratch
 # Copy runtime from build image
 COPY --from=build /runtime/ /
 COPY --from=build /app/bin/server /bin/
-COPY /www ./bin/www
-ENV APP_DIRECTORY=bin/www
+COPY /www ./www
+ENV APP_DIRECTORY=www
 # Start server.
 EXPOSE 8080
 CMD ["bin/server"]
 ''';
 
+// language=Yaml
 const pubspecFile = '''
 name: dockerize_server
 description: A new Dockerized Flutter App
@@ -78,8 +78,10 @@ environment:
 dependencies:
   shelf_static: ^1.1.0
   shelf_router: ^1.1.3
+
 ''';
 
+// language=Dart
 const dockerizeFile = r'''
 import 'package:dcli/dcli.dart' as dcli;
 import 'package:sidekick_core/sidekick_core.dart';
