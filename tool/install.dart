@@ -17,9 +17,7 @@ Future<void> main() async {
 
   final commandFile =
       package.root.file('lib/src/dockerize_sidekick_plugin.dart');
-  final dockerize =
-      PluginContext.localPlugin!.libDir.file('src/dockerize.dart');
-  commandFile.writeAsStringSync(dockerize.readAsStringSync());
+  commandFile.writeAsStringSync(dockerizeFile);
 
   final folder = package.root.directory('../server');
   if (!folder.existsSync()) {

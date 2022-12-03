@@ -79,3 +79,40 @@ dependencies:
   shelf_static: ^1.1.0
   shelf_router: ^1.1.3
 ''';
+
+const dockerizeFile = r'''
+import 'package:dcli/dcli.dart' as dcli;
+import 'package:sidekick_core/sidekick_core.dart';
+
+class Dockerize extends Command {
+  @override
+  String get description => 'Dockerize your Flutter project';
+
+  @override
+  String get name => 'dockerize';
+
+  @override
+  Future<void> run() async {
+    mainProject!.root.directory('packages/server').createSync();
+    mainProject!.root.directory('packages/server/www').createSync();
+    flutter(
+      ['build', 'web'],
+      workingDirectory: mainProject!.root,
+    );
+
+    copyTree(
+      mainProject!.root.directory('build/web').path,
+      mainProject!.root.directory('packages/server/www').path,
+    );
+    await createDockerImage();
+  }
+
+  Future<void> createDockerImage() async {
+    dcli.run(
+      'docker build -t ${mainProject!.name}:dev .',
+      workingDirectory: mainProject!.root.directory('packages/server').path,
+    );
+  }
+}
+
+''';
