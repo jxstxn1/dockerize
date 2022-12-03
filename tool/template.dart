@@ -19,7 +19,7 @@ void main(List<String> args) async {
   var port = int.tryParse(portStr);
 
   if (!Directory(appDirectory).existsSync()) {
-    throw "Can't serve APP_DIRECTORY \$appDirectory, it doesn't exits";
+    throw "Can't serve APP_DIRECTORY $appDirectory, it doesn't exits";
   }
   var serveApp = createStaticHandler(appDirectory,
       defaultDocument: 'index.html', useHeaderBytesForContentType: true);
@@ -34,7 +34,7 @@ void main(List<String> args) async {
     port!,
     poweredByHeader: null,
   );
-  print('Serving at http://\${server.address.host}:\${server.port}');
+  print('Serving at http://${server.address.host}:${server.port}');
 }
 ''';
 
