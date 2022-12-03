@@ -7,11 +7,8 @@ environment:
 
 dependencies:
   dcli: ^1.36.0
-  mason: ^0.1.0-dev.39
   sidekick_core: '>=0.7.1 <1.0.0'
 
 dev_dependencies:
   lint: ^1.5.0
-  mason_cli: ^0.1.0-dev.40
-  mason_logger: ^0.2.3
   sidekick_plugin_installer: ^0.1.3
