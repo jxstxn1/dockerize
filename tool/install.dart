@@ -15,38 +15,14 @@ Future<void> main() async {
 
   final commandFile =
       package.root.file('lib/src/dockerize_sidekick_plugin.dart');
-  commandFile.writeAsStringSync("""
-import 'package:sidekick_core/sidekick_core.dart';
-import 'package:dockerize_sidekick_plugin/dockerize_sidekick_plugin.dart';
-
-class DockerizeSidekickPluginCommand extends Command {
-  @override
-  final String description = 'Sample command';
-
-  @override
-  final String name = 'dockerize-sidekick-plugin';
-
-  DockerizeSidekickPluginCommand() {
-    // add parameters here with argParser.addOption
-  }
-
-  @override
-  Future<void> run() async {
-    // please implement me
-    final hello = getGreetings().shuffled().first;
-    print('\$hello from PHNTM!');
-    
-    final bye = getFarewells().shuffled().first;
-    print('\$bye from PHNTM!');
-  }
-}
-
-""");
+  final dockerize =
+      PluginContext.localPlugin!.libDir.file('src/dockerize.dart');
+  commandFile.writeAsStringSync(dockerize.readAsStringSync());
 
   registerPlugin(
     sidekickCli: package,
     import:
         "import 'package:${package.name}/src/dockerize_sidekick_plugin.dart';",
-    command: 'DockerizeSidekickPluginCommand()',
+    command: 'Dockerize()',
   );
 }
