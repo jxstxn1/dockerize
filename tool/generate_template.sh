@@ -3,8 +3,6 @@ set -e
 
 echo "Generating Sidekick Template Bundle"
 rm -rf lib/src/templates/
-true | dart run tool/local_mason.dart bundle cli_template/bricks/package -t dart -o lib/src/templates/
-true | dart run tool/local_mason.dart bundle cli_template/bricks/entrypoint -t dart -o lib/src/templates/
-mv lib/src/templates/package_bundle.dart lib/src/templates/package_bundle.g.dart
-mv lib/src/templates/entrypoint_bundle.dart lib/src/templates/entrypoint_bundle.g.dart
+true | dart run tool/local_mason.dart bundle template/dockerize_template -t dart -o lib/src/templates/
+mv lib/src/templates/dockerize_template_bundle.dart lib/src/templates/dockerize_template_bundle.g.dart
 dart format lib/src/templates/*.g.dart
