@@ -29,13 +29,8 @@ Run the dockerize command:
 ```bash
 office dockerize
 ```
-Build an docker image:
-```bash
-docker build -t app:dev . 
-```
-
 Start a container:
 ```bash
-docker run -it --rm -p 8000:8080 --name app app:dev
+docker run -it --rm -p 8000:8080 --name your_custom_sidekick_cli your_custom_sidekick_cli:dev
 ```
 This will run your app and makes it accessible on port 8000. The full URL is http://0.0.0.0:8000/#/
