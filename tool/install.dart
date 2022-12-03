@@ -2,6 +2,8 @@ import 'package:sidekick_core/sidekick_core.dart'
     hide cliName, repository, mainProject;
 import 'package:sidekick_plugin_installer/sidekick_plugin_installer.dart';
 
+import 'template.dart';
+
 Future<void> main() async {
   final SidekickPackage package = PluginContext.sidekickPackage;
 
@@ -18,6 +20,15 @@ Future<void> main() async {
   final dockerize =
       PluginContext.localPlugin!.libDir.file('src/dockerize.dart');
   commandFile.writeAsStringSync(dockerize.readAsStringSync());
+
+  final folder = package.root.directory('../server');
+  if (!folder.existsSync()) {
+    folder.createSync();
+  }
+  folder.file('server.dart').writeAsStringSync(serverFile);
+  folder.file('Dockerfile').writeAsStringSync(dockerFile);
+  folder.file('pubspec.yaml').writeAsStringSync(pubspecFile);
+  pubGet(DartPackage(folder, 'server'));
 
   registerPlugin(
     sidekickCli: package,
