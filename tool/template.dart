@@ -93,8 +93,8 @@ class Dockerize extends Command {
 
   @override
   Future<void> run() async {
-    mainProject!.root.directory('packages/server').createSync();
-    mainProject!.root.directory('packages/server/www').createSync();
+    repository.root.directory('packages/server').createSync();
+    repository.root.directory('packages/server/www').createSync();
     flutter(
       ['build', 'web'],
       workingDirectory: mainProject!.root,
@@ -102,7 +102,7 @@ class Dockerize extends Command {
 
     copyTree(
       mainProject!.root.directory('build/web').path,
-      mainProject!.root.directory('packages/server/www').path,
+      repository.root.directory('packages/server/www').path,
     );
     await createDockerImage();
   }
@@ -110,7 +110,7 @@ class Dockerize extends Command {
   Future<void> createDockerImage() async {
     dcli.run(
       'docker build -t ${mainProject!.name}:dev .',
-      workingDirectory: mainProject!.root.directory('packages/server').path,
+      workingDirectory: repository.root.directory('packages/server').path,
     );
   }
 }
