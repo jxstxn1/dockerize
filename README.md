@@ -22,6 +22,7 @@ the [pub tool](https://dart.dev/tools/pub/cmd/pub-global#activating-a-package).
 ## Run locally
 Install the locally cloned plugin:
 ```bash
+TODO: Change this after release
 your_custom_sidekick_cli sidekick plugins install --source path path-to-local-dockerize-plugin
 ```
 Run the dockerize command:
