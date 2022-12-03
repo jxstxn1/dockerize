@@ -31,6 +31,10 @@ office dockerize
 ```
 Start a container:
 ```bash
-docker run -it --rm -p 8000:8080 --name your_custom_sidekick_cli your_custom_sidekick_cli:dev
+docker run -d --rm -p 8000:8080 --name main_package_name main_package_name:dev
+```
+Stop the container
+```bash
+docker kill main_package_name 
 ```
 This will run your app and makes it accessible on port 8000. The full URL is http://0.0.0.0:8000/#/
