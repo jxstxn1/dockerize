@@ -1,0 +1,13 @@
+name: dockerize_template
+description: A new brick to dockerize your flutter application
+
+version: 0.1.0+1
+
+environment:
+  mason: ">=0.1.0-dev.39 <0.1.0"
+
+vars:
+  name:
+    type: string
+    description: Name of your project
+    default: flutter
