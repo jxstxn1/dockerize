@@ -1,3 +1,5 @@
+// language=Dart
+const String serverFile = r'''
 import 'dart:io';
 
 import 'package:shelf/shelf.dart' as shelf;
@@ -34,3 +36,46 @@ void main(List<String> args) async {
   );
   print('Serving at http://\${server.address.host}:\${server.port}');
 }
+''';
+
+// language=Dockerfile
+const String dockerFile = '''
+FROM dart:stable AS build
+# Copy shared submodule package
+WORKDIR /app
+COPY pubspec.* ./
+RUN dart pub get
+# Ensure packages are still up-to-date if anything has changed
+RUN dart pub get --offline
+COPY server.dart ./bin/server.dart
+RUN touch server
+RUN dart compile exe bin/server.dart -o bin/server
+# Build minimal serving image from AOT-compiled `/server` and required system
+# libraries and configuration files stored in `/runtime/` from the build stage.
+FROM scratch
+# Copy runtime from build image
+COPY --from=build /runtime/ /
+COPY --from=build /app/bin/server /bin/
+COPY /www ./bin/www
+ENV APP_DIRECTORY=bin/www
+# Start server.
+EXPOSE 8080
+CMD ["bin/server"]
+''';
+
+const pubspecFile = '''
+name: dockerize_server
+description: A new Dockerized Flutter App
+
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.15.0 <3.0.0"
+
+dependencies:
+  shelf_static: ^1.1.0
+  shelf_router: ^1.1.3
+''';
