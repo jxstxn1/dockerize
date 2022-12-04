@@ -87,6 +87,7 @@ import 'package:dcli/dcli.dart' as dcli;
 import 'package:sidekick_core/sidekick_core.dart';
 import 'package:$packageName/src/commands/dockerize/build_command.dart';
 import 'package:$packageName/src/commands/dockerize/run_command.dart';
+import 'package:$packageName/src/commands/dockerize/stop_command.dart';
 
 class DockerCommand extends Command {
   @override
@@ -98,9 +99,9 @@ class DockerCommand extends Command {
   DockerCommand() {
     addSubcommand(BuildCommand());
     addSubcommand(RunCommand());
+    addSubcommand(StopCommand());
   }
 }
-
 ''';
 
 // language=Dart
@@ -185,5 +186,30 @@ class RunCommand extends Command {
     print(green('App is running on http://localhost:8000'));
   }
 }
+''';
 
+// language=Dart
+const stopCommandContent = '''
+import 'package:dcli/dcli.dart' as dcli;
+import 'package:sidekick_core/sidekick_core.dart';
+
+class StopCommand extends Command {
+  @override
+  String get description => 'Stop the docker app';
+
+  @override
+  String get name => 'stop';
+
+  @override
+  Future<void> run() async {
+    if (which('docker').notfound) {
+      printerr(
+        red('Docker is not installed. Please install docker and try again.'),
+      );
+      return;
+    }
+    dcli.run('docker stop \${mainProject!.name}');
+    print(green('App is stopped'));
+  }
+}
 ''';
