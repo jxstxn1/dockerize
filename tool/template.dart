@@ -82,6 +82,7 @@ dependencies:
   shelf_static: ^1.1.0
   shelf_router: ^1.1.3
   shelf_helmet: ^1.0.0
+  shelf_enforces_ssl: ^1.1.0
 ''';
 
 // language=Dart
