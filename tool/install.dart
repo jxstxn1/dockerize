@@ -26,6 +26,9 @@ Future<void> main() async {
   final buildCommandFile = commandFolder.file('build_command.dart');
   buildCommandFile.writeAsStringSync(buildCommandContent);
 
+  final runCommandFile = commandFolder.file('run_command.dart');
+  runCommandFile.writeAsStringSync(runCommandContent(package.name));
+
   registerPlugin(
     sidekickCli: package,
     import:

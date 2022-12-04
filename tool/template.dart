@@ -86,6 +86,7 @@ String dockerCommandContent(String packageName) => '''
 import 'package:dcli/dcli.dart' as dcli;
 import 'package:sidekick_core/sidekick_core.dart';
 import 'package:$packageName/src/commands/dockerize/build_command.dart';
+import 'package:$packageName/src/commands/dockerize/run_command.dart';
 
 class DockerCommand extends Command {
   @override
@@ -96,8 +97,10 @@ class DockerCommand extends Command {
 
   DockerCommand() {
     addSubcommand(BuildCommand());
+    addSubcommand(RunCommand());
   }
 }
+
 ''';
 
 // language=Dart
@@ -114,6 +117,12 @@ class BuildCommand extends Command {
 
   @override
   Future<void> run() async {
+    if (which('docker').notfound) {
+      printerr(
+        red('Docker is not installed. Please install docker and try again.'),
+      );
+      return;
+    }
     repository.root.directory('packages/server').createSync();
     repository.root.directory('packages/server/www').createSync();
     flutter(
@@ -135,4 +144,46 @@ class BuildCommand extends Command {
     );
   }
 }
+''';
+
+// language=Dart
+String runCommandContent(String packageName) => '''
+import 'package:dcli/dcli.dart' as dcli;
+import 'package:sidekick_core/sidekick_core.dart';
+import 'package:packageName/src/commands/dockerize/build_command.dart';
+
+class RunCommand extends Command {
+  @override
+  String get description => 'Run the dockerized app';
+
+  @override
+  String get name => 'run';
+
+  RunCommand() {
+    argParser.addFlag(
+      'build',
+      abbr: 'b',
+      help: 'Call the docker build command before running',
+    );
+  }
+
+  @override
+  Future<void> run() async {
+    if (which('docker').notfound) {
+      printerr(
+        red('Docker is not installed. Please install docker and try again.'),
+      );
+      return;
+    }
+    final build = argResults!['build'] as bool?;
+    if (build != null) {
+      await BuildCommand().run();
+    }
+    dcli.run(
+      'docker run -d --rm -p 8000:8080 --name \${mainProject!.name} \${mainProject!.name}:dev',
+    );
+    print(green('App is running on http://localhost:8000'));
+  }
+}
+
 ''';
