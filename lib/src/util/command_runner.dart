@@ -6,16 +6,22 @@ void commandRunner(
   String command,
   List<String> args, {
   required Directory workingDirectory,
-  required dcli.Progress progress,
+  dcli.Progress? progress,
 }) {
+  final processProgress = progress ??
+      dcli.Progress(
+        dcli.devNull,
+        captureStdin: true,
+        captureStderr: true,
+      );
   try {
     dcli.startFromArgs(
       command,
       args,
       workingDirectory: workingDirectory.path,
-      progress: progress,
+      progress: processProgress,
     );
   } catch (e) {
-    print(progress.lines.join('\n'));
+    print(processProgress.lines.join('\n'));
   }
 }

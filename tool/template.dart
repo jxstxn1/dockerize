@@ -83,7 +83,6 @@ dependencies:
 
 // language=Dart
 String dockerCommandContent(String packageName) => '''
-import 'package:dcli/dcli.dart' as dcli;
 import 'package:sidekick_core/sidekick_core.dart';
 import 'package:$packageName/src/commands/dockerize/build_command.dart';
 import 'package:$packageName/src/commands/dockerize/run_command.dart';
@@ -180,7 +179,6 @@ class RunCommand extends Command {
 
 // language=Dart
 const stopCommandContent = '''
-import 'package:dcli/dcli.dart' as dcli;
 import 'package:dockerize_sidekick_plugin/dockerize_sidekick_plugin.dart';
 import 'package:sidekick_core/sidekick_core.dart';
 
@@ -194,8 +192,7 @@ class StopCommand extends Command {
   @override
   Future<void> run() async {
     checkDockerInstall();
-    dcli.run('docker kill \${mainProject!.name}');
-    print(green('App is stopped'));
+    stopImage();
   }
 }
 ''';
