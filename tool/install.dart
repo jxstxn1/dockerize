@@ -20,14 +20,17 @@ Future<void> main() async {
     commandFolder.createSync();
   }
 
-  final commandFile = commandFolder.file('dockerize_sidekick_plugin.dart');
-  commandFile.writeAsStringSync(dockerizeFile);
+  final dockerCommandFile = commandFolder.file('docker_command.dart');
+  dockerCommandFile.writeAsStringSync(dockerCommandContent(package.name));
+
+  final buildCommandFile = commandFolder.file('build_command.dart');
+  buildCommandFile.writeAsStringSync(buildCommandContent);
 
   registerPlugin(
     sidekickCli: package,
     import:
-        "import 'package:${package.name}/src/commands/dockerize/dockerize_sidekick_plugin.dart';",
-    command: 'Dockerize()',
+        "import 'package:${package.name}/src/commands/dockerize/docker_command.dart';",
+    command: 'DockerCommand()',
   );
 }
 

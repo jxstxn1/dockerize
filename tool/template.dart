@@ -82,16 +82,35 @@ dependencies:
 ''';
 
 // language=Dart
-const dockerizeFile = r'''
+String dockerCommandContent(String packageName) => '''
+import 'package:dcli/dcli.dart' as dcli;
+import 'package:sidekick_core/sidekick_core.dart';
+import 'package:$packageName/src/commands/dockerize/build_command.dart';
+
+class DockerCommand extends Command {
+  @override
+  String get description => 'Manage all the docker related commands';
+
+  @override
+  String get name => 'docker';
+
+  DockerCommand() {
+    addSubcommand(BuildCommand());
+  }
+}
+''';
+
+// language=Dart
+const buildCommandContent = r'''
 import 'package:dcli/dcli.dart' as dcli;
 import 'package:sidekick_core/sidekick_core.dart';
 
-class Dockerize extends Command {
+class BuildCommand extends Command {
   @override
-  String get description => 'Dockerize your Flutter project';
+  String get description => 'Builds a docker image for your Flutter Web App';
 
   @override
-  String get name => 'dockerize';
+  String get name => 'build';
 
   @override
   Future<void> run() async {
@@ -116,5 +135,4 @@ class Dockerize extends Command {
     );
   }
 }
-
 ''';
