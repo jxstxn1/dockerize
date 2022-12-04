@@ -177,8 +177,8 @@ class RunCommand extends Command {
       );
       return;
     }
-    final build = argResults!['build'] as bool?;
-    if (build != null) {
+    final withBuildCommand = argResults!['build'] as bool;
+    if (withBuildCommand) {
       await BuildCommand().run();
     }
     dcli.run(
