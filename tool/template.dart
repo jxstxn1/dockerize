@@ -142,7 +142,6 @@ class BuildCommand extends Command {
 
 // language=Dart
 String runCommandContent(String packageName) => '''
-import 'package:dcli/dcli.dart' as dcli;
 import 'package:dockerize_sidekick_plugin/dockerize_sidekick_plugin.dart';
 import 'package:sidekick_core/sidekick_core.dart';
 import 'package:$packageName/src/commands/dockerize/build_command.dart';
@@ -169,10 +168,7 @@ class RunCommand extends Command {
     if (withBuildCommand) {
       await BuildCommand().run();
     }
-    dcli.run(
-      'docker run -d --rm -p 8000:8080 --name \${mainProject!.name} \${mainProject!.name}:dev',
-    );
-    print(green('App is running on http://localhost:8000'));
+    runImage();
   }
 }
 ''';
