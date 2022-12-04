@@ -214,3 +214,30 @@ class StopCommand extends Command {
   }
 }
 ''';
+
+String middlewareFileContent = '''
+import 'package:shelf/shelf.dart';
+import 'package:shelf_enforces_ssl/shelf_enforces_ssl.dart';
+import 'package:shelf_helmet/shelf_helmet.dart';
+
+/// Returns a opinionated set of middlewares for a shelf server.
+/// This is used by default from the server.dart file.
+Middleware middlewares() {
+  Pipeline pipeline = Pipeline();
+
+  // Logging middleware
+  pipeline = pipeline.addMiddleware(logRequests());
+
+  // Helmet middleware
+  // You can customize or remove the default helmet middleware
+  // For more information checkout https://pub.dev/packages/shelf_helmet
+  pipeline = pipeline.addMiddleware(helmet());
+
+  // Enforce SSL middleware
+  // You can customize or remove the default enforceSSL middleware
+  // For more information checkout https://pub.dev/packages/shelf_enforces_ssl
+  pipeline = pipeline.addMiddleware(enforceSSL());
+
+  return (innerHandler) => pipeline.addHandler(innerHandler);
+}
+''';
