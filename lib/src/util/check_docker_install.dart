@@ -7,6 +7,6 @@ void checkDockerInstall() {
     printerr(
       red('Docker is not installed. Please install docker and try again.'),
     );
-    return;
+    exit(0);
   }
 }
