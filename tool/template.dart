@@ -82,19 +82,48 @@ dependencies:
 ''';
 
 // language=Dart
-const dockerizeFile = r'''
+String dockerCommandContent(String packageName) => '''
+import 'package:dcli/dcli.dart' as dcli;
+import 'package:sidekick_core/sidekick_core.dart';
+import 'package:$packageName/src/commands/dockerize/build_command.dart';
+import 'package:$packageName/src/commands/dockerize/run_command.dart';
+import 'package:$packageName/src/commands/dockerize/stop_command.dart';
+
+class DockerCommand extends Command {
+  @override
+  String get description => 'Manage all the docker related commands';
+
+  @override
+  String get name => 'docker';
+
+  DockerCommand() {
+    addSubcommand(BuildCommand());
+    addSubcommand(RunCommand());
+    addSubcommand(StopCommand());
+  }
+}
+''';
+
+// language=Dart
+const buildCommandContent = r'''
 import 'package:dcli/dcli.dart' as dcli;
 import 'package:sidekick_core/sidekick_core.dart';
 
-class Dockerize extends Command {
+class BuildCommand extends Command {
   @override
-  String get description => 'Dockerize your Flutter project';
+  String get description => 'Builds a docker image for your Flutter Web App';
 
   @override
-  String get name => 'dockerize';
+  String get name => 'build';
 
   @override
   Future<void> run() async {
+    if (which('docker').notfound) {
+      printerr(
+        red('Docker is not installed. Please install docker and try again.'),
+      );
+      return;
+    }
     repository.root.directory('packages/server').createSync();
     repository.root.directory('packages/server/www').createSync();
     flutter(
@@ -105,6 +134,7 @@ class Dockerize extends Command {
     copyTree(
       mainProject!.root.directory('build/web').path,
       repository.root.directory('packages/server/www').path,
+      overwrite: true,
     );
     await createDockerImage();
   }
@@ -116,5 +146,71 @@ class Dockerize extends Command {
     );
   }
 }
+''';
 
+// language=Dart
+String runCommandContent(String packageName) => '''
+import 'package:dcli/dcli.dart' as dcli;
+import 'package:sidekick_core/sidekick_core.dart';
+import 'package:$packageName/src/commands/dockerize/build_command.dart';
+
+class RunCommand extends Command {
+  @override
+  String get description => 'Run the dockerized app';
+
+  @override
+  String get name => 'run';
+
+  RunCommand() {
+    argParser.addFlag(
+      'build',
+      abbr: 'b',
+      help: 'Call the docker build command before running',
+    );
+  }
+
+  @override
+  Future<void> run() async {
+    if (which('docker').notfound) {
+      printerr(
+        red('Docker is not installed. Please install docker and try again.'),
+      );
+      return;
+    }
+    final withBuildCommand = argResults!['build'] as bool;
+    if (withBuildCommand) {
+      await BuildCommand().run();
+    }
+    dcli.run(
+      'docker run -d --rm -p 8000:8080 --name \${mainProject!.name} \${mainProject!.name}:dev',
+    );
+    print(green('App is running on http://localhost:8000'));
+  }
+}
+''';
+
+// language=Dart
+const stopCommandContent = '''
+import 'package:dcli/dcli.dart' as dcli;
+import 'package:sidekick_core/sidekick_core.dart';
+
+class StopCommand extends Command {
+  @override
+  String get description => 'Stop the docker app';
+
+  @override
+  String get name => 'stop';
+
+  @override
+  Future<void> run() async {
+    if (which('docker').notfound) {
+      printerr(
+        red('Docker is not installed. Please install docker and try again.'),
+      );
+      return;
+    }
+    dcli.run('docker kill \${mainProject!.name}');
+    print(green('App is stopped'));
+  }
+}
 ''';
