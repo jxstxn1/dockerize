@@ -14,7 +14,7 @@ Future<void> main() async {
   }
   pubGet(package);
 
-  final commandFile = package.root.file('lib/src/dockerize_sidekick_plugin.dart');
+  final commandFile = package.root.file('lib/src/commands/dockerize_command.dart');
   commandFile.writeAsStringSync(dockerizeFile);
 
   final folder = package.root.directory('../server');
@@ -29,7 +29,7 @@ Future<void> main() async {
 
   registerPlugin(
     sidekickCli: package,
-    import: "import 'package:${package.name}/src/dockerize_sidekick_plugin.dart';",
+    import: "import 'package:${package.name}/src/commands/dockerize_command.dart';",
     command: 'Dockerize()',
   );
 }
