@@ -209,7 +209,7 @@ class StopCommand extends Command {
       );
       return;
     }
-    dcli.run('docker stop \${mainProject!.name}');
+    dcli.run('docker kill \${mainProject!.name}');
     print(green('App is stopped'));
   }
 }
