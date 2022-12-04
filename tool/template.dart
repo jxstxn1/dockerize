@@ -134,6 +134,7 @@ class BuildCommand extends Command {
     copyTree(
       mainProject!.root.directory('build/web').path,
       repository.root.directory('packages/server/www').path,
+      overwrite: true,
     );
     await createDockerImage();
   }
