@@ -150,7 +150,7 @@ class BuildCommand extends Command {
 String runCommandContent(String packageName) => '''
 import 'package:dcli/dcli.dart' as dcli;
 import 'package:sidekick_core/sidekick_core.dart';
-import 'package:packageName/src/commands/dockerize/build_command.dart';
+import 'package:$packageName/src/commands/dockerize/build_command.dart';
 
 class RunCommand extends Command {
   @override
