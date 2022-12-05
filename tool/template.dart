@@ -170,7 +170,6 @@ class RunCommand extends Command {
       'port',
       abbr: 'p',
       help: 'Port to run the app on',
-      defaultsTo: '8000',
     );
   }
 
