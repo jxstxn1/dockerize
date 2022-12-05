@@ -50,6 +50,10 @@ Future<void> createServerFolder(SidekickPackage package) async {
       .directory('bin')
       .file('server.dart')
       .writeAsStringSync(serverFile);
+  serverFolder
+      .directory('bin')
+      .file('middlewares.dart')
+      .writeAsStringSync(middlewareFileContent);
   serverFolder.file('Dockerfile').writeAsStringSync(dockerFile);
   serverFolder.file('pubspec.yaml').writeAsStringSync(pubspecFile);
   pubGet(DartPackage(serverFolder, 'server'));

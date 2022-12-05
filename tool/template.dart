@@ -7,6 +7,8 @@ import 'package:shelf/shelf_io.dart' as io;
 import 'package:shelf_router/shelf_router.dart';
 import 'package:shelf_static/shelf_static.dart';
 
+import 'middlewares.dart';
+
 // For Google Cloud Run, set _hostname to '0.0.0.0'.
 const String _hostname = '0.0.0.0';
 
@@ -24,11 +26,12 @@ void main(List<String> args) async {
   var serveApp = createStaticHandler(appDirectory,
       defaultDocument: 'index.html', useHeaderBytesForContentType: true);
 
-  final handleGet = shelf.Pipeline().addHandler(serveApp);
+  final handleGet =
+      shelf.Pipeline().addMiddleware(middlewares()).addHandler(serveApp);
 
   app.get('/<anything|.*>', handleGet);
 
-  var server = await io.serve(
+  await io.serve(
     app,
     _hostname,
     port!,
@@ -78,7 +81,7 @@ environment:
 dependencies:
   shelf_static: ^1.1.0
   shelf_router: ^1.1.3
-
+  shelf_helmet: ^1.0.0
 ''';
 
 // language=Dart
@@ -190,5 +193,27 @@ class StopCommand extends Command {
     checkDockerInstall();
     stopImage();
   }
+}
+''';
+
+String middlewareFileContent = '''
+import 'package:shelf/shelf.dart';
+import 'package:shelf_enforces_ssl/shelf_enforces_ssl.dart';
+import 'package:shelf_helmet/shelf_helmet.dart';
+
+/// Returns a opinionated set of middlewares for a shelf server.
+/// This is used by default from the server.dart file.
+Middleware middlewares() {
+  Pipeline pipeline = Pipeline();
+
+  // Logging middleware
+  pipeline = pipeline.addMiddleware(logRequests());
+
+  // Helmet middleware
+  // You can customize or remove the default helmet middleware
+  // For more information checkout https://pub.dev/packages/shelf_helmet
+  pipeline = pipeline.addMiddleware(helmet());
+
+  return (innerHandler) => pipeline.addHandler(innerHandler);
 }
 ''';
