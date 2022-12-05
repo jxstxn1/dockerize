@@ -166,18 +166,31 @@ class RunCommand extends Command {
       abbr: 'b',
       help: 'Call the docker build command before running',
     );
+    argParser.addOption(
+      'port',
+      abbr: 'p',
+      help: 'Port to run the app on',
+      defaultsTo: '8000',
+    );
   }
 
   @override
   Future<void> run() async {
     checkDockerInstall();
     final withBuildCommand = argResults!['build'] as bool;
+    final port = argResults!['port'] as String;
+    final isPort = RegExp(r'^[0-9]{1,4}\$').hasMatch(port);
+    if (!isPort) {
+      print(red('Port must be a number with a max of 4 digits'));
+      exit(1);
+    }
     if (withBuildCommand) {
       await BuildCommand().run();
     }
-    runImage();
+    runImage(port: port);
   }
 }
+
 ''';
 
 // language=Dart
