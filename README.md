@@ -6,34 +6,45 @@ A plugin for [sidekick CLIs](https://pub.dev/packages/sidekick).
 
 This plugin for [sidekick](https://pub.dev/packages/sidekick) wants to make it as easy as possible to deploy your flutter web app as a docker container.
 
-# Installation
+## Installation
 
-## Kickstart
+### Kickstart
+
 with having [docker](https://www.docker.com/) and [sidekick](https://pub.dev/packages/sidekick) installed
+
 ```bash
 <<your_cli>> sidekick plugins install dockerize_sidekick_plugin
 <<your_cli>> docker build
 <<your_cli>> docker run
 ```
+
 ### Docker
+
 To run this locally you need [Docker](https://docs.docker.com/get-docker/) installed on your machine.
 
 ### The commands
+
 #### Install the plugin
+
 ```bash
 <<your_cli>> sidekick plugins install dockerize_sidekick_plugin
 ```
+
 #### Build the docker image
+
 ```bash
 <<your_cli>> docker build
 ```
+
 You can customize the build process in the commands/docker/build_command.dart file.
 
 #### Run the docker image locally
+
 ```bash
 <<your_cli>> docker run
 ```
-This will run your app and makes it accessible on port 8000. The full URL is <http://0.0.0.0:8000/#/>
+
+This will run your app and makes it accessible at `localhost:8080`.
 With the `-b, --build` flag you can execute the build command before running the container.
 With the `-p, --port` flag you can specify the port on which the app is accessible.
 
