@@ -10,7 +10,7 @@ void runImage() {
       '-d',
       '--rm',
       '-p',
-      '8080:8080',
+      '8000:8080',
       '--name',
       mainProject!.name,
       '${mainProject!.name}:dev',
