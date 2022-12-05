@@ -86,6 +86,7 @@ dependencies:
 
 // language=Dart
 String dockerCommandContent(String packageName) => '''
+import 'package:dockerize_sidekick_plugin/dockerize_sidekick_plugin.dart';
 import 'package:sidekick_core/sidekick_core.dart';
 import 'package:$packageName/src/commands/dockerize/build_command.dart';
 import 'package:$packageName/src/commands/dockerize/run_command.dart';
@@ -103,6 +104,9 @@ class DockerCommand extends Command {
     addSubcommand(RunCommand());
     addSubcommand(StopCommand());
   }
+
+  @override
+  String get usage => printUsage(cliName);
 }
 ''';
 

@@ -32,11 +32,14 @@ Future<void> main() async {
   final stopCommandFile = commandFolder.file('stop_command.dart');
   stopCommandFile.writeAsStringSync(stopCommandContent);
 
-  registerPlugin(
+  await registerPlugin(
     sidekickCli: package,
     import:
         "import 'package:${package.name}/src/commands/dockerize/docker_command.dart';",
     command: 'DockerCommand()',
+  );
+  print(
+    'Run: ${package.cliName} docker --help to see all commands and options',
   );
 }
 
@@ -46,14 +49,17 @@ Future<void> createServerFolder(SidekickPackage package) async {
     serverFolder.createSync();
     serverFolder.directory('bin').createSync();
   }
+
   serverFolder
       .directory('bin')
       .file('server.dart')
       .writeAsStringSync(serverFile);
+
   serverFolder
       .directory('bin')
       .file('middlewares.dart')
       .writeAsStringSync(middlewareFileContent);
+
   serverFolder.file('Dockerfile').writeAsStringSync(dockerFile);
   serverFolder.file('pubspec.yaml').writeAsStringSync(pubspecFile);
   pubGet(DartPackage(serverFolder, 'server'));
