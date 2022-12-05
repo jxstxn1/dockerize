@@ -22,6 +22,9 @@ void commandRunner(
       progress: processProgress,
     );
   } catch (e) {
-    print(processProgress.lines.join('\n'));
+    if (!processProgress.lines.contains('Cannot kill container') &&
+        !processProgress.lines.contains('No such container')) {
+      print(processProgress.lines.join('\n'));
+    }
   }
 }
