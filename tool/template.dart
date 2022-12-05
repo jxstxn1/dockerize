@@ -234,9 +234,8 @@ Middleware middlewares() {
         directives: {
           'script-src': [
             "'unsafe-eval'",
+            "'unsafe-inline'",
             "'self'",
-            "'sha256-7kkT0t17vF4Bgf54wBSjuZO3pORc3aibNdISkVdNrnk='",
-            "'sha256-xRz2auJGknzB6jXNgOXmVZJ4TXI/yBGd9KF6ILsaJp4='",
             "blob:",
             "https://unpkg.com/",
           ],
