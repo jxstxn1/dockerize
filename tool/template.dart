@@ -202,7 +202,6 @@ class StopCommand extends Command {
 
 String middlewareFileContent = '''
 import 'package:shelf/shelf.dart';
-import 'package:shelf_enforces_ssl/shelf_enforces_ssl.dart';
 import 'package:shelf_helmet/shelf_helmet.dart';
 
 /// Returns a opinionated set of middlewares for a shelf server.
