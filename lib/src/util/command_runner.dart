@@ -1,4 +1,5 @@
 import 'package:dcli/dcli.dart' as dcli;
+import 'package:dockerize_sidekick_plugin/dockerize_sidekick_plugin.dart';
 import 'package:sidekick_core/sidekick_core.dart';
 
 /// Internal Command runner which only prints the output if there is an error
@@ -23,6 +24,9 @@ void commandRunner(
       progress: processProgress,
     );
   } catch (e) {
-    if (!silent) print(processProgress.lines.join('\n'));
+    if (!silent) {
+      print(processProgress.lines.join('\n'));
+      print(printUsage(cliName));
+    }
   }
 }
