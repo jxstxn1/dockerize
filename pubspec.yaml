@@ -1,5 +1,5 @@
 name: dockerize_sidekick_plugin
-description: Generated sidekick plugin (template shared-code)
+description: Generate a Docker Container for your Flutter Web App
 version: 0.0.1
 
 environment:
