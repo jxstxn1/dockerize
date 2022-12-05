@@ -82,7 +82,6 @@ dependencies:
   shelf_static: ^1.1.0
   shelf_router: ^1.1.3
   shelf_helmet: ^1.0.0
-  shelf_enforces_ssl: ^1.1.0
 ''';
 
 // language=Dart
@@ -214,11 +213,6 @@ Middleware middlewares() {
   // You can customize or remove the default helmet middleware
   // For more information checkout https://pub.dev/packages/shelf_helmet
   pipeline = pipeline.addMiddleware(helmet());
-
-  // Enforce SSL middleware
-  // You can customize or remove the default enforceSSL middleware
-  // For more information checkout https://pub.dev/packages/shelf_enforces_ssl
-  pipeline = pipeline.addMiddleware(enforceSSL());
 
   return (innerHandler) => pipeline.addHandler(innerHandler);
 }
