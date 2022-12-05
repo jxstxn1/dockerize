@@ -5,7 +5,7 @@ import 'package:sidekick_core/sidekick_core.dart';
 void stopImage() {
   commandRunner(
     'docker',
-    ['stop', mainProject!.name],
+    ['kill', mainProject!.name],
     workingDirectory: repository.root,
   );
   print(green('Stopped app: ${mainProject!.name}:dev'));
