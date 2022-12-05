@@ -45,6 +45,14 @@ With the -b, --build flag you can execute the build command before running the c
 <cli> docker stop
 ```
 
+### Help
+
+If you need help, you can always use the help command.
+
+```bash
+<cli> docker --help
+```
+
 ### Issues and Feedback
 
 Feel free to open an issue or send a pull request.
