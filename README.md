@@ -9,7 +9,7 @@ This plugin for [sidekick](https://pub.dev/packages/sidekick) wants to make it a
 
 ## Installation
 
-### Prerequisites:
+### Prerequisites
 
 - install `sidekick`: `dart pub global activate sidekick`
 - generate custom sidekick CLI: `sidekick init`
@@ -20,21 +20,30 @@ the [pub tool](https://dart.dev/tools/pub/cmd/pub-global#activating-a-package).
 ### Installing dockerize as a sidekick plugin
 
 ## Run locally
+
 Install the locally cloned plugin:
+
 ```bash
 TODO: Change this after release
 your_custom_sidekick_cli sidekick plugins install --source path path-to-local-dockerize-plugin
 ```
+
 Run the dockerize command:
+
 ```bash
 office dockerize
 ```
+
 Start a container:
+
 ```bash
 docker run -d --rm -p 8000:8080 --name main_package_name main_package_name:dev
 ```
+
 Stop the container
+
 ```bash
 docker kill main_package_name 
 ```
-This will run your app and makes it accessible on port 8000. The full URL is http://0.0.0.0:8000/#/
+
+This will run your app and makes it accessible on port 8000. The full URL is <http://0.0.0.0:8000/#/>
