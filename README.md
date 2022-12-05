@@ -6,44 +6,45 @@ A plugin for [sidekick CLIs](https://pub.dev/packages/sidekick).
 
 This plugin for [sidekick](https://pub.dev/packages/sidekick) wants to make it as easy as possible to deploy your flutter web app as a docker container.
 
-## Installation
+# Installation
 
-### Prerequisites
-
-- install `sidekick`: `dart pub global activate sidekick`
-- generate custom sidekick CLI: `sidekick init`
-
-Installing plugins to a custom sidekick CLI is very similar to installing a package with
-the [pub tool](https://dart.dev/tools/pub/cmd/pub-global#activating-a-package).
-
-### Installing dockerize as a sidekick plugin
-
+## Kickstart
+with having [docker](https://www.docker.com/) and [sidekick](https://pub.dev/packages/sidekick) installed
 ```bash
-<cli> sidekick plugins install dockerize_sidekick_plugin
+<<your_cli>> sidekick plugins install dockerize_sidekick_plugin
+<<your_cli>> docker build
+<<your_cli>> docker run
+```
+### Docker
+To test this locally you need Docker installed on your machine.
+The easiest way is using homebrew:
+```bash
+brew install docker
 ```
 
-### Building the Web App and the Container
-
+### The commands
+#### Install the plugin
 ```bash
-<cli> docker build
+<<your_cli>> sidekick plugins install dockerize_sidekick_plugin
 ```
-
+#### Build the docker image
+```bash
+<<your_cli>> docker build
+```
 You can customize the build process in the commands/docker/build_command.dart file.
 
-### Run the Container
-
+#### Run the docker image locally
 ```bash
-<cli> docker run
+<<your_cli>> docker run
 ```
-
 This will run your app and makes it accessible on port 8000. The full URL is <http://0.0.0.0:8000/#/>
 With the `-b, --build` flag you can execute the build command before running the container.
 With the `-p, --port` flag you can specify the port on which the app is accessible.
 
-### Stop the container
+#### Stop the container
 
 ```bash
-<cli> docker stop
+<<your_cli>> docker stop
 ```
 
 ### Help
@@ -51,14 +52,14 @@ With the `-p, --port` flag you can specify the port on which the app is accessib
 If you need help, you can always use the help command.
 
 ```bash
-<cli> docker --help
+<<your_cli>> docker --help
 ```
 
 ### Issues and Feedback
 
 Feel free to open an issue or send a pull request.
 
-## License
+### License
 
    ```Text
    Copyright 2022 Justin Baumann, Robin Schönau
