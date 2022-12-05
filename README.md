@@ -16,11 +16,7 @@ with having [docker](https://www.docker.com/) and [sidekick](https://pub.dev/pac
 <<your_cli>> docker run
 ```
 ### Docker
-To test this locally you need Docker installed on your machine.
-The easiest way is using homebrew:
-```bash
-brew install docker
-```
+To run this locally you need [Docker](https://docs.docker.com/get-docker/) installed on your machine.
 
 ### The commands
 #### Install the plugin
