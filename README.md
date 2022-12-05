@@ -1,7 +1,6 @@
 # dockerize_sidekick_plugin sidekick plugin
 
 A plugin for [sidekick CLIs](https://pub.dev/packages/sidekick).  
-Generated from template `shared-code`.
 
 ## Description
 
@@ -19,34 +18,36 @@ the [pub tool](https://dart.dev/tools/pub/cmd/pub-global#activating-a-package).
 
 ### Installing dockerize as a sidekick plugin
 
-## Run locally
-
-Install the locally cloned plugin:
-
 ```bash
-TODO: Change this after release
-your_custom_sidekick_cli sidekick plugins install --source path path-to-local-dockerize-plugin
+<cli> sidekick plugins install dockerize_sidekick_plugin
 ```
 
-Run the dockerize command:
+### Building the Web App and the Container
 
 ```bash
-office dockerize
+<cli> docker build
 ```
 
-Start a container:
+You can customize the build process in the commands/docker/build_command.dart file.
+
+### Run the Container
 
 ```bash
-docker run -d --rm -p 8000:8080 --name main_package_name main_package_name:dev
-```
-
-Stop the container
-
-```bash
-docker kill main_package_name 
+<cli> docker run
 ```
 
 This will run your app and makes it accessible on port 8000. The full URL is <http://0.0.0.0:8000/#/>
+With the -b, --build flag you can execute the build command before running the container.
+
+### Stop the container
+
+```bash
+<cli> docker stop
+```
+
+### Issues and Feedback
+
+Feel free to open an issue or send a pull request.
 
 ## License
 
