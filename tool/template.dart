@@ -166,16 +166,29 @@ class RunCommand extends Command {
       abbr: 'b',
       help: 'Call the docker build command before running',
     );
+    argParser.addOption(
+      'port',
+      abbr: 'p',
+      help: 'Port to run the app on',
+    );
   }
 
   @override
   Future<void> run() async {
     checkDockerInstall();
     final withBuildCommand = argResults!['build'] as bool;
+    final port = argResults?['port'] as String?;
+    if(port != null) {
+      final isPort = RegExp(r'^[0-9]{1,4}\$').hasMatch(port);
+      if (!isPort) {
+        print(red('Port must be a number with a max of 4 digits'));
+        exit(1);
+      }
+    }
     if (withBuildCommand) {
       await BuildCommand().run();
     }
-    runImage();
+    runImage(port: port);
   }
 }
 ''';
@@ -202,7 +215,6 @@ class StopCommand extends Command {
 
 String middlewareFileContent = '''
 import 'package:shelf/shelf.dart';
-import 'package:shelf_enforces_ssl/shelf_enforces_ssl.dart';
 import 'package:shelf_helmet/shelf_helmet.dart';
 
 /// Returns a opinionated set of middlewares for a shelf server.
