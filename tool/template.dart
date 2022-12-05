@@ -81,7 +81,7 @@ environment:
 dependencies:
   shelf_static: ^1.1.0
   shelf_router: ^1.1.3
-  shelf_helmet: ^1.0.0
+  shelf_helmet: ^1.1.0
 ''';
 
 // language=Dart
@@ -228,7 +228,28 @@ Middleware middlewares() {
   // Helmet middleware
   // You can customize or remove the default helmet middleware
   // For more information checkout https://pub.dev/packages/shelf_helmet
-  pipeline = pipeline.addMiddleware(helmet());
+  pipeline = pipeline.addMiddleware(helmet(
+    options: HelmetOptions(
+      cspOptions: ContentSecurityPolicyOptions.useDefaults(
+        directives: {
+          'script-src': [
+            "'unsafe-eval'",
+            "'self'",
+            "'sha256-7kkT0t17vF4Bgf54wBSjuZO3pORc3aibNdISkVdNrnk='",
+            "'sha256-xRz2auJGknzB6jXNgOXmVZJ4TXI/yBGd9KF6ILsaJp4='",
+            "blob:",
+            "https://unpkg.com/",
+          ],
+          'connect-src': [
+            "'self'",
+            "https://unpkg.com/",
+            "https://fonts.gstatic.com/s/roboto/v20/KFOmCnqEu92Fr1Me5WZLCzYlKw.ttf ",
+          ],
+        },
+      ),
+      coepOptions: CrossOriginEmbedderPolicyOptions.credentialLess,
+    ),
+  ));
 
   return (innerHandler) => pipeline.addHandler(innerHandler);
 }
