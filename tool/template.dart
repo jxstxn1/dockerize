@@ -177,11 +177,13 @@ class RunCommand extends Command {
   Future<void> run() async {
     checkDockerInstall();
     final withBuildCommand = argResults!['build'] as bool;
-    final port = argResults!['port'] as String;
-    final isPort = RegExp(r'^[0-9]{1,4}\$').hasMatch(port);
-    if (!isPort) {
-      print(red('Port must be a number with a max of 4 digits'));
-      exit(1);
+    final port = argResults?['port'] as String?;
+    if(port != null) {
+      final isPort = RegExp(r'^[0-9]{1,4}\$').hasMatch(port);
+      if (!isPort) {
+        print(red('Port must be a number with a max of 4 digits'));
+        exit(1);
+      }
     }
     if (withBuildCommand) {
       await BuildCommand().run();
@@ -189,7 +191,6 @@ class RunCommand extends Command {
     runImage(port: port);
   }
 }
-
 ''';
 
 // language=Dart

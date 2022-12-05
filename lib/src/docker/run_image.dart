@@ -2,7 +2,8 @@ import 'package:dockerize_sidekick_plugin/src/util/command_runner.dart';
 import 'package:sidekick_core/sidekick_core.dart';
 
 /// Starting the docker image
-void runImage({String port = '8000'}) {
+void runImage({String? port}) {
+  final String publicPort = port ?? '8000';
   commandRunner(
     'docker',
     [
@@ -10,12 +11,12 @@ void runImage({String port = '8000'}) {
       '-d',
       '--rm',
       '-p',
-      '$port:8080',
+      '$publicPort:8080',
       '--name',
       mainProject!.name,
       '${mainProject!.name}:dev',
     ],
     workingDirectory: repository.root,
   );
-  print(green('App is running on http://localhost:$port'));
+  print(green('App is running on http://localhost:$publicPort'));
 }
