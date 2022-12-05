@@ -37,7 +37,8 @@ You can customize the build process in the commands/docker/build_command.dart fi
 ```
 
 This will run your app and makes it accessible on port 8000. The full URL is <http://0.0.0.0:8000/#/>
-With the -b, --build flag you can execute the build command before running the container.
+With the `-b, --build` flag you can execute the build command before running the container.
+With the `-p, --port` flag you can specify the port on which the app is accessible.
 
 ### Stop the container
 
