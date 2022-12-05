@@ -3,6 +3,9 @@ import 'package:sidekick_core/sidekick_core.dart';
 
 /// Creates a docker image
 void createDockerImage() {
+  print(
+    green('Creating image ${mainProject!.name}:dev'),
+  );
   commandRunner(
     'docker',
     ['build', '-t', '${mainProject!.name}:dev', '.'],
