@@ -5,7 +5,7 @@ import 'package:sidekick_core/sidekick_core.dart';
 /// Starting the docker image
 void runImage({String? port}) {
   final String publicPort = port ?? '8000';
-  stopImage();
+  stopImage(silent: true);
   commandRunner(
     'docker',
     [

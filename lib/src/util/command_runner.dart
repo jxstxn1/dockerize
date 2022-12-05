@@ -7,6 +7,7 @@ void commandRunner(
   List<String> args, {
   required Directory workingDirectory,
   dcli.Progress? progress,
+  bool silent = false,
 }) {
   final processProgress = progress ??
       dcli.Progress(
@@ -22,9 +23,6 @@ void commandRunner(
       progress: processProgress,
     );
   } catch (e) {
-    if (!processProgress.lines.contains('Cannot kill container') &&
-        !processProgress.lines.contains('No such container')) {
-      print(processProgress.lines.join('\n'));
-    }
+    if (!silent) print(processProgress.lines.join('\n'));
   }
 }
