@@ -37,6 +37,7 @@ void main(List<String> args) async {
     port!,
     poweredByHeader: null,
   );
+  print('Serving at http://localhost:$port');
 }
 ''';
 
