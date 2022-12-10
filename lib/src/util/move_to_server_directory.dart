@@ -6,7 +6,7 @@ void moveToServerDirectory() {
   locateServerFolder().directory('www').createSync(recursive: true);
   copyTree(
     mainProject!.root.directory('build/web').path,
-    locateServerFolder().path,
+    locateServerFolder().directory('www').path,
     overwrite: true,
   );
 }
