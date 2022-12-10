@@ -17,8 +17,8 @@ final appDirectory = Platform.environment['APP_DIRECTORY'] ?? 'www';
 void main(List<String> args) async {
   final app = Router();
   // For Google Cloud Run, we respect the PORT environment variable
-  var portStr = Platform.environment['PORT'] ?? '8080';
-  var port = int.tryParse(portStr);
+  final portStr = Platform.environment['PORT'];
+  final port = int.tryParse(portStr ?? '8080');
 
   if (!Directory(appDirectory).existsSync()) {
     throw "Can't serve APP_DIRECTORY $appDirectory, it doesn't exits";
@@ -37,6 +37,9 @@ void main(List<String> args) async {
     port!,
     poweredByHeader: null,
   );
+  if (portStr == null) {
+    print('Serving at http://localhost:$port');
+  }
 }
 ''';
 
