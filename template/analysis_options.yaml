@@ -1,0 +1,10 @@
+# This file has very loose rules to allow the template folder to not have warnings.
+include: package:lint/analysis_options.yaml
+
+linter:
+  rules:
+    depend_on_referenced_packages: false
+    prefer_const_constructors: false
+    avoid_print: false
+    prefer_final_locals: false
+    
