@@ -3,8 +3,7 @@ include: package:lint/analysis_options.yaml
 
 linter:
   rules:
-    depend_on_referenced_packages: false
-    prefer_const_constructors: false
+    
     avoid_print: false
-    prefer_final_locals: false
+    avoid_relative_lib_imports: false
     

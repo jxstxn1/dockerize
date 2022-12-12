@@ -1,0 +1,19 @@
+name: dockerize_template_folder
+description: Pubspec to manage the dependencies of the template folder
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.18.0 <3.0.0"
+
+dependencies:
+  dcli: ^1.36.0
+  shelf: ^1.4.0
+  shelf_helmet: ^1.1.0
+  shelf_router: ^1.1.3
+  shelf_static: ^1.1.0
+  sidekick_core: ^0.13.0
+
+dev_dependencies: 
+  lint: ^2.0.0

@@ -27,9 +27,14 @@ Future<void> main() async {
   );
 
   final buildCommandFile = commandFolder.file('build_command.dart');
-  PluginContext.installerPlugin.root
-      .file('template/build_command.template.dart')
-      .copySync(buildCommandFile.path);
+  buildCommandFile.writeAsStringSync(
+    replaceTemplateDependencies(
+      PluginContext.installerPlugin.root
+          .file('template/build_command.template.dart')
+          .readAsLinesSync(),
+      package.cliName,
+    ).join('\n'),
+  );
 
   final runCommandFile = commandFolder.file('run_command.dart');
   runCommandFile.writeAsStringSync(
@@ -42,9 +47,14 @@ Future<void> main() async {
   );
 
   final stopCommandFile = commandFolder.file('stop_command.dart');
-  PluginContext.installerPlugin.root
-      .file('template/stop_command.template.dart')
-      .copySync(stopCommandFile.path);
+  stopCommandFile.writeAsStringSync(
+    replaceTemplateDependencies(
+      PluginContext.installerPlugin.root
+          .file('template/stop_command.template.dart')
+          .readAsLinesSync(),
+      package.cliName,
+    ).join('\n'),
+  );
 
   await registerPlugin(
     sidekickCli: package,

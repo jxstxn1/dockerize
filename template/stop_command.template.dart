@@ -1,5 +1,9 @@
-import 'package:dockerize_sidekick_plugin/dockerize_sidekick_plugin.dart';
 import 'package:sidekick_core/sidekick_core.dart';
+
+import '../lib/dockerize_sidekick_plugin.dart'; //template import
+/* installed import
+import 'package:dockerize_sidekick_plugin/dockerize_sidekick_plugin.dart';
+installed import */
 
 class StopCommand extends Command {
   @override

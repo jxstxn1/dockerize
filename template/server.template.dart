@@ -24,14 +24,14 @@ void main(List<String> args) async {
   if (!Directory(appDirectory).existsSync()) {
     throw "Can't serve APP_DIRECTORY $appDirectory, it doesn't exits";
   }
-  var serveApp = createStaticHandler(
+  final serveApp = createStaticHandler(
     appDirectory,
     defaultDocument: 'index.html',
     useHeaderBytesForContentType: true,
   );
 
   final handleGet =
-      shelf.Pipeline().addMiddleware(middlewares()).addHandler(serveApp);
+      const shelf.Pipeline().addMiddleware(middlewares()).addHandler(serveApp);
 
   app.get('/<anything|.*>', handleGet);
 

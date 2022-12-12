@@ -36,5 +36,10 @@ Future<void> createServerFolder(SidekickPackage package) async {
             .file('template/pubspec.template.yaml')
             .readAsStringSync(),
       );
+  serverFolder.file('analysis_options.yaml').writeAsStringSync(
+        PluginContext.installerPlugin.root
+            .file('template/analysis_options.template.yaml')
+            .readAsStringSync(),
+      );
   pubGet(DartPackage(serverFolder, 'server'));
 }
