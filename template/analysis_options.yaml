@@ -3,7 +3,5 @@ include: package:lint/analysis_options.yaml
 
 linter:
   rules:
-    
     avoid_print: false
-    avoid_relative_lib_imports: false
     

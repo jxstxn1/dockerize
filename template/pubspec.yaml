@@ -9,6 +9,8 @@ environment:
 
 dependencies:
   dcli: ^1.36.0
+  dockerize_sidekick_plugin:
+    path: ../
   shelf: ^1.4.0
   shelf_helmet: ^1.1.0
   shelf_router: ^1.1.3

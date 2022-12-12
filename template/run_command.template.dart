@@ -1,8 +1,7 @@
+import 'package:dockerize_sidekick_plugin/dockerize_sidekick_plugin.dart';
 import 'package:sidekick_core/sidekick_core.dart';
-import '../lib/dockerize_sidekick_plugin.dart'; //template import
 import 'build_command.template.dart'; //template import
 /* installed import
-import 'package:dockerize_sidekick_plugin/dockerize_sidekick_plugin.dart';
 import 'package:<<packageName>>/src/commands/dockerize/build_command.dart';
 installed import */
 
