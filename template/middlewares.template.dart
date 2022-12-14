@@ -4,7 +4,7 @@ import 'package:shelf_helmet/shelf_helmet.dart';
 /// Returns a opinionated set of middlewares for a shelf server.
 /// This is used by default from the server.dart file.
 Middleware middlewares() {
-  Pipeline pipeline = Pipeline();
+  Pipeline pipeline = const Pipeline();
 
   // Logging middleware
   pipeline = pipeline.addMiddleware(logRequests());
@@ -14,7 +14,7 @@ Middleware middlewares() {
   // For more information checkout https://pub.dev/packages/shelf_helmet
   pipeline = pipeline.addMiddleware(
     helmet(
-      options: HelmetOptions(
+      options: const HelmetOptions(
         cspOptions: ContentSecurityPolicyOptions.useDefaults(
           directives: {
             'script-src': [
