@@ -2,18 +2,14 @@ import 'package:sidekick_core/sidekick_core.dart'
     hide cliName, repository, mainProject;
 import 'package:sidekick_plugin_installer/sidekick_plugin_installer.dart';
 
-import 'template.dart';
+import 'create_server_folder.dart';
+import 'replace_template_dependencies.dart';
 
 Future<void> main() async {
   final SidekickPackage package = PluginContext.sidekickPackage;
-
-  if (PluginContext.localPlugin == null) {
-    pubAddDependency(package, 'dockerize_sidekick_plugin');
-  } else {
-    // For local development
-    pubAddLocalDependency(package, PluginContext.localPlugin!.root.path);
-  }
+  addSelfAsDependency();
   await createServerFolder(package);
+
   pubGet(package);
   final commandFolder = package.root.directory('lib/src/commands/dockerize');
   if (!commandFolder.existsSync()) {
@@ -21,16 +17,34 @@ Future<void> main() async {
   }
 
   final dockerCommandFile = commandFolder.file('docker_command.dart');
-  dockerCommandFile.writeAsStringSync(dockerCommandContent(package.name));
+  dockerCommandFile.writeAsStringSync(
+    replaceTemplateDependencies(
+      PluginContext.installerPlugin.root
+          .file('template/docker_command.template.dart')
+          .readAsLinesSync(),
+      package.cliName,
+    ).join('\n'),
+  );
 
   final buildCommandFile = commandFolder.file('build_command.dart');
-  buildCommandFile.writeAsStringSync(buildCommandContent);
+  PluginContext.installerPlugin.root
+      .file('template/build_command.template.dart')
+      .copySync(buildCommandFile.path);
 
   final runCommandFile = commandFolder.file('run_command.dart');
-  runCommandFile.writeAsStringSync(runCommandContent(package.name));
+  runCommandFile.writeAsStringSync(
+    replaceTemplateDependencies(
+      PluginContext.installerPlugin.root
+          .file('template/run_command.template.dart')
+          .readAsLinesSync(),
+      package.cliName,
+    ).join('\n'),
+  );
 
   final stopCommandFile = commandFolder.file('stop_command.dart');
-  stopCommandFile.writeAsStringSync(stopCommandContent);
+  PluginContext.installerPlugin.root
+      .file('template/stop_command.template.dart')
+      .copySync(stopCommandFile.path);
 
   await registerPlugin(
     sidekickCli: package,
@@ -41,26 +55,4 @@ Future<void> main() async {
   print(
     'Run: ${package.cliName} docker --help to see all commands and options',
   );
-}
-
-Future<void> createServerFolder(SidekickPackage package) async {
-  final serverFolder = package.root.directory('../server');
-  if (!serverFolder.existsSync()) {
-    serverFolder.createSync();
-    serverFolder.directory('bin').createSync();
-  }
-
-  serverFolder
-      .directory('bin')
-      .file('server.dart')
-      .writeAsStringSync(serverFile);
-
-  serverFolder
-      .directory('bin')
-      .file('middlewares.dart')
-      .writeAsStringSync(middlewareFileContent);
-
-  serverFolder.file('Dockerfile').writeAsStringSync(dockerFile);
-  serverFolder.file('pubspec.yaml').writeAsStringSync(pubspecFile);
-  pubGet(DartPackage(serverFolder, 'server'));
 }
