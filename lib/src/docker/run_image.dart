@@ -1,6 +1,5 @@
 import 'package:dockerize_sidekick_plugin/dockerize_sidekick_plugin.dart';
 import 'package:dockerize_sidekick_plugin/src/util/command_runner.dart';
-import 'package:dockerize_sidekick_plugin/src/util/locate_server_folder.dart';
 import 'package:sidekick_core/sidekick_core.dart';
 
 /// Starting the docker image
@@ -19,7 +18,7 @@ void runImage({String? port}) {
       mainProject!.name,
       '${mainProject!.name}:dev',
     ],
-    workingDirectory: locateServerFolder(),
+    workingDirectory: repository.root.directory('server'),
   );
   print(green('App is running on http://localhost:$publicPort'));
 }
