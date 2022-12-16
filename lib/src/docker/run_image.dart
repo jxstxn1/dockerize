@@ -11,6 +11,8 @@ void runImage({String? port}) {
     [
       'run',
       '-it',
+      '--sig-proxy=false',
+      '--detach-keys=ctrl-c',
       '--rm',
       '-p',
       '$publicPort:$publicPort',
