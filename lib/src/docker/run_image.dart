@@ -3,16 +3,20 @@ import 'package:dockerize_sidekick_plugin/dockerize_sidekick_plugin.dart';
 import 'package:sidekick_core/sidekick_core.dart';
 
 /// Starting the docker image
-void runImage({String? port}) {
+void runImage({String? port, bool background = false}) {
   final String publicPort = port ?? '8000';
   stopImage(silent: true);
   dcli.startFromArgs(
     'docker',
     [
       'run',
-      '-it',
-      '--sig-proxy=false',
-      '--detach-keys=ctrl-c',
+      if (background) ...[
+        '-d'
+      ] else ...[
+        '--sig-proxy=false',
+        '--detach-keys=ctrl-c',
+        '-it',
+      ],
       '--rm',
       '-p',
       '$publicPort:$publicPort',
