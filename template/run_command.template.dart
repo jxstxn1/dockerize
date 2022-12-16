@@ -18,6 +18,10 @@ class RunCommand extends Command {
       abbr: 'b',
       help: 'Call the docker build command before running',
     );
+    argParser.addFlag(
+      'background',
+      help: 'Run the app in the background',
+    );
     argParser.addOption(
       'port',
       abbr: 'p',
@@ -29,7 +33,9 @@ class RunCommand extends Command {
   Future<void> run() async {
     checkDockerInstall();
     final withBuildCommand = argResults!['build'] as bool;
+    final background = argResults!['background'] as bool;
     final port = argResults?['port'] as String?;
+
     if (port != null) {
       final isPort = RegExp(r'^[0-9]{1,4}\$').hasMatch(port);
       if (!isPort) {
@@ -40,6 +46,6 @@ class RunCommand extends Command {
     if (withBuildCommand) {
       await BuildCommand().run();
     }
-    runImage(port: port);
+    runImage(port: port, background: background);
   }
 }
