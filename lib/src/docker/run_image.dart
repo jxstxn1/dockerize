@@ -13,7 +13,7 @@ void runImage({String? port}) {
       '-it',
       '--rm',
       '-p',
-      '$publicPort:8080',
+      '$publicPort:$publicPort',
       '--name',
       mainProject!.name,
       '${mainProject!.name}:dev',
