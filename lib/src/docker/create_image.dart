@@ -10,8 +10,6 @@ void createDockerImage() {
     'docker',
     ['build', '-t', '${mainProject!.name}:dev', '.'],
     workingDirectory: repository.root.directory('server'),
-  );
-  print(
-    green('Created image ${mainProject!.name}:dev'),
+    successMessage: 'Created image ${mainProject!.name}:dev',
   );
 }

@@ -8,6 +8,6 @@ void stopImage({bool silent = false}) {
     ['kill', mainProject!.name],
     workingDirectory: repository.root.directory('server'),
     silent: silent,
+    successMessage: 'Stopped app: ${mainProject!.name}:dev',
   );
-  if (!silent) print(green('Stopped app: ${mainProject!.name}:dev'));
 }
