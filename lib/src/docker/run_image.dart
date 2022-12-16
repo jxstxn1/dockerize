@@ -18,7 +18,7 @@ void runImage({String? port}) {
       mainProject!.name,
       '${mainProject!.name}:dev',
     ],
-    workingDirectory: repository.root,
+    workingDirectory: repository.root.directory('server'),
   );
   print(green('App is running on http://localhost:$publicPort'));
 }

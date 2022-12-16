@@ -6,7 +6,7 @@ void stopImage({bool silent = false}) {
   commandRunner(
     'docker',
     ['kill', mainProject!.name],
-    workingDirectory: repository.root,
+    workingDirectory: repository.root.directory('server'),
     silent: silent,
   );
   if (!silent) print(green('Stopped app: ${mainProject!.name}:dev'));

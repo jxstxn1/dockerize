@@ -9,7 +9,7 @@ void createDockerImage() {
   commandRunner(
     'docker',
     ['build', '-t', '${mainProject!.name}:dev', '.'],
-    workingDirectory: repository.root.directory('packages/server'),
+    workingDirectory: repository.root.directory('server'),
   );
   print(
     green('Created image ${mainProject!.name}:dev'),

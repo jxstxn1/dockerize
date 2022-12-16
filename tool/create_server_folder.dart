@@ -5,7 +5,7 @@ import 'replace_template_dependencies.dart';
 
 /// Creates the server folder and files
 Future<void> createServerFolder(SidekickPackage package) async {
-  final serverFolder = package.root.directory('../server');
+  final serverFolder = findRepository().root.directory('server');
   if (!serverFolder.existsSync()) {
     serverFolder.createSync();
     serverFolder.directory('bin').createSync();
