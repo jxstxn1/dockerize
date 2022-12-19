@@ -16,9 +16,7 @@ Middleware middlewares() {
     helmet(
       options: const HelmetOptions(
         // TODO: Add your own CSP options
-        cspOptions: ContentSecurityPolicyOptions.dangerouslyDisableDefaultSrc(),
-
-        // These are the CSP Rules for a default flutter web app
+        cspOptions: ContentSecurityPolicyOptions.useDefaults(reportOnly: true),
         /*
         ContentSecurityPolicyOptions.useDefaults(
           directives: {
