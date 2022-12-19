@@ -26,6 +26,7 @@ class BuildCommand extends Command {
     moveToServerDirectory();
 
     // You can disable the hashScripts() function if you don't want to use CSP
+    // You can change the hashType to sha384 or sha512 if you want
 
     hashScripts(hashType: sha256);
 
