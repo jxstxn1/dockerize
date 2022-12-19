@@ -67,7 +67,7 @@ extension HashType on Hash {
       case sha512:
         return 'sha512';
       default:
-        return 'sha256';
+        throw Exception('Hash type not supported');
     }
   }
 }
