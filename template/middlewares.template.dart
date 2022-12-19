@@ -1,6 +1,9 @@
 import 'package:shelf/shelf.dart';
 import 'package:shelf_helmet/shelf_helmet.dart';
 
+/// Dont touch this line because it will be replaced by the build function
+const List<String> hashes = [];
+
 /// Returns a opinionated set of middlewares for a shelf server.
 /// This is used by default from the server.dart file.
 Middleware middlewares(List<String> nonces) {
@@ -21,9 +24,9 @@ Middleware middlewares(List<String> nonces) {
           reportOnly: true,
           directives: {
             'script-src': [
-              "'unsafe-eval'",
-              "'unsafe-inline'",
               "'self'",
+              "'wasm-unsafe-eval'",
+              ...hashes,
               "blob:",
               "https://unpkg.com/",
             ],
