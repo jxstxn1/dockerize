@@ -37,7 +37,9 @@ class RunCommand extends Command {
     final port = argResults?['port'] as String?;
 
     if (port != null) {
-      final isPort = RegExp(r'^[0-9]{1,4}\$').hasMatch(port);
+      final isPort = RegExp('^[0-9]{1,4}\$').hasMatch(port);
+      print('isPort: $isPort');
+      print('port: $port');
       if (!isPort) {
         print(red('Port must be a number with a max of 4 digits'));
         exit(1);
