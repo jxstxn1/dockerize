@@ -30,8 +30,9 @@ void main(List<String> args) async {
     useHeaderBytesForContentType: true,
   );
 
-  final handleGet =
-      const shelf.Pipeline().addMiddleware(middlewares()).addHandler(serveApp);
+  final handleGet = const shelf.Pipeline()
+      .addMiddleware(middlewares([]))
+      .addHandler(serveApp);
 
   app.get('/<anything|.*>', handleGet);
 

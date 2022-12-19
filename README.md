@@ -57,6 +57,18 @@ Afterwards you can kill the container with `<<your_cli>> docker stop`.
 <<your_cli>> docker stop
 ```
 
+### Further reading
+
+#### Script hashes
+
+By default we are generating script hashes for each script tag in your index.html file.
+You can change the hashtype or disable it in the `commands/docker/build_command.dart` file.
+
+#### CSP Rules
+
+By default we are adding a default Set of CSP rules to the `server/bin/middlewares.dart` File.
+You can change the rules or disable them in the `commands/docker/build_command.dart` file.
+
 ### Help
 
 If you need help, you can always use the help command.
