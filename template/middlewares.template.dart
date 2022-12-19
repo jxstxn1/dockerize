@@ -15,7 +15,12 @@ Middleware middlewares() {
   pipeline = pipeline.addMiddleware(
     helmet(
       options: const HelmetOptions(
-        cspOptions: ContentSecurityPolicyOptions.useDefaults(
+        // TODO: Add your own CSP options
+        cspOptions: ContentSecurityPolicyOptions.dangerouslyDisableDefaultSrc(),
+
+        // These are the CSP Rules for a default flutter web app
+        /*
+        ContentSecurityPolicyOptions.useDefaults(
           directives: {
             'script-src': [
               "'unsafe-eval'",
@@ -31,6 +36,7 @@ Middleware middlewares() {
             ],
           },
         ),
+        */
         coepOptions: CrossOriginEmbedderPolicyOptions.credentialLess,
       ),
     ),
