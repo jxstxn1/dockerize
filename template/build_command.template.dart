@@ -27,7 +27,7 @@ class BuildCommand extends Command {
 
     // You can disable the hashScripts() function if you don't want to use CSP
 
-    hashScripts(shouldHash: true, hash: sha256);
+    hashScripts(hashType: sha256);
 
     // You can insert your own logic here after moving the Flutter app to the server directory (packages/server/www)
     // and before building the Docker image

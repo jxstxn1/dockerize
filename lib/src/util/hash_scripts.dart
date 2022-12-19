@@ -5,20 +5,19 @@ import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:sidekick_core/sidekick_core.dart';
 
-void hashScripts({required bool shouldHash, required Hash hash}) {
-  if (!shouldHash) return;
+void hashScripts({required Hash hashType}) {
   final Document htmlFile = parse(
     repository.root
         .directory('server/www')
         .file('index.html')
         .readAsStringSync(),
   );
-  final scripts = getScripts(htmlFile);
-  final hashedScripts = hasher(scripts, hash);
-  insertScripts(hashedScripts);
+  final scripts = _getScripts(htmlFile);
+  final hashedScripts = _hasher(scripts, hashType);
+  _insertScripts(hashedScripts);
 }
 
-void insertScripts(List<String> hashedScript) {
+void _insertScripts(List<String> hashedScript) {
   final middlewareFile =
       repository.root.directory('server/bin').file('middlewares.dart');
   print(middlewareFile.path);
@@ -35,7 +34,7 @@ void insertScripts(List<String> hashedScript) {
   middlewareFile.writeAsStringSync(newContent);
 }
 
-List<String> getScripts(Document htmlFile) {
+List<String> _getScripts(Document htmlFile) {
   final hashScripts = <String>[];
   final List<Element> scripts = htmlFile.getElementsByTagName('script');
   for (final script in scripts) {
@@ -46,29 +45,29 @@ List<String> getScripts(Document htmlFile) {
   return hashScripts;
 }
 
-List<String> hasher(List<String> scripts, Hash hash) {
+List<String> _hasher(List<String> scripts, Hash hashType) {
   final hashScripts = <String>[];
   for (final script in scripts) {
+    final hashedScriptBytes = hashType.convert(utf8.encode(script)).bytes;
+    final base64String = base64.encode(hashedScriptBytes);
     hashScripts.add(
-      '''"'${hashType(hash)}-${base64.encode(hash.convert(utf8.encode(script)).bytes)}'"''',
+      '''"'${hashType.typeToString}-$base64String'"''',
     );
   }
   return hashScripts;
 }
 
-String hashType(Hash hash) {
-  switch (hash) {
-    case sha256:
-      print('sha256');
-      return 'sha256';
-    case sha384:
-      print('sha384');
-      return 'sha384';
-    case sha512:
-      print('sha512');
-      return 'sha512';
-    default:
-      print('default');
-      return 'sha256';
+extension HashType on Hash {
+  String get typeToString {
+    switch (this) {
+      case sha256:
+        return 'sha256';
+      case sha384:
+        return 'sha384';
+      case sha512:
+        return 'sha512';
+      default:
+        return 'sha256';
+    }
   }
 }
