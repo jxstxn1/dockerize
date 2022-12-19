@@ -19,7 +19,7 @@ void main(List<String> args) async {
   final app = Router();
   // For Google Cloud Run, we respect the PORT environment variable
   final portStr = Platform.environment['PORT'];
-  final port = int.tryParse(portStr ?? '8080');
+  final port = int.tryParse(portStr ?? '8000');
 
   if (!Directory(appDirectory).existsSync()) {
     throw "Can't serve APP_DIRECTORY $appDirectory, it doesn't exits";
@@ -43,5 +43,8 @@ void main(List<String> args) async {
   );
   if (portStr == null) {
     print('Serving at http://localhost:$port');
+    print(
+      'Note: If you used the -p --port option, the actuall port is different',
+    );
   }
 }

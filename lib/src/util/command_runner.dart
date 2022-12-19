@@ -25,7 +25,9 @@ void commandRunner(
     );
     if (!silent) print(green(successMessage));
   } catch (e) {
-    print(processProgress.lines.join('\n'));
-    exit(1);
+    if (!silent) {
+      print(processProgress.lines.join('\n'));
+      exit(1);
+    }
   }
 }
