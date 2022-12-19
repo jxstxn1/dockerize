@@ -29,5 +29,12 @@ class BuildCommand extends Command {
     // and before building the Docker image
 
     createDockerImage();
+
+    // TODO: Remove this warning in production
+    print(
+      yellow(
+        'Warning: Update the CSP Rules in the template/middlewares.template.dart file to make the app production ready',
+      ),
+    );
   }
 }

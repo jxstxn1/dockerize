@@ -15,7 +15,10 @@ Middleware middlewares() {
   pipeline = pipeline.addMiddleware(
     helmet(
       options: const HelmetOptions(
+        // TODO: Add your own CSP options
         cspOptions: ContentSecurityPolicyOptions.useDefaults(
+          // TODO: Disable reportOnly in production
+          reportOnly: true,
           directives: {
             'script-src': [
               "'unsafe-eval'",
@@ -31,6 +34,7 @@ Middleware middlewares() {
             ],
           },
         ),
+
         coepOptions: CrossOriginEmbedderPolicyOptions.credentialLess,
       ),
     ),
