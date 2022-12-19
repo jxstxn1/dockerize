@@ -12,12 +12,12 @@ void hashScripts({required Hash hashType}) {
         .file('index.html')
         .readAsStringSync(),
   );
-  final scripts = _getScripts(htmlFile);
-  final hashedScripts = _hasher(scripts, hashType);
-  _insertScripts(hashedScripts);
+  final scripts = getScripts(htmlFile);
+  final hashedScripts = hasher(scripts, hashType);
+  insertScripts(hashedScripts);
 }
 
-void _insertScripts(List<String> hashedScript) {
+void insertScripts(List<String> hashedScript) {
   final middlewareFile =
       repository.root.directory('server/bin').file('middlewares.dart');
   print(middlewareFile.path);
@@ -34,7 +34,7 @@ void _insertScripts(List<String> hashedScript) {
   middlewareFile.writeAsStringSync(newContent);
 }
 
-List<String> _getScripts(Document htmlFile) {
+List<String> getScripts(Document htmlFile) {
   final hashScripts = <String>[];
   final List<Element> scripts = htmlFile.getElementsByTagName('script');
   for (final script in scripts) {
@@ -45,7 +45,7 @@ List<String> _getScripts(Document htmlFile) {
   return hashScripts;
 }
 
-List<String> _hasher(List<String> scripts, Hash hashType) {
+List<String> hasher(List<String> scripts, Hash hashType) {
   final hashScripts = <String>[];
   for (final script in scripts) {
     final hashedScriptBytes = hashType.convert(utf8.encode(script)).bytes;
