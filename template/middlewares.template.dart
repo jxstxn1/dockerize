@@ -16,9 +16,9 @@ Middleware middlewares() {
     helmet(
       options: const HelmetOptions(
         // TODO: Add your own CSP options
-        cspOptions: ContentSecurityPolicyOptions.useDefaults(reportOnly: true),
-        /*
-        ContentSecurityPolicyOptions.useDefaults(
+        cspOptions: ContentSecurityPolicyOptions.useDefaults(
+          // TODO: Disable reportOnly in production
+          reportOnly: true,
           directives: {
             'script-src': [
               "'unsafe-eval'",
@@ -34,7 +34,7 @@ Middleware middlewares() {
             ],
           },
         ),
-        */
+
         coepOptions: CrossOriginEmbedderPolicyOptions.credentialLess,
       ),
     ),
