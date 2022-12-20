@@ -10,16 +10,22 @@ import 'middlewares.template.dart'; //template import
 import 'middlewares.dart';
 installed import */
 
-// For Google Cloud Run, set _hostname to '0.0.0.0'.
-const String _hostname = '0.0.0.0';
+/// Whether the app runs locally or on Google Cloud Run
+const bool runsLocally = bool.fromEnvironment('runs-locally');
 
-final appDirectory = Platform.environment['APP_DIRECTORY'] ?? 'www';
+// For Google Cloud Run, set _hostname to '0.0.0.0'.
+const String _hostname = runsLocally ? 'localhost' : '0.0.0.0';
+
+final appDirectory = runsLocally
+    ? Directory('server/www').path
+    : Platform.environment['APP_DIRECTORY'] ?? 'www';
 
 void main(List<String> args) async {
   final app = Router();
+  print('APP_DIRECTORY: $appDirectory');
   // For Google Cloud Run, we respect the PORT environment variable
   final portStr = Platform.environment['PORT'];
-  final port = int.tryParse(portStr ?? '8080');
+  final port = runsLocally ? 3000 : int.tryParse(portStr ?? '8080');
 
   if (!Directory(appDirectory).existsSync()) {
     throw "Can't serve APP_DIRECTORY $appDirectory, it doesn't exits";
@@ -42,4 +48,7 @@ void main(List<String> args) async {
     port!,
     poweredByHeader: null,
   );
+  if (runsLocally) {
+    print('Serving at http://$_hostname:$port');
+  }
 }
