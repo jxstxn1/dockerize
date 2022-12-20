@@ -41,5 +41,10 @@ Future<void> createServerFolder(SidekickPackage package) async {
             .file('template/analysis_options.template.yaml')
             .readAsStringSync(),
       );
+  serverFolder.file('README.md').writeAsStringSync(
+        PluginContext.installerPlugin.root
+            .file('template/README.template.md')
+            .readAsStringSync(),
+      );
   pubGet(DartPackage(serverFolder, 'server'));
 }
