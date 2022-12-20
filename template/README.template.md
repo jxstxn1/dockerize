@@ -5,11 +5,11 @@ It contains the following files:
 
 - `bin/server.dart` - The main entry point for the server.
 - `bin/middlewares.dart` - Contains all the middlewares for the server. Contains all CSP, CORS, and other security headers.
-- `Dockerfile` - The Dockerfile for the server to build it.
+- `Dockerfile` - The Dockerfile to build a docker image containing the server
 
 ## Running the server
 
-The recommended way to run the server is to use the Dockerfile by using the following command:
+The recommended way to run the server is to run it within docker with the following command:
 
 ```bash
 <<cli_name>> docker run -b
