@@ -15,8 +15,9 @@ The recommended way to run the server is to use the Dockerfile by using the foll
 <<cli_name>> docker run -b
 ```
 
-To run the server you can use the following command from your repo root:
+If you nevertheless want to run the server locally, you can do so by using the following command from your repo root:
 
 ```bash
+<<cli_name>> docker build
 dart run -Druns-locally=true server/bin/server.dart 
 ```
