@@ -54,12 +54,11 @@ class BuildCommand extends Command {
 
     createDockerImage(env.name);
 
-    if (env.name != 'prod') {
-      print(
-        yellow(
-          'Warning: Update the CSP Rules in the template/middlewares.template.dart file to make the app production ready',
-        ),
-      );
-    }
+    // TODO: Remove this warning after updating the CSP rules in the template/middlewares.template.dart file
+    print(
+      yellow(
+        'Warning: Update the CSP Rules in the template/middlewares.template.dart file to make the app production ready',
+      ),
+    );
   }
 }
