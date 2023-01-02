@@ -22,7 +22,6 @@ final appDirectory = runsLocally
 
 void main(List<String> args) async {
   final app = Router();
-  print('APP_DIRECTORY: $appDirectory');
   // For Google Cloud Run, we respect the PORT environment variable
   final portStr = Platform.environment['PORT'];
   final port = runsLocally ? 3000 : int.tryParse(portStr ?? '8080');
