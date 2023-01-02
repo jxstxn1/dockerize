@@ -47,6 +47,9 @@ class RunCommand extends Command {
     final background = argResults!['background'] as bool;
     final port = argResults?['port'] as String?;
 
+    /// Stoping all other running containers from the project
+    stopImage(silent: true);
+
     if (port != null) {
       final isPort = RegExp('^[0-9]{1,4}\$').hasMatch(port);
       if (!isPort) {
