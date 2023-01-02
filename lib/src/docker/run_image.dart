@@ -3,7 +3,11 @@ import 'package:dockerize_sidekick_plugin/dockerize_sidekick_plugin.dart';
 import 'package:sidekick_core/sidekick_core.dart';
 
 /// Starting the docker image
-void runImage({String? port, bool background = false}) {
+void runImage({
+  required String environmentName,
+  String? port,
+  bool background = false,
+}) {
   final String publicPort = port ?? '8000';
   stopImage(silent: true);
   print('Running ${mainProject!.name} on https://localhost:$publicPort');
@@ -23,7 +27,7 @@ void runImage({String? port, bool background = false}) {
       '$publicPort:8080',
       '--name',
       mainProject!.name,
-      '${mainProject!.name}:dev',
+      '${mainProject!.name}:$environmentName',
     ],
     terminal: true,
     workingDirectory: repository.root.directory('server').path,
