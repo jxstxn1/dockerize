@@ -32,9 +32,14 @@ Future<void> main() async {
       .copySync(environmentFile.path);
 
   final buildCommandFile = commandFolder.file('build_command.dart');
-  PluginContext.installerPlugin.root
-      .file('template/build_command.template.dart')
-      .copySync(buildCommandFile.path);
+  buildCommandFile.writeAsStringSync(
+    replaceTemplateDependencies(
+      PluginContext.installerPlugin.root
+          .file('template/build_command.template.dart')
+          .readAsLinesSync(),
+      package.cliName,
+    ).join('\n'),
+  );
 
   final runCommandFile = commandFolder.file('run_command.dart');
   runCommandFile.writeAsStringSync(
