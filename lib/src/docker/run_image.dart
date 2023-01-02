@@ -2,7 +2,11 @@ import 'package:dcli/dcli.dart' as dcli;
 import 'package:sidekick_core/sidekick_core.dart';
 
 /// Starting the docker image
-void runImage({String? port, bool background = false}) {
+void runImage({
+  required String environmentName,
+  String? port,
+  bool background = false,
+}) {
   final String publicPort = port ?? '8000';
   print('Running ${mainProject!.name} on https://localhost:$publicPort');
   dcli.startFromArgs(
@@ -21,7 +25,7 @@ void runImage({String? port, bool background = false}) {
       '$publicPort:8080',
       '--name',
       mainProject!.name,
-      '${mainProject!.name}:dev',
+      '${mainProject!.name}:$environmentName',
     ],
     terminal: true,
     workingDirectory: repository.root.directory('server').path,

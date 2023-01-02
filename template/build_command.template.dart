@@ -1,6 +1,11 @@
 import 'package:dockerize_sidekick_plugin/dockerize_sidekick_plugin.dart';
 import 'package:sidekick_core/sidekick_core.dart';
 
+import 'environment.template.dart'; //template import
+/* installed import
+import 'package:<<packageName>>/src/commands/dockerize/environment.dart';
+installed import */
+
 class BuildCommand extends Command {
   @override
   String get description => 'Builds a docker image for your Flutter Web App';
@@ -8,8 +13,21 @@ class BuildCommand extends Command {
   @override
   String get name => 'build';
 
+  final Set<DockerizeEnvironment> _environments = DockerizeEnvironments.all;
+
+  BuildCommand() {
+    argParser.addOption(
+      'env',
+      allowed: _environments.map((it) => it.name),
+      help: 'The environment to build the docker image for',
+    );
+  }
+
   @override
   Future<void> run() async {
+    final String environmentName = argResults!['env'] as String? ?? 'dev';
+    final DockerizeEnvironment env =
+        _environments.firstWhere((it) => it.name == environmentName);
     checkDockerInstall();
 
     // You can insert your own logic here before building the Flutter app
@@ -30,12 +48,18 @@ class BuildCommand extends Command {
 
     hashScripts(hashType: sha256);
 
+    // Setting enforceCSP to true will enforce the CSP rules in the template/middlewares.template.dart file
+    if (env.shouldEnforceCSP) enforceCSP(shouldEnforce: env.shouldEnforceCSP);
+
     // You can insert your own logic here after moving the Flutter app to the server directory (packages/server/www)
     // and before building the Docker image
 
-    createDockerImage();
+    createDockerImage(env.name);
 
-    // TODO: Remove this warning in production
+    // Setting enforceCSP back to false after the build is done
+    if (env.shouldEnforceCSP) enforceCSP(shouldEnforce: !env.shouldEnforceCSP);
+
+    // TODO: Remove this warning after updating the CSP rules in the template/middlewares.template.dart file
     print(
       yellow(
         'Warning: Update the CSP Rules in the template/middlewares.template.dart file to make the app production ready',

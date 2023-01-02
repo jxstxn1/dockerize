@@ -35,6 +35,10 @@ To run this locally you need [Docker](https://docs.docker.com/get-docker/) insta
 <<your_cli>> docker build
 ```
 
+The build command can choose between different environments.
+The default environment is `dev`.
+You can change the environment with the `--env` flag.
+
 You can customize the build process in the commands/docker/build_command.dart file.
 
 #### Run the docker image locally
@@ -48,6 +52,10 @@ With the `--background` flag you can run the container in the background.
 With the `-b, --build` flag you can execute the build command before running the container.
 With the `-p, --port` flag you can specify the port on which the app is accessible.
 
+The build command can choose between different environments.
+The default environment is `dev`.
+You can change the environment with the `--env` flag.
+
 You can detach from your running container with `Ctrl + P + Q` or `Ctrl + C`.
 Afterwards you can kill the container with `<<your_cli>> docker stop`.
 
@@ -59,6 +67,11 @@ Afterwards you can kill the container with `<<your_cli>> docker stop`.
 
 ### Further reading
 
+#### Environments
+
+By default we are generating a very simple way of handling different environments.
+You can change the environments in the `commands/docker/environment.dart` file.
+
 #### Script hashes
 
 By default we are generating script hashes for each script tag in your index.html file.
@@ -68,6 +81,7 @@ You can change the hashtype or disable it in the `commands/docker/build_command.
 
 By default we are adding a default Set of CSP rules to the `server/bin/middlewares.dart` File.
 You can change the rules or disable them in the `commands/docker/build_command.dart` file.
+You can find more informations about CSP Rules [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP).
 
 ### Help
 

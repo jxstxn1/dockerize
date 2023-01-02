@@ -4,6 +4,10 @@ import 'package:shelf_helmet/shelf_helmet.dart';
 /// Dont touch this line because it will be replaced by the build function
 const List<String> hashes = [];
 
+/// This is the default value, it will be replaced by the build function if
+/// the `shouldEnforceCSP` bool in the environments is set to true
+const bool shouldEnforceCsp = false;
+
 /// Returns a opinionated set of middlewares for a shelf server.
 /// This is used by default from the server.dart file.
 Middleware middlewares(List<String> nonces) {
@@ -20,8 +24,8 @@ Middleware middlewares(List<String> nonces) {
       options: const HelmetOptions(
         // TODO: Add your own CSP options
         cspOptions: ContentSecurityPolicyOptions.useDefaults(
-          // TODO: Disable reportOnly in production
-          reportOnly: true,
+          // ignore: avoid_redundant_argument_values
+          reportOnly: shouldEnforceCsp,
           directives: {
             'script-src': [
               "'self'",

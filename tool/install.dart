@@ -26,10 +26,20 @@ Future<void> main() async {
     ).join('\n'),
   );
 
-  final buildCommandFile = commandFolder.file('build_command.dart');
+  final environmentFile = commandFolder.file('environment.dart');
   PluginContext.installerPlugin.root
-      .file('template/build_command.template.dart')
-      .copySync(buildCommandFile.path);
+      .file('template/environment.template.dart')
+      .copySync(environmentFile.path);
+
+  final buildCommandFile = commandFolder.file('build_command.dart');
+  buildCommandFile.writeAsStringSync(
+    replaceTemplateDependencies(
+      PluginContext.installerPlugin.root
+          .file('template/build_command.template.dart')
+          .readAsLinesSync(),
+      package.cliName,
+    ).join('\n'),
+  );
 
   final runCommandFile = commandFolder.file('run_command.dart');
   runCommandFile.writeAsStringSync(
