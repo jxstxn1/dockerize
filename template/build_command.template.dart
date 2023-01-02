@@ -47,12 +47,17 @@ class BuildCommand extends Command {
     // You can change the hashType to sha384 or sha512 if you want
 
     hashScripts(hashType: sha256);
-    enforceCSP(shouldEnforce: env.shouldEnforceCSP);
+
+    // Setting enforceCSP to true will enforce the CSP rules in the template/middlewares.template.dart file
+    if (env.shouldEnforceCSP) enforceCSP(shouldEnforce: env.shouldEnforceCSP);
 
     // You can insert your own logic here after moving the Flutter app to the server directory (packages/server/www)
     // and before building the Docker image
 
     createDockerImage(env.name);
+
+    // Setting enforceCSP back to false after the build is done
+    if (env.shouldEnforceCSP) enforceCSP(shouldEnforce: !env.shouldEnforceCSP);
 
     // TODO: Remove this warning after updating the CSP rules in the template/middlewares.template.dart file
     print(
