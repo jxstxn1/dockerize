@@ -26,6 +26,11 @@ Future<void> main() async {
     ).join('\n'),
   );
 
+  final environmentFile = commandFolder.file('environment.dart');
+  PluginContext.installerPlugin.root
+      .file('template/environment.template.dart')
+      .copySync(environmentFile.path);
+
   final buildCommandFile = commandFolder.file('build_command.dart');
   PluginContext.installerPlugin.root
       .file('template/build_command.template.dart')
