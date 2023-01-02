@@ -39,11 +39,7 @@ class RunCommand extends Command {
 
   @override
   Future<void> run() async {
-    final environmentName = argResults!['env'] as String?;
-    if (environmentName == null) {
-      print(red('Please specify an environment to build the docker image for'));
-      return;
-    }
+    final String environmentName = argResults!['env'] as String? ?? 'dev';
     final DockerizeEnvironment env =
         _environments.firstWhere((it) => it.name == environmentName);
     checkDockerInstall();
