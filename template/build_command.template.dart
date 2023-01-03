@@ -67,11 +67,14 @@ class BuildCommand extends Command {
 
     allStopwatch.stop();
     print(
-        '- Finished Dockerize build in ${allStopwatch.elapsedMilliseconds}ms');
+      '- Finished Dockerize build in ${allStopwatch.elapsedMilliseconds}ms',
+    );
     print(
-        '  - Flutter build took ${flutterBuildStopwatch.elapsedMilliseconds}ms');
+      '  - Flutter build took ${flutterBuildStopwatch.elapsedMilliseconds}ms',
+    );
     print(
-        '  - Docker build took ${dockerBuildStopwatch.elapsedMilliseconds}ms');
+      '  - Docker build took ${dockerBuildStopwatch.elapsedMilliseconds}ms',
+    );
 
     // TODO: Remove this warning after updating the CSP rules in the template/middlewares.template.dart file
     print(
