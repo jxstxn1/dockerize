@@ -29,7 +29,8 @@ class BuildCommand extends Command {
     final Stopwatch flutterBuildStopwatch = Stopwatch();
     final Stopwatch dockerBuildStopwatch = Stopwatch();
     final String environmentName = argResults!['env'] as String? ?? 'dev';
-    final DockerizeEnvironment env = _environments.firstWhere((it) => it.name == environmentName);
+    final DockerizeEnvironment env =
+        _environments.firstWhere((it) => it.name == environmentName);
     checkDockerInstall();
 
     // You can insert your own logic here before building the Flutter app
@@ -65,9 +66,12 @@ class BuildCommand extends Command {
     if (env.shouldEnforceCSP) enforceCSP(shouldEnforce: !env.shouldEnforceCSP);
 
     allStopwatch.stop();
-    print('- Finished Dockerize build in ${allStopwatch.elapsedMilliseconds}ms');
-    print('  - Flutter build took ${flutterBuildStopwatch.elapsedMilliseconds}ms');
-    print('  - Docker build took ${dockerBuildStopwatch.elapsedMilliseconds}ms');
+    print(
+        '- Finished Dockerize build in ${allStopwatch.elapsedMilliseconds}ms');
+    print(
+        '  - Flutter build took ${flutterBuildStopwatch.elapsedMilliseconds}ms');
+    print(
+        '  - Docker build took ${dockerBuildStopwatch.elapsedMilliseconds}ms');
 
     // TODO: Remove this warning after updating the CSP rules in the template/middlewares.template.dart file
     print(
