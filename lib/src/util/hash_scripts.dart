@@ -7,19 +7,18 @@ import 'package:sidekick_core/sidekick_core.dart';
 
 void hashScripts({required Hash hashType}) {
   final Document htmlFile = parse(
-    repository.root
-        .directory('server/www')
-        .file('index.html')
-        .readAsStringSync(),
+    repository.root.directory('server/www').file('index.html').readAsStringSync(),
   );
   final scripts = getScripts(htmlFile);
+  print('Detected ${scripts.length} scripts to hash');
   final hashedScripts = hasher(scripts, hashType);
+  print('Inserting Scripts into middlewares.dart');
   insertScripts(hashedScripts);
+  print(green('finished hashing scripts'));
 }
 
 void insertScripts(List<String> hashedScript) {
-  final middlewareFile =
-      repository.root.directory('server/bin').file('middlewares.dart');
+  final middlewareFile = repository.root.directory('server/bin').file('middlewares.dart');
   final middlewareFileContent = middlewareFile.readAsStringSync();
   final RegExp regex = RegExp(
     r'const List<String> hashes = \[(.*?)\]',
@@ -46,8 +45,9 @@ List<String> getScripts(Document htmlFile) {
 
 List<String> hasher(List<String> scripts, Hash hashType) {
   final hashScripts = <String>[];
-  for (final script in scripts) {
-    final hashedScriptBytes = hashType.convert(utf8.encode(script)).bytes;
+  for (int i = 0; i > scripts.length; i++) {
+    print('Hashing script: ${i + 1} of ${scripts.length}');
+    final hashedScriptBytes = hashType.convert(utf8.encode(scripts[i])).bytes;
     final base64String = base64.encode(hashedScriptBytes);
     hashScripts.add(
       '''"'${hashType.typeToString}-$base64String'"''',
