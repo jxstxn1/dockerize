@@ -47,6 +47,9 @@ class RunCommand extends Command {
     final background = argResults!['background'] as bool;
     final port = argResults?['port'] as String?;
 
+    final mainProjectName = mainProject!.name;
+    final workingDir = repository.root.directory('server');
+
     /// Stoping all other running containers from the project
     stopImage(silent: true);
 
@@ -72,5 +75,9 @@ class RunCommand extends Command {
       port: port,
       background: background,
     );
+    ProcessSignal.sigint.watch().listen((signal) {
+      stopImage(mainProjectName: mainProjectName, workingDirectory: workingDir);
+      exit(0);
+    });
   }
 }
