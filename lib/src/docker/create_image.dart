@@ -4,7 +4,7 @@ import 'package:sidekick_core/sidekick_core.dart';
 /// Creates a docker image
 void createDockerImage(String environmentName) {
   print(
-    green('Creating image ${mainProject!.name}:$environmentName'),
+    'Creating image ${mainProject!.name}:$environmentName',
   );
   commandRunner(
     'docker',
