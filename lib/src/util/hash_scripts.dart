@@ -10,11 +10,11 @@ void hashScripts({required Hash hashType}) {
     repository.root.directory('server/www').file('index.html').readAsStringSync(),
   );
   final scripts = getScripts(htmlFile);
-  print('Detected ${scripts.length} scripts to hash');
+  print('- Detected ${scripts.length} scripts to hash');
   final hashedScripts = hasher(scripts, hashType);
-  print('Inserting Scripts into middlewares.dart');
+  print('- Inserting Scripts into middlewares.dart');
   insertScripts(hashedScripts);
-  print(green('finished hashing scripts'));
+  print(green('✅ Finished hashing scripts'));
 }
 
 void insertScripts(List<String> hashedScript) {
@@ -45,8 +45,8 @@ List<String> getScripts(Document htmlFile) {
 
 List<String> hasher(List<String> scripts, Hash hashType) {
   final hashScripts = <String>[];
-  for (int i = 0; i > scripts.length; i++) {
-    print('Hashing script: ${i + 1} of ${scripts.length}');
+  for (int i = 0; i < scripts.length; i++) {
+    print('- Hashing script: ${i + 1} of ${scripts.length}');
     final hashedScriptBytes = hashType.convert(utf8.encode(scripts[i])).bytes;
     final base64String = base64.encode(hashedScriptBytes);
     hashScripts.add(

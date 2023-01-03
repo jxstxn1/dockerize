@@ -10,6 +10,6 @@ void createDockerImage(String environmentName) {
     'docker',
     ['build', '-t', '${mainProject!.name}:$environmentName', '.'],
     workingDirectory: repository.root.directory('server'),
-    successMessage: 'Created image ${mainProject!.name}:$environmentName',
+    successMessage: '✅ Created image ${mainProject!.name}:$environmentName 🎉',
   );
 }
