@@ -25,7 +25,7 @@ Middleware middlewares(List<String> nonces) {
         // TODO: Add your own CSP options
         cspOptions: ContentSecurityPolicyOptions.useDefaults(
           // ignore: avoid_redundant_argument_values
-          reportOnly: shouldEnforceCsp,
+          reportOnly: !shouldEnforceCsp,
           directives: {
             'script-src': [
               "'self'",
