@@ -8,7 +8,9 @@ void runImage({
   bool background = false,
 }) {
   final String publicPort = port ?? '8000';
-  print('Running ${mainProject!.name} on https://localhost:$publicPort');
+  print(
+    'Running ${mainProject!.name} on https://localhost:$publicPort\n${yellow('Press ctrl-c twice to stop the app')}',
+  );
   dcli.startFromArgs(
     'docker',
     [
