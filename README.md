@@ -64,6 +64,15 @@ You can change the environment with the `--env` flag.
 <<your_cli>> docker stop
 ```
 
+#### Deploy the docker image
+
+Deploying the docker image depends on the environment you are deploying to.
+Here are the official guides for the biggest cloud providers:
+
+- [AWS](https://aws.amazon.com/getting-started/hands-on/deploy-docker-containers/)
+- [Azure](https://docs.docker.com/cloud/aci-integration/)
+- [Google Cloud Run](https://cloud.google.com/run/docs/quickstarts/deploy-container)
+
 ### Further reading
 
 #### Environments
