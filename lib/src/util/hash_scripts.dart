@@ -6,15 +6,14 @@ import 'package:html/parser.dart' show parse;
 import 'package:sidekick_core/sidekick_core.dart';
 
 void hashScripts({required Hash hashType}) {
-  final Document htmlFile = parse(
-    repository.root
-        .directory('server/www')
-        .file('index.html')
-        .readAsStringSync(),
-  );
+  final htmlString = repository.root
+      .directory('server/www')
+      .file('index.html')
+      .readAsStringSync();
+  final Document htmlFile = parse(htmlString);
   final scripts = getScripts(htmlFile);
   print('- Detected ${scripts.length} scripts to hash');
-  final hashedScripts = hasher(scripts, hashType);
+  final hashedScripts = hasher(scripts, hashType, htmlString);
   print('- Inserting Scripts into middlewares.dart');
   insertScripts(hashedScripts);
   print(green('✅ Finished hashing scripts'));
@@ -47,17 +46,45 @@ List<String> getScripts(Document htmlFile) {
   return hashScripts;
 }
 
-List<String> hasher(List<String> scripts, Hash hashType) {
+List<String> hasher(List<String> scripts, Hash hashType, String file) {
   final hashScripts = <String>[];
   for (int i = 0; i < scripts.length; i++) {
-    print('- Hashing script: ${i + 1} of ${scripts.length}');
-    final hashedScriptBytes = hashType.convert(utf8.encode(scripts[i])).bytes;
-    final base64String = base64.encode(hashedScriptBytes);
-    hashScripts.add(
-      '''"'${hashType.typeToString}-$base64String'"''',
-    );
+    if (scripts[i].isNotEmpty) {
+      print('- Hashing index.html:${getLineNumber(file, scripts[i])} <script>');
+      final hashedScriptBytes = hashType.convert(utf8.encode(scripts[i])).bytes;
+      final base64String = base64.encode(hashedScriptBytes);
+      hashScripts.add(
+        '''"'${hashType.typeToString}-$base64String'"''',
+      );
+    }
   }
   return hashScripts;
+}
+
+int getLineNumber(String htmlFile, String script) {
+  const slashN = 0x0A;
+  const slashR = 0x0D;
+
+  int lineStarts = 0;
+  final length = htmlFile.indexOf(script);
+  for (var i = 0; i < length; i++) {
+    final unit = htmlFile.codeUnitAt(i);
+    // Special-case \r\n.
+    if (unit == slashR) {
+      // Peek ahead to detect a following \n.
+      if (i + 1 < length && htmlFile.codeUnitAt(i + 1) == slashN) {
+        // Line start will get registered at next index at the \n.
+      } else {
+        lineStarts++;
+      }
+    }
+    // \n
+    if (unit == slashN) {
+      lineStarts++;
+    }
+  }
+
+  return lineStarts + 1;
 }
 
 extension HashType on Hash {
