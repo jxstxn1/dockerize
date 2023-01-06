@@ -7,7 +7,10 @@ import 'package:sidekick_core/sidekick_core.dart';
 
 void hashScripts({required Hash hashType}) {
   final Document htmlFile = parse(
-    repository.root.directory('server/www').file('index.html').readAsStringSync(),
+    repository.root
+        .directory('server/www')
+        .file('index.html')
+        .readAsStringSync(),
   );
   final scripts = getScripts(htmlFile);
   final hashedScripts = hasher(scripts, hashType);

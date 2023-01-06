@@ -26,7 +26,8 @@ class BuildCommand extends Command {
   @override
   Future<void> run() async {
     final String environmentName = argResults!['env'] as String? ?? 'dev';
-    final DockerizeEnvironment env = _environments.firstWhere((it) => it.name == environmentName);
+    final DockerizeEnvironment env =
+        _environments.firstWhere((it) => it.name == environmentName);
     checkDockerInstall();
 
     // You can insert your own logic here before building the Flutter app
