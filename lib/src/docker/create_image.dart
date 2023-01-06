@@ -8,7 +8,7 @@ void createDockerImage(String environmentName) {
   );
   commandRunner(
     'docker',
-    ['build', '-t', '${mainProject!.name}:$environmentName', '.'],
+    ['buildx', 'build', '-t', '${mainProject!.name}:$environmentName', '.'],
     workingDirectory: repository.root.directory('server'),
     successMessage: 'Created image ${mainProject!.name}:$environmentName',
   );
