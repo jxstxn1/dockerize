@@ -25,6 +25,9 @@ class BuildCommand extends Command {
 
   @override
   Future<void> run() async {
+    final Stopwatch allStopwatch = Stopwatch()..start();
+    final Stopwatch flutterBuildStopwatch = Stopwatch();
+    final Stopwatch dockerBuildStopwatch = Stopwatch();
     final String environmentName = argResults!['env'] as String? ?? 'dev';
     final DockerizeEnvironment env =
         _environments.firstWhere((it) => it.name == environmentName);
@@ -32,12 +35,14 @@ class BuildCommand extends Command {
 
     // You can insert your own logic here before building the Flutter app
 
+    flutterBuildStopwatch.start();
     flutter(
       // You can change any build arguments here like --release
       // Check out `flutter build web --help` for more information
       ['build', 'web'],
       workingDirectory: mainProject!.root,
     );
+    flutterBuildStopwatch.stop();
 
     // You can insert your own logic here after building the Flutter app
 
@@ -53,11 +58,23 @@ class BuildCommand extends Command {
 
     // You can insert your own logic here after moving the Flutter app to the server directory (packages/server/www)
     // and before building the Docker image
-
+    dockerBuildStopwatch.start();
     createDockerImage(env.name);
+    dockerBuildStopwatch.stop();
 
     // Setting enforceCSP back to false after the build is done
     if (env.shouldEnforceCSP) enforceCSP(shouldEnforce: !env.shouldEnforceCSP);
+
+    allStopwatch.stop();
+    print(
+      '- Finished Dockerize build in ${allStopwatch.elapsedMilliseconds}ms',
+    );
+    print(
+      '  - Flutter build took ${flutterBuildStopwatch.elapsedMilliseconds}ms',
+    );
+    print(
+      '  - Docker build took ${dockerBuildStopwatch.elapsedMilliseconds}ms',
+    );
 
     // TODO: Remove this warning after updating the CSP rules in the template/middlewares.template.dart file
     print(
