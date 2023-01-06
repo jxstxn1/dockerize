@@ -7,10 +7,7 @@ import 'package:sidekick_core/sidekick_core.dart';
 
 void hashScripts({required Hash hashType}) {
   final Document htmlFile = parse(
-    repository.root
-        .directory('server/www')
-        .file('index.html')
-        .readAsStringSync(),
+    repository.root.directory('server/www').file('index.html').readAsStringSync(),
   );
   final scripts = getScripts(htmlFile);
   final hashedScripts = hasher(scripts, hashType);
@@ -18,8 +15,7 @@ void hashScripts({required Hash hashType}) {
 }
 
 void insertScripts(List<String> hashedScript) {
-  final middlewareFile =
-      repository.root.directory('server/bin').file('middlewares.dart');
+  final middlewareFile = repository.root.file('server/bin/middlewares.dart');
   final middlewareFileContent = middlewareFile.readAsStringSync();
   final RegExp regex = RegExp(
     r'const List<String> hashes = \[(.*?)\]',
