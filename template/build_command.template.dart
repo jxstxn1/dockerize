@@ -26,8 +26,7 @@ class BuildCommand extends Command {
   @override
   Future<void> run() async {
     final String environmentName = argResults!['env'] as String? ?? 'dev';
-    final DockerizeEnvironment env =
-        _environments.firstWhere((it) => it.name == environmentName);
+    final DockerizeEnvironment env = _environments.firstWhere((it) => it.name == environmentName);
     checkDockerInstall();
 
     // You can insert your own logic here before building the Flutter app
@@ -53,7 +52,12 @@ class BuildCommand extends Command {
 
     // You can insert your own logic here after moving the Flutter app to the server directory (packages/server/www)
     // and before building the Docker image
-
+    createVersionFile(
+      entries: {
+        'environment': env.name,
+        // You can add any other information you want to the version.json file here
+      },
+    );
     createDockerImage(env.name);
 
     // Setting enforceCSP back to false after the build is done
