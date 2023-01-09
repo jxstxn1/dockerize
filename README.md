@@ -35,6 +35,8 @@ To run this locally you need [Docker](https://docs.docker.com/get-docker/) insta
 <<your_cli>> docker build
 ```
 
+With the `--docker-only` flag you just build the docker container without the flutter build command.
+
 The build command can choose between different environments.
 The default environment is `dev`.
 You can change the environment with the `--env` flag.
@@ -51,8 +53,9 @@ You can detach and kill the container by pressing `Ctrl + C` twice.
 
 This will run your app and makes it accessible at `localhost:8000`.
 With the `--background` flag you can run the container in the background.
-With the `-b, --build` flag you can execute the build command before running the container.
+With the `-b, --build-all` flag you can execute the build command before running the container.
 With the `-p, --port` flag you can specify the port on which the app is accessible.
+With the `--build-docker` flag you just build the docker container without the flutter build command.
 
 The build command can choose between different environments.
 The default environment is `dev`.
