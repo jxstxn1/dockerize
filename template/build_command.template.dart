@@ -21,6 +21,11 @@ class BuildCommand extends Command {
       allowed: _environments.map((it) => it.name),
       help: 'The environment to build the docker image for',
     );
+    argParser.addFlag(
+      'docker-only',
+      abbr: 'd',
+      help: 'Builds only the docker image',
+    );
   }
 
   @override
@@ -29,24 +34,28 @@ class BuildCommand extends Command {
     final Stopwatch flutterBuildStopwatch = Stopwatch();
     final Stopwatch dockerBuildStopwatch = Stopwatch();
     final String environmentName = argResults!['env'] as String? ?? 'dev';
+    final bool shouldOnlyBuildDocker =
+        argResults!['docker-only'] as bool? ?? false;
     final DockerizeEnvironment env =
         _environments.firstWhere((it) => it.name == environmentName);
     checkDockerInstall();
 
-    // You can insert your own logic here before building the Flutter app
+    if (!shouldOnlyBuildDocker) {
+      // You can insert your own logic here before building the Flutter app
 
-    flutterBuildStopwatch.start();
-    flutter(
-      // You can change any build arguments here like --release
-      // Check out `flutter build web --help` for more information
-      ['build', 'web'],
-      workingDirectory: mainProject!.root,
-    );
-    flutterBuildStopwatch.stop();
+      flutterBuildStopwatch.start();
+      flutter(
+        // You can change any build arguments here like --release
+        // Check out `flutter build web --help` for more information
+        ['build', 'web'],
+        workingDirectory: mainProject!.root,
+      );
+      flutterBuildStopwatch.stop();
 
-    // You can insert your own logic here after building the Flutter app
+      // You can insert your own logic here after building the Flutter app
 
-    moveToServerDirectory();
+      moveToServerDirectory();
+    }
 
     // You can disable the hashScripts() function if you don't want to use CSP
     // You can change the hashType to sha384 or sha512 if you want
@@ -76,12 +85,14 @@ class BuildCommand extends Command {
     print(
       '- Finished Dockerize build in ${allStopwatch.elapsedMilliseconds}ms',
     );
-    print(
-      '  - Flutter build took ${flutterBuildStopwatch.elapsedMilliseconds}ms',
-    );
-    print(
-      '  - Docker build took ${dockerBuildStopwatch.elapsedMilliseconds}ms',
-    );
+    if (!shouldOnlyBuildDocker) {
+      print(
+        '  - Flutter build took ${flutterBuildStopwatch.elapsedMilliseconds}ms',
+      );
+      print(
+        '  - Docker build took ${dockerBuildStopwatch.elapsedMilliseconds}ms',
+      );
+    }
 
     // TODO: Remove this warning after updating the CSP rules in the template/middlewares.template.dart file
     print(
