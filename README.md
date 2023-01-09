@@ -1,4 +1,4 @@
-# dockerize_sidekick_plugin sidekick plugin
+# dockerize_sidekick_plugin
 
 A plugin for [sidekick CLIs](https://pub.dev/packages/sidekick).  
 
