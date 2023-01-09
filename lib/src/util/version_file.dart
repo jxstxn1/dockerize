@@ -7,10 +7,8 @@ void createVersionFile({Map<String, dynamic>? entries}) {
     "created_at": DateTime.now().toIso8601String(),
     ...entries ?? {},
   };
-  final middlewareFile = repository.root.file('server/www/version.json');
-  if (!middlewareFile.existsSync()) {
-    middlewareFile.createSync(recursive: true);
-  }
-
-  middlewareFile.writeAsStringSync(jsonEncode(content));
+  final versionFile = repository.root.file('server/www/version.json');
+  final versionContent = jsonDecode(versionFile.readAsStringSync()) as Map;
+  versionContent.addAll(content);
+  versionFile.writeAsStringSync(jsonEncode(versionContent));
 }
