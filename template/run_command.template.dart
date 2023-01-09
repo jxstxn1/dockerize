@@ -66,7 +66,7 @@ class RunCommand extends Command {
     );
 
     print(
-      'Running ${mainProject!.name} on https://localhost:$port\n${yellow('Press ctrl-c twice to stop the app')}',
+      'Running ${mainProject!.name} on https://localhost:$port\n${yellow('Press ctrl-c to stop the app')}',
     );
 
     runImage(
