@@ -58,6 +58,13 @@ class BuildCommand extends Command {
 
     // You can insert your own logic here after moving the Flutter app to the server directory (packages/server/www)
     // and before building the Docker image
+
+    createVersionFile(
+      entries: {
+        'environment': env.name,
+        // You can add any other information you want to the version.json file here
+      },
+    );
     dockerBuildStopwatch.start();
     createDockerImage(env.name);
     dockerBuildStopwatch.stop();

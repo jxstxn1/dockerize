@@ -20,8 +20,7 @@ void hashScripts({required Hash hashType}) {
 }
 
 void insertScripts(List<String> hashedScript) {
-  final middlewareFile =
-      repository.root.directory('server/bin').file('middlewares.dart');
+  final middlewareFile = repository.root.file('server/bin/middlewares.dart');
   final middlewareFileContent = middlewareFile.readAsStringSync();
   final RegExp regex = RegExp(
     r'const List<String> hashes = \[(.*?)\]',
