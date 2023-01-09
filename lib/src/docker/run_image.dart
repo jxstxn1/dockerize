@@ -1,35 +1,55 @@
-import 'package:dcli/dcli.dart' as dcli;
+import 'dart:convert';
+import 'dart:io' as io;
+
+import 'package:dockerize_sidekick_plugin/dockerize_sidekick_plugin.dart';
 import 'package:sidekick_core/sidekick_core.dart';
 
 /// Starting the docker image
-void runImage({
+Future<void> runImage({
   required String environmentName,
   String? port,
   bool background = false,
-}) {
-  final String publicPort = port ?? '8000';
-  print(
-    'Running ${mainProject!.name} on https://localhost:$publicPort\n${yellow('Press ctrl-c twice to stop the app')}',
-  );
-  dcli.startFromArgs(
+}) async {
+  final mainProjectName = mainProject!.name;
+  final workingDir = repository.root.directory('server');
+  final process = await io.Process.start(
     'docker',
     [
       'run',
-      if (background) ...[
-        '-d'
-      ] else ...[
-        '--sig-proxy=false',
-        '--detach-keys=ctrl-c',
-        '-it',
-      ],
+      if (background) ...['-d'],
       '--rm',
       '-p',
-      '$publicPort:8080',
+      '$port:8080',
       '--name',
       mainProject!.name,
       '${mainProject!.name}:$environmentName',
     ],
-    terminal: true,
-    workingDirectory: repository.root.directory('server').path,
   );
+
+  ProcessSignal.sigint
+      .watch()
+      .listen((_) => _killProcess(process, mainProjectName, workingDir));
+
+  process.stderr.listen((_) async {
+    final message = utf8.decode(_).trim();
+    if (message.isEmpty) return;
+    print(red(message));
+    await _killProcess(process, mainProjectName, workingDir);
+  });
+
+  process.stdout.listen((_) {
+    final message = utf8.decode(_).trim();
+    if (message.isEmpty) return;
+    print(message);
+  });
+}
+
+Future<void> _killProcess(
+  io.Process process,
+  String mainProjectName,
+  Directory workingDir,
+) async {
+  stopImage(mainProjectName: mainProjectName, workingDirectory: workingDir);
+  process.kill();
+  exit(1);
 }
