@@ -17,9 +17,13 @@ class RunCommand extends Command {
 
   RunCommand() {
     argParser.addFlag(
-      'build',
+      'build-all',
       abbr: 'b',
       help: 'Call the docker build command before running',
+    );
+    argParser.addFlag(
+      'build-container',
+      help: 'Builds the docker container before running',
     );
     argParser.addFlag(
       'background',
@@ -43,7 +47,8 @@ class RunCommand extends Command {
     final DockerizeEnvironment env =
         _environments.firstWhere((it) => it.name == environmentName);
     checkDockerInstall();
-    final withBuildCommand = argResults!['build'] as bool;
+    final withBuildAll = argResults!['build-all'] as bool;
+    final withBuildContainer = argResults!['build-container'] as bool;
     final background = argResults!['background'] as bool;
     final port = argResults?['port'] as String?;
 
@@ -60,11 +65,12 @@ class RunCommand extends Command {
         exit(1);
       }
     }
-    if (withBuildCommand) {
+    if (withBuildAll || withBuildContainer) {
       final process = dcli.startFromArgs(Repository.requiredEntryPoint.path, [
         'docker',
         'build',
         '--env=$environmentName',
+        if (withBuildContainer) '--docker-only',
       ]);
       process.exitCode == 0
           ? print(green('Build successful'))
