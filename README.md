@@ -49,7 +49,7 @@ You can customize the build process in the commands/docker/build_command.dart fi
 <<your_cli>> docker run
 ```
 
-You can detach and kill the container by pressing `Ctrl + C` twice.
+You can detach and kill the container by pressing `Ctrl + C`.
 
 This will run your app and makes it accessible at `localhost:8000`.
 With the `--background` flag you can run the container in the background.
