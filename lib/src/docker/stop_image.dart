@@ -13,6 +13,6 @@ void stopImage({
     ['kill', projectName],
     workingDirectory: workingDirectory ?? repository.root.directory('server'),
     silent: silent,
-    successMessage: 'Stopped app: $projectName',
+    successMessage: '\nStopped app: $projectName',
   );
 }
