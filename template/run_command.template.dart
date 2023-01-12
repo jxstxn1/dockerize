@@ -1,4 +1,3 @@
-import 'dart:io' as io;
 import 'package:dockerize_sidekick_plugin/dockerize_sidekick_plugin.dart';
 import 'package:sidekick_core/sidekick_core.dart';
 
@@ -59,11 +58,12 @@ class RunCommand extends Command {
 
     isPortValid(port);
 
-    executeBuild(
-      buildAll: withBuildAll,
-      buildContainer: withBuildContainer,
-      envName: env.name,
-    );
+    if (withBuildAll || withBuildContainer) {
+      executeBuild(
+        buildContainer: withBuildContainer,
+        envName: env.name,
+      );
+    }
 
     print(
       'Running ${mainProject!.name} on https://localhost:$port\n${yellow('Press ctrl-c to stop the app')}',
@@ -72,26 +72,8 @@ class RunCommand extends Command {
     runImage(
       port: port,
       background: background,
+      mainProject: mainProject,
       environmentName: env.name,
     );
-  }
-
-  // Helper method which is under the hood calling the build command
-  void executeBuild({
-    required bool buildAll,
-    required bool buildContainer,
-    required String envName,
-  }) {
-    if (buildAll || buildContainer) {
-      final process = io.Process.runSync(Repository.requiredEntryPoint.path, [
-        'docker',
-        'build',
-        '--env=$envName',
-        if (buildContainer) '--docker-only',
-      ]);
-      process.exitCode == 0
-          ? print(green('Build successful'))
-          : print(red('Build failed'));
-    }
   }
 }
