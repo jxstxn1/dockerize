@@ -3,20 +3,23 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
-import 'package:sidekick_core/sidekick_core.dart';
+import 'package:mason_logger/mason_logger.dart';
+import 'package:sidekick_core/sidekick_core.dart' hide Progress;
 
 void hashScripts({required Hash hashType}) {
+  final Logger logger = Logger();
   final htmlString = repository.root
       .directory('server/www')
       .file('index.html')
       .readAsStringSync();
   final Document htmlFile = parse(htmlString);
   final scripts = getScripts(htmlFile);
-  print('- Detected ${scripts.length} scripts to hash');
+  final progress =
+      logger.progress('[dockerize] Detected ${scripts.length} scripts to hash');
   final hashedScripts = hasher(scripts, hashType, htmlString);
-  print('- Inserting Scripts into middlewares.dart');
+  progress.update('[dockerize]  Inserting Scripts into middlewares.dart');
   insertScripts(hashedScripts);
-  print(green('✅ Finished hashing scripts'));
+  progress.complete('[dockerize]  Finished hashing scripts');
 }
 
 void insertScripts(List<String> hashedScript) {
@@ -45,11 +48,25 @@ List<String> getScripts(Document htmlFile) {
   return hashScripts;
 }
 
-List<String> hasher(List<String> scripts, Hash hashType, String file) {
+List<String> hasher(
+  List<String> scripts,
+  Hash hashType,
+  String file, {
+  Logger? logger,
+}) {
   final hashScripts = <String>[];
   for (int i = 0; i < scripts.length; i++) {
     if (scripts[i].isNotEmpty) {
-      print('- Hashing index.html:${getLineNumber(file, scripts[i])} <script>');
+      if (logger != null) {
+        logger.info(
+          '[dockerize] - Hashing index.html:${getLineNumber(file, scripts[i])} <script>',
+        );
+      } else {
+        print(
+          '[dockerize] - Hashing index.html:${getLineNumber(file, scripts[i])} <script>',
+        );
+      }
+
       final hashedScriptBytes = hashType.convert(utf8.encode(scripts[i])).bytes;
       final base64String = base64.encode(hashedScriptBytes);
       hashScripts.add(

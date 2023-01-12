@@ -2,8 +2,9 @@ import 'dart:convert';
 import 'dart:io' as io;
 
 import 'package:dockerize_sidekick_plugin/dockerize_sidekick_plugin.dart';
+import 'package:mason_logger/mason_logger.dart';
 import 'package:path/path.dart' as path;
-import 'package:sidekick_core/sidekick_core.dart';
+import 'package:sidekick_core/sidekick_core.dart' hide red;
 import 'package:stream_transform/stream_transform.dart';
 import 'package:watcher/watcher.dart';
 
@@ -23,6 +24,7 @@ Future<void> runImage({
   final repositoryRoot = repository.root;
   final workingDir = repository.root.directory('server');
   final DirectoryWatcher watcher = DirectoryWatcher(repository.root.path);
+  final Logger logger = Logger();
   Process? process;
   bool reloading = false;
 
@@ -51,7 +53,7 @@ Future<void> runImage({
     process?.stderr.listen((_) {
       final message = utf8.decode(_).trim();
       if (message.isEmpty) return;
-      print(red(message));
+      logger.err('[dockerize] $message');
       _killProcess(process, mainProjectName, workingDir);
     });
 
@@ -59,7 +61,7 @@ Future<void> runImage({
     process?.stdout.listen((_) {
       final message = utf8.decode(_).trim();
       if (message.isEmpty) return;
-      print(message);
+      logger.info('[dockerize] $message');
     });
   }
 
@@ -106,19 +108,31 @@ Future<void> runImage({
   Future<void> reload({required bool reloadAll}) async {
     // blocking watcher from triggering reload multiple times after build is done
     reloading = true;
-    print('Reloading...');
-    print('Stopping image...');
-    _killProcess(process, mainProjectName, workingDir, shouldExit: false);
-    print('Building image...');
-    executeBuild(
-      buildContainer: !reloadAll,
-      envName: environmentName,
-      path: requiredEntryPointPath,
-    );
-    print('Starting image...');
-    runImage();
-    print('Reload complete.');
-    cooldown();
+    final progress = logger.progress('[dockerize] Reloading...');
+    try {
+      progress.update('[dockerize] Stopping image...');
+      _killProcess(
+        process,
+        mainProjectName,
+        workingDir,
+        shouldExit: false,
+        silent: true,
+      );
+      progress.update('[dockerize] Building image...');
+      await executeBuild(
+        progressLogger: progress,
+        buildContainer: !reloadAll,
+        envName: environmentName,
+        path: requiredEntryPointPath,
+      );
+      progress.update('[dockerize] Starting image...');
+      runImage();
+      progress.complete('[dockerize] Reload complete.');
+      cooldown();
+    } catch (e) {
+      progress.fail('[dockerize] Failed to reload');
+      logger.err('[dockerize] $e');
+    }
   }
 
   final subscription = watcher.events
@@ -142,8 +156,13 @@ void _killProcess(
   String mainProjectName,
   Directory workingDir, {
   bool shouldExit = true,
+  bool silent = false,
 }) {
-  stopImage(mainProjectName: mainProjectName, workingDirectory: workingDir);
+  stopImage(
+    mainProjectName: mainProjectName,
+    workingDirectory: workingDir,
+    silent: silent,
+  );
   if (process != null) process.kill();
   if (shouldExit) exit(1);
 }

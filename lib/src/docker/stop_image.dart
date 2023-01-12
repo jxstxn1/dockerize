@@ -1,4 +1,5 @@
 import 'package:dockerize_sidekick_plugin/src/util/command_runner.dart';
+import 'package:mason_logger/mason_logger.dart';
 import 'package:sidekick_core/sidekick_core.dart';
 
 /// Stoping the currently running docker image
@@ -13,6 +14,7 @@ void stopImage({
     ['kill', projectName],
     workingDirectory: workingDirectory ?? repository.root.directory('server'),
     silent: silent,
-    successMessage: '\nStopped app: $projectName',
+    logger: Logger(),
+    successMessage: 'Stopped app: $projectName',
   );
 }
