@@ -30,9 +30,7 @@ void executeBuild({
       '--env=$envName',
       if (buildContainer) '--docker-only',
     ],
-    runInShell: true,
   );
-  print(process.stdout);
   process.exitCode == 0
       ? print(green('Build successful'))
       : print(red('Build failed'));
