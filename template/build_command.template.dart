@@ -83,21 +83,21 @@ class BuildCommand extends Command {
 
     allStopwatch.stop();
     print(
-      '- Finished Dockerize build in ${allStopwatch.elapsedMilliseconds}ms',
+      '[dockerize] Finished Dockerize build in ${allStopwatch.elapsedMilliseconds}ms',
     );
     if (!shouldOnlyBuildDocker) {
       print(
-        '  - Flutter build took ${flutterBuildStopwatch.elapsedMilliseconds}ms',
+        '[dockerize]   - Flutter build took ${flutterBuildStopwatch.elapsedMilliseconds}ms',
       );
       print(
-        '  - Docker build took ${dockerBuildStopwatch.elapsedMilliseconds}ms',
+        '[dockerize]   - Docker build took ${dockerBuildStopwatch.elapsedMilliseconds}ms',
       );
     }
 
     // TODO: Remove this warning after updating the CSP rules in the template/middlewares.template.dart file
     print(
       yellow(
-        'Warning: Update the CSP Rules in the template/middlewares.template.dart file to make the app production ready',
+        '[dockerize] Warning: Update the CSP Rules in the template/middlewares.template.dart file to make the app production ready',
       ),
     );
   }

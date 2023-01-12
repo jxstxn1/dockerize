@@ -59,14 +59,14 @@ class RunCommand extends Command {
     isPortValid(port);
 
     if (withBuildAll || withBuildContainer) {
-      executeBuild(
+      await executeBuild(
         buildContainer: withBuildContainer,
         envName: env.name,
       );
     }
 
     print(
-      'Running ${mainProject!.name} on https://localhost:$port\n${yellow('Press ctrl-c to stop the app')}',
+      '[dockerize] Running ${mainProject!.name} on http://localhost:$port\n[dockerize] ${yellow('Press ctrl-c to stop the app')}',
     );
 
     runImage(
