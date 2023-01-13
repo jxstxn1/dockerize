@@ -73,11 +73,19 @@ Future<void> runImage({
     if (reloading) return false;
     final mainProjectPath = mainProject?.libDir.path;
     if (mainProjectPath == null) return false;
-    return path.isWithin(mainProjectPath, event.path) ||
-        path.isWithin(
-          repositoryRoot.directory('packages').path,
-          event.path,
-        );
+    final withinSidekick = () {
+      if (Repository.cliPackageDir == null) return false;
+      return path.isWithin(
+        Repository.cliPackageDir!.path,
+        event.path,
+      );
+    }();
+    return (path.isWithin(mainProjectPath, event.path) ||
+            path.isWithin(
+              repositoryRoot.directory('packages').path,
+              event.path,
+            )) &&
+        !withinSidekick;
   }
 
   /// Checks if the server dir is changed
