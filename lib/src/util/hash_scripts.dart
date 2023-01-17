@@ -113,7 +113,7 @@ extension HashType on Hash {
       case sha512:
         return 'sha512';
       default:
-        throw Exception('Hash type not supported');
+        throw ArgumentError('Hash type not supported');
     }
   }
 }

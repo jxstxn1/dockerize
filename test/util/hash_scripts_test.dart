@@ -21,6 +21,14 @@ void main() {
   });
 
   group('hasher', () {
+    test('Should throw if a non supported HashType is inserted', () {
+      final Document htmlFile = loadSampleHTML;
+      final scripts = getScripts(htmlFile);
+      expect(
+        () => hasher(scripts, sha224, loadSampleHTMLString),
+        throwsA(isA<ArgumentError>()),
+      );
+    });
     group('Sha256', () {
       test('Should hash the serviceWorkerVersion', () {
         final Document htmlFile = loadSampleHTML;
