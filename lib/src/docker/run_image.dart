@@ -44,8 +44,14 @@ Future<void> runImage({
     );
 
     // Watches if the user is pressing ctrl+c and kills the process
-    ProcessSignal.sigint.watch().listen((_) =>
-        _killProcess(process, mainProjectName, workingDir, logger: logger));
+    ProcessSignal.sigint.watch().listen(
+          (_) => _killProcess(
+            process,
+            mainProjectName,
+            workingDir,
+            logger: logger,
+          ),
+        );
 
     // Listens to the process error output and prints it to the console
     process?.stderr.listen((_) {
