@@ -1,5 +1,4 @@
 import 'package:dockerize_sidekick_plugin/dockerize_sidekick_plugin.dart';
-import 'package:mason_logger/mason_logger.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
