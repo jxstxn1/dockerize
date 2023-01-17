@@ -10,6 +10,7 @@ class StopCommand extends Command {
 
   @override
   Future<void> run() async {
+    final Logger logger = Logger();
     checkDockerInstall();
     stopImage();
   }

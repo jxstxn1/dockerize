@@ -30,6 +30,7 @@ class BuildCommand extends Command {
 
   @override
   Future<void> run() async {
+    final Logger logger = Logger();
     final Stopwatch allStopwatch = Stopwatch()..start();
     final Stopwatch flutterBuildStopwatch = Stopwatch();
     final Stopwatch dockerBuildStopwatch = Stopwatch();
@@ -82,23 +83,21 @@ class BuildCommand extends Command {
     if (env.shouldEnforceCSP) enforceCSP(shouldEnforce: !env.shouldEnforceCSP);
 
     allStopwatch.stop();
-    print(
+    logger.success(
       '[dockerize] Finished Dockerize build in ${allStopwatch.elapsedMilliseconds}ms',
     );
     if (!shouldOnlyBuildDocker) {
-      print(
+      logger.info(
         '[dockerize]   - Flutter build took ${flutterBuildStopwatch.elapsedMilliseconds}ms',
       );
-      print(
+      logger.info(
         '[dockerize]   - Docker build took ${dockerBuildStopwatch.elapsedMilliseconds}ms',
       );
     }
 
     // TODO: Remove this warning after updating the CSP rules in the template/middlewares.template.dart file
-    print(
-      yellow(
-        '[dockerize] Warning: Update the CSP Rules in the template/middlewares.template.dart file to make the app production ready',
-      ),
+    logger.warn(
+      '[dockerize] Warning: Update the CSP Rules in the template/middlewares.template.dart file to make the app production ready',
     );
   }
 }
