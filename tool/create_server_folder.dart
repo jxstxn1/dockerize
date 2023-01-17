@@ -45,5 +45,10 @@ Future<void> createServerFolder(SidekickPackage package) async {
             .file('template/README.template.md')
             .readAsStringSync(),
       );
+  serverFolder.file('.gitignore').writeAsStringSync(
+        PluginContext.installerPlugin.root
+            .file('template/gitignore.template')
+            .readAsStringSync(),
+      );
   pubGet(DartPackage(serverFolder, 'server'));
 }
