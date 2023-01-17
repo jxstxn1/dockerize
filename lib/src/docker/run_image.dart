@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io' as io;
 
 import 'package:dockerize_sidekick_plugin/dockerize_sidekick_plugin.dart';
-import 'package:mason_logger/mason_logger.dart';
 import 'package:path/path.dart' as path;
 import 'package:sidekick_core/sidekick_core.dart' hide red;
 import 'package:stream_transform/stream_transform.dart';
