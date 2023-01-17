@@ -56,7 +56,9 @@ class RunCommand extends Command {
     /// Stoping all other running containers from the project
     stopImage(silent: true);
 
-    isPortValid(port);
+    if (!isPortValid(port)) {
+      exit(1);
+    }
 
     if (withBuildAll || withBuildContainer) {
       await executeBuild(
