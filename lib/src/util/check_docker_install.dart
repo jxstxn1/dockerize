@@ -9,6 +9,6 @@ void checkDockerInstall() {
     logger.err(
       '[dockerize] Docker is not installed. Please install docker and try again.',
     );
-    exit(0);
+    exit(1);
   }
 }

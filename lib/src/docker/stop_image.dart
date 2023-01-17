@@ -7,6 +7,7 @@ void stopImage({
   bool silent = false,
   String? mainProjectName,
   Directory? workingDirectory,
+  required Logger logger,
 }) {
   final projectName = mainProjectName ?? mainProject!.name;
   commandRunner(
@@ -14,7 +15,7 @@ void stopImage({
     ['kill', projectName],
     workingDirectory: workingDirectory ?? repository.root.directory('server'),
     silent: silent,
-    logger: Logger(),
+    logger: logger,
     successMessage: 'Stopped app: $projectName',
   );
 }
