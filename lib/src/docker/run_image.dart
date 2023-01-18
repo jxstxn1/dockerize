@@ -164,15 +164,15 @@ Future<void> runImage({
 }
 
 /// kills the Process and exits the application
-void _killProcess(
+Future<void> _killProcess(
   io.Process? process,
   String mainProjectName,
   Directory workingDir, {
   bool shouldExit = true,
   bool silent = false,
   required Logger logger,
-}) {
-  stopImage(
+}) async {
+  await stopImage(
     mainProjectName: mainProjectName,
     workingDirectory: workingDir,
     silent: silent,

@@ -12,6 +12,6 @@ class StopCommand extends Command {
   Future<void> run() async {
     final logger = Logger();
     checkDockerInstall();
-    stopImage(logger: logger);
+    await stopImage(logger: logger);
   }
 }
