@@ -59,7 +59,12 @@ class RunCommand extends Command {
     }
 
     /// Stoping all other running containers from the project
-    await stopImage(silent: true, logger: logger);
+    await stopImage(
+      silent: true,
+      logger: logger,
+      mainProjectName: mainProject!.name,
+      workingDirectory: repository.root.directory('server'),
+    );
 
     if (withBuildAll || withBuildContainer) {
       await executeBuild(

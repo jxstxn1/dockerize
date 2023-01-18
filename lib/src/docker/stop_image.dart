@@ -5,15 +5,15 @@ import 'package:sidekick_core/sidekick_core.dart';
 /// Stoping the currently running docker image
 Future<void> stopImage({
   bool silent = false,
-  String? mainProjectName,
-  Directory? workingDirectory,
+  required String mainProjectName,
+  required Directory workingDirectory,
   required Logger logger,
 }) async {
-  final projectName = mainProjectName ?? mainProject!.name;
+  final projectName = mainProjectName;
   await commandRunner(
     'docker',
     ['kill', projectName],
-    workingDirectory: workingDirectory ?? repository.root.directory('server'),
+    workingDirectory: workingDirectory,
     silent: silent,
     logger: logger,
     successMessage: 'Stopped app: $projectName',
