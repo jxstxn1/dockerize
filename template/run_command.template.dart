@@ -52,7 +52,7 @@ class RunCommand extends Command {
     final background = argResults!['background'] as bool;
     final port = argResults?['port'] as String? ?? '8000';
 
-    checkDockerInstall();
+    checkDockerInstall(logger);
 
     if (!isPortValid(port, logger)) {
       exit(1);

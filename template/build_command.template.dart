@@ -39,7 +39,7 @@ class BuildCommand extends Command {
         argResults!['docker-only'] as bool? ?? false;
     final DockerizeEnvironment env =
         _environments.firstWhere((it) => it.name == environmentName);
-    checkDockerInstall();
+    checkDockerInstall(logger);
 
     if (!shouldOnlyBuildDocker) {
       // You can insert your own logic here before building the Flutter app
