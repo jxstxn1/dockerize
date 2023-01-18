@@ -54,7 +54,7 @@ class RunCommand extends Command {
     checkDockerInstall();
 
     /// Stoping all other running containers from the project
-    stopImage(silent: true);
+    await stopImage(silent: true);
 
     isPortValid(port);
 
