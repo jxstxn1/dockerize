@@ -75,7 +75,7 @@ class BuildCommand extends Command {
       },
     );
     dockerBuildStopwatch.start();
-    createDockerImage(env.name);
+    await createDockerImage(env.name);
     dockerBuildStopwatch.stop();
 
     // Setting enforceCSP back to false after the build is done

@@ -3,13 +3,13 @@ import 'package:mason_logger/mason_logger.dart';
 import 'package:sidekick_core/sidekick_core.dart';
 
 /// Stoping the currently running docker image
-void stopImage({
+Future<void> stopImage({
   bool silent = false,
   String? mainProjectName,
   Directory? workingDirectory,
-}) {
+}) async {
   final projectName = mainProjectName ?? mainProject!.name;
-  commandRunner(
+  await commandRunner(
     'docker',
     ['kill', projectName],
     workingDirectory: workingDirectory ?? repository.root.directory('server'),
