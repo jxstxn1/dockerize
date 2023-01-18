@@ -64,7 +64,12 @@ class BuildCommand extends Command {
     hashScripts(hashType: sha256);
 
     // Setting enforceCSP to true will enforce the CSP rules in the template/middlewares.template.dart file
-    if (env.shouldEnforceCSP) enforceCSP(shouldEnforce: env.shouldEnforceCSP);
+    if (env.shouldEnforceCSP) {
+      enforceCSP(
+        shouldEnforce: env.shouldEnforceCSP,
+        middlewareFile: repository.root.file('server/bin/middlewares.dart'),
+      );
+    }
 
     // You can insert your own logic here after moving the Flutter app to the server directory (packages/server/www)
     // and before building the Docker image
@@ -81,7 +86,12 @@ class BuildCommand extends Command {
     dockerBuildStopwatch.stop();
 
     // Setting enforceCSP back to false after the build is done
-    if (env.shouldEnforceCSP) enforceCSP(shouldEnforce: !env.shouldEnforceCSP);
+    if (env.shouldEnforceCSP) {
+      enforceCSP(
+        shouldEnforce: !env.shouldEnforceCSP,
+        middlewareFile: repository.root.file('server/bin/middlewares.dart'),
+      );
+    }
 
     allStopwatch.stop();
     logger.success(
