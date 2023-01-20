@@ -1,12 +1,18 @@
+import 'dart:io' as io;
+
+import 'package:dockerize_sidekick_plugin/dockerize_sidekick_plugin.dart';
 import 'package:sidekick_core/sidekick_core.dart';
 
 import 'build_app_command.template.dart'; //template import
 import 'build_image_command.template.dart'; //template import
 import 'build_scripts_command.template.dart'; //template import
+import 'environment.template.dart'; //template import
 /* installed import
-import 'package:<<packageName>>/src/commands/dockerize/build_app_command.dart';
-import 'package:<<packageName>>/src/commands/dockerize/build_image_command.dart';
-import 'package:<<packageName>>/src/commands/dockerize/build_scripts_command.dart';
+
+import 'package:<<packageName>>/src/commands/dockerize/build/build_app_command.dart';
+import 'package:<<packageName>>/src/commands/dockerize/build/build_image_command.dart';
+import 'package:<<packageName>>/src/commands/dockerize/build/build_scripts_command.dart';
+import 'package:<<packageName>>/src/commands/dockerize/environment.dart';
 installed import */
 
 class BuildCommand extends Command {
@@ -16,9 +22,39 @@ class BuildCommand extends Command {
   @override
   String get name => 'build';
 
+  final Set<DockerizeEnvironment> _environments = DockerizeEnvironments.all;
+
   BuildCommand() {
     addSubcommand(BuildImageCommand());
     addSubcommand(BuildAppCommand());
     addSubcommand(BuildScriptsCommand());
+    argParser.addOption(
+      'env',
+      allowed: _environments.map((it) => it.name),
+      help: 'The environment to build the docker image for',
+    );
+  }
+
+  @override
+  Future<void> run() async {
+    final logger = Logger();
+    final process = logger.progress('Building docker image');
+    final String environmentName = argResults!['env'] as String? ?? 'dev';
+    final DockerizeEnvironment env =
+        _environments.firstWhere((it) => it.name == environmentName);
+    final ioProcess = await io.Process.run(
+      Repository.requiredEntryPoint.path,
+      [
+        'docker',
+        'build',
+        'image',
+        '--env=${env.name}',
+      ],
+    );
+    if (ioProcess.exitCode == 0) {
+      process.complete('[dockerize] Build successful');
+    } else {
+      process.fail('[dockerize] Build failed');
+    }
   }
 }
