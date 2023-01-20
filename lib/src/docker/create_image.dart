@@ -15,10 +15,11 @@ Future<void> createDockerImage(
   final entryPointPath = entryPoint ?? Repository.requiredEntryPoint.path;
   final containerName = mainProjectName ?? mainProject!.name;
   final Logger buildLogger = logger ?? Logger();
-  final buildProgess = buildLogger.progress(
-    '[dockerize] Creating image $containerName:$environmentName',
-  );
+
   if (buildFlutter) {
+    final buildProgess = buildLogger.progress(
+      '[dockerize] Building Flutter App',
+    );
     final process = await io.Process.run(
       entryPointPath,
       [
@@ -29,7 +30,7 @@ Future<void> createDockerImage(
       ],
     );
     if (process.exitCode == 0) {
-      buildProgess.update('[dockerize] Built flutter app 🎉');
+      buildProgess.complete('[dockerize] Built flutter app 🎉');
     } else {
       buildProgess.fail('[dockerize] Failed to build flutter app 😢');
       buildLogger.err(process.stdout.toString());
@@ -37,6 +38,9 @@ Future<void> createDockerImage(
     }
   }
   if (buildScripts) {
+    final buildProgess = buildLogger.progress(
+      '[dockerize] Running BuildScripts',
+    );
     final process = await io.Process.run(
       entryPointPath,
       [
@@ -47,7 +51,7 @@ Future<void> createDockerImage(
       ],
     );
     if (process.exitCode == 0) {
-      buildProgess.update('[dockerize] Executed Build Scripts 🎉');
+      buildProgess.complete('[dockerize] Executed Build Scripts 🎉');
     } else {
       buildProgess.fail('[dockerize] Failed to execute BuildScripts 😢');
       buildLogger.err(process.stdout.toString());
@@ -55,6 +59,9 @@ Future<void> createDockerImage(
     }
   }
 
+  final buildProgess = buildLogger.progress(
+    '[dockerize] Creating image $containerName:$environmentName',
+  );
   final workingDir =
       (workingDirectoryPath ?? repository.root).directory('server');
   final process = await io.Process.run(
