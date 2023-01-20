@@ -5,7 +5,7 @@ import 'build_command.template.dart'; //template import
 import 'run_command.template.dart'; //template import
 import 'stop_command.template.dart'; //template import
 /* installed import 
-import 'package:<<packageName>>/src/commands/dockerize/build_command.dart';
+import 'package:<<packageName>>/src/commands/dockerize/build/build_command.dart';
 import 'package:<<packageName>>/src/commands/dockerize/run_command.dart';
 import 'package:<<packageName>>/src/commands/dockerize/stop_command.dart';
 installed import */

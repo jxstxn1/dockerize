@@ -30,11 +30,46 @@ Future<void> main() async {
       .file('template/environment.template.dart')
       .copySync(environmentFile.path);
 
-  final buildCommandFile = commandFolder.file('build_command.dart');
+  commandFolder.directory('build').createIfNotExists();
+
+  final buildCommandFile = commandFolder.file('build/build_command.dart');
   buildCommandFile.writeAsStringSync(
     replaceTemplateDependencies(
       PluginContext.installerPlugin.root
           .file('template/build_command.template.dart')
+          .readAsLinesSync(),
+      package.cliName,
+    ).join('\n'),
+  );
+
+  final buildAppCommandFile =
+      commandFolder.file('build/build_app_command.dart');
+  buildAppCommandFile.writeAsStringSync(
+    replaceTemplateDependencies(
+      PluginContext.installerPlugin.root
+          .file('template/build_app_command.template.dart')
+          .readAsLinesSync(),
+      package.cliName,
+    ).join('\n'),
+  );
+
+  final buildImageCommandFile =
+      commandFolder.file('build/build_image_command.dart');
+  buildImageCommandFile.writeAsStringSync(
+    replaceTemplateDependencies(
+      PluginContext.installerPlugin.root
+          .file('template/build_image_command.template.dart')
+          .readAsLinesSync(),
+      package.cliName,
+    ).join('\n'),
+  );
+
+  final buildScriptsCommandFile =
+      commandFolder.file('build/build_scripts_command.dart');
+  buildScriptsCommandFile.writeAsStringSync(
+    replaceTemplateDependencies(
+      PluginContext.installerPlugin.root
+          .file('template/build_scripts_command.template.dart')
           .readAsLinesSync(),
       package.cliName,
     ).join('\n'),
