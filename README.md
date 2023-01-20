@@ -33,17 +33,17 @@ To run this locally you need [Docker](https://docs.docker.com/get-docker/) insta
 
 #### Build the docker image
 
-```bash
-<<your_cli>> docker build
-```
+You have multiple build commands. Here is a short overview:
 
-With the `--docker-only` flag you just build the docker container without the flutter build command.
+`<<your_cli>> docker build app` => basically a flutter build web command
+`<<your_cli>> docker build scripts` => runs all required scripts to move the files to the right place or hash scripts from the index.html
+`<<your_cli>> docker build image` => builds the docker image and also execute the app and scripts build commands
 
-The build command can choose between different environments.
+The build commands can choose between different environments.
 The default environment is `dev`.
 You can change the environment with the `--env` flag.
 
-You can customize the build process in the commands/docker/build_command.dart file.
+You can customize the build process in the `commands/build` folder.
 
 #### Run the docker image locally
 
@@ -51,13 +51,15 @@ You can customize the build process in the commands/docker/build_command.dart fi
 <<your_cli>> docker run
 ```
 
+**Notice:**
+**While you execute the run command, a hot-reload is enabled which will rerun the required build commands if you change a file.**
 You can detach and kill the container by pressing `Ctrl + C`.
 
 This will run your app and makes it accessible at `localhost:8000`.
-With the `--background` flag you can run the container in the background.
-With the `-b, --build-all` flag you can execute the build command before running the container.
+With the `-b, --build-all` flag you can execute all build commands before running the container.(Recommended if you just changed something in the project)
+With the `-build-scripts` flag you can execute the scripts build command before running the container.(Recommended if you just changed something in the `server/` folder)
+With the `--build-image` flag you can execute the image build command before running the container.(Recommended if you just changed something in the `Dockerfile`)
 With the `-p, --port` flag you can specify the port on which the app is accessible.
-With the `--build-docker` flag you just build the docker container without the flutter build command.
 
 The build command can choose between different environments.
 The default environment is `dev`.
