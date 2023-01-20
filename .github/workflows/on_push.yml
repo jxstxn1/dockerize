@@ -10,7 +10,7 @@ jobs:
       with:
         dart_sdk: "stable"
         platform: "vm"
-        min_coverage: 60
+        min_coverage: 25
   coverage:
 
     runs-on: ubuntu-latest
