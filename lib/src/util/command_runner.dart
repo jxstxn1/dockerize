@@ -17,15 +17,20 @@ Future<void> commandRunner(
     workingDirectory: workingDirectory.path,
     runInShell: true,
   );
-  if (process.exitCode == 0) {
+  if (process.stderr.toString().isEmpty) {
     if (!silent) {
       logger.info('[dockerize] ${process.stdout}');
       logger.success('[dockerize] $successMessage');
     }
   } else {
     if (!silent) {
-      logger.info('[dockerize] ${process.stdout}');
+      print(process.stderr);
+      print(process.stdout);
+      if (stdout.toString().isNotEmpty) {
+        logger.info('[dockerize] ${process.stdout}');
+      }
       logger.err('[dockerize] ${process.stderr}');
     }
   }
+  return;
 }

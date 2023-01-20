@@ -1,8 +1,6 @@
 import 'package:sidekick_core/sidekick_core.dart';
 
-void enforceCSP({required bool shouldEnforce}) {
-  final middlewareFile =
-      repository.root.directory('server/bin').file('middlewares.dart');
+void enforceCSP({required bool shouldEnforce, required File middlewareFile}) {
   final middlewareFileContent = middlewareFile.readAsStringSync();
   final RegExp regex = RegExp(
     'const bool shouldEnforceCsp = (.*?);',

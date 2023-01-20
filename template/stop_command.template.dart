@@ -10,7 +10,12 @@ class StopCommand extends Command {
 
   @override
   Future<void> run() async {
-    checkDockerInstall();
-    await stopImage();
+    final logger = Logger();
+    checkDockerInstall(logger);
+    await stopImage(
+      logger: logger,
+      mainProjectName: mainProject!.name,
+      workingDirectory: repository.root.directory('server'),
+    );
   }
 }

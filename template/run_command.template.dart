@@ -43,6 +43,7 @@ class RunCommand extends Command {
 
   @override
   Future<void> run() async {
+    final Logger logger = Logger();
     final String environmentName = argResults!['env'] as String? ?? 'dev';
     final DockerizeEnvironment env =
         _environments.firstWhere((it) => it.name == environmentName);
@@ -51,12 +52,19 @@ class RunCommand extends Command {
     final background = argResults!['background'] as bool;
     final port = argResults?['port'] as String? ?? '8000';
 
-    checkDockerInstall();
+    checkDockerInstall(logger);
+
+    if (!isPortValid(port, logger)) {
+      exit(1);
+    }
 
     /// Stoping all other running containers from the project
-    await stopImage(silent: true);
-
-    isPortValid(port);
+    await stopImage(
+      silent: true,
+      logger: logger,
+      mainProjectName: mainProject!.name,
+      workingDirectory: repository.root.directory('server'),
+    );
 
     if (withBuildAll || withBuildContainer) {
       await executeBuild(
@@ -65,9 +73,10 @@ class RunCommand extends Command {
       );
     }
 
-    print(
-      '[dockerize] Running ${mainProject!.name} on http://localhost:$port\n[dockerize] ${yellow('Press ctrl-c to stop the app')}',
+    logger.info(
+      '[dockerize] Running ${mainProject!.name} on http://localhost:$port',
     );
+    logger.warn('[dockerize] Press ctrl-c to stop the app');
 
     runImage(
       port: port,

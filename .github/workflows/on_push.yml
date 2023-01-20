@@ -5,4 +5,31 @@ jobs:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/pana.yml@v1
     with:
       min_score: 130
-  
+  build:
+      uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/dart_package.yml@v1
+      with:
+        dart_sdk: "stable"
+        platform: "vm"
+        min_coverage: 25
+  coverage:
+
+    runs-on: ubuntu-latest
+    
+    container:
+      image:  dart:2.18
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install coverage
+      run: dart pub global activate coverage 1.2.0
+    - name: Install dependencies
+      run: dart pub get    
+    - name: Run tests with coverage
+      run: dart run test --coverage="coverage"
+    - name: Convert coverage to ICOV
+      run: dart run coverage:format_coverage --lcov --in=coverage --out=coverage.lcov --report-on=lib
+    - name: Upload coverage to Codecov  
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{secrets.CODECOV_TOKEN}}
+        file: coverage.lcov

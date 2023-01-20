@@ -30,6 +30,7 @@ class BuildCommand extends Command {
 
   @override
   Future<void> run() async {
+    final Logger logger = Logger();
     final Stopwatch allStopwatch = Stopwatch()..start();
     final Stopwatch flutterBuildStopwatch = Stopwatch();
     final Stopwatch dockerBuildStopwatch = Stopwatch();
@@ -38,7 +39,7 @@ class BuildCommand extends Command {
         argResults!['docker-only'] as bool? ?? false;
     final DockerizeEnvironment env =
         _environments.firstWhere((it) => it.name == environmentName);
-    checkDockerInstall();
+    checkDockerInstall(logger);
 
     if (!shouldOnlyBuildDocker) {
       // You can insert your own logic here before building the Flutter app
@@ -63,12 +64,18 @@ class BuildCommand extends Command {
     hashScripts(hashType: sha256);
 
     // Setting enforceCSP to true will enforce the CSP rules in the template/middlewares.template.dart file
-    if (env.shouldEnforceCSP) enforceCSP(shouldEnforce: env.shouldEnforceCSP);
+    if (env.shouldEnforceCSP) {
+      enforceCSP(
+        shouldEnforce: env.shouldEnforceCSP,
+        middlewareFile: repository.root.file('server/bin/middlewares.dart'),
+      );
+    }
 
     // You can insert your own logic here after moving the Flutter app to the server directory (packages/server/www)
     // and before building the Docker image
 
-    createVersionFile(
+    writeToVersionFile(
+      versionFile: repository.root.file('server/www/version.json'),
       entries: {
         'environment': env.name,
         // You can add any other information you want to the version.json file here
@@ -79,26 +86,29 @@ class BuildCommand extends Command {
     dockerBuildStopwatch.stop();
 
     // Setting enforceCSP back to false after the build is done
-    if (env.shouldEnforceCSP) enforceCSP(shouldEnforce: !env.shouldEnforceCSP);
+    if (env.shouldEnforceCSP) {
+      enforceCSP(
+        shouldEnforce: !env.shouldEnforceCSP,
+        middlewareFile: repository.root.file('server/bin/middlewares.dart'),
+      );
+    }
 
     allStopwatch.stop();
-    print(
+    logger.success(
       '[dockerize] Finished Dockerize build in ${allStopwatch.elapsedMilliseconds}ms',
     );
     if (!shouldOnlyBuildDocker) {
-      print(
+      logger.info(
         '[dockerize]   - Flutter build took ${flutterBuildStopwatch.elapsedMilliseconds}ms',
       );
-      print(
+      logger.info(
         '[dockerize]   - Docker build took ${dockerBuildStopwatch.elapsedMilliseconds}ms',
       );
     }
 
     // TODO: Remove this warning after updating the CSP rules in the template/middlewares.template.dart file
-    print(
-      yellow(
-        '[dockerize] Warning: Update the CSP Rules in the template/middlewares.template.dart file to make the app production ready',
-      ),
+    logger.warn(
+      '[dockerize] Warning: Update the CSP Rules in the template/middlewares.template.dart file to make the app production ready',
     );
   }
 }

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io' as io;
 
 import 'package:dockerize_sidekick_plugin/dockerize_sidekick_plugin.dart';
-import 'package:mason_logger/mason_logger.dart';
 import 'package:path/path.dart' as path;
 import 'package:sidekick_core/sidekick_core.dart' hide red;
 import 'package:stream_transform/stream_transform.dart';
@@ -45,16 +44,21 @@ Future<void> runImage({
     );
 
     // Watches if the user is pressing ctrl+c and kills the process
-    ProcessSignal.sigint
-        .watch()
-        .listen((_) => _killProcess(process, mainProjectName, workingDir));
+    ProcessSignal.sigint.watch().listen(
+          (_) => _killProcess(
+            process,
+            mainProjectName,
+            workingDir,
+            logger: logger,
+          ),
+        );
 
     // Listens to the process error output and prints it to the console
     process?.stderr.listen((_) {
       final message = utf8.decode(_).trim();
       if (message.isEmpty) return;
       logger.err('[dockerize] $message');
-      _killProcess(process, mainProjectName, workingDir);
+      _killProcess(process, mainProjectName, workingDir, logger: logger);
     });
 
     // Listens to the process output and prints it to the console
@@ -125,6 +129,7 @@ Future<void> runImage({
         workingDir,
         shouldExit: false,
         silent: true,
+        logger: logger,
       );
       progress.update('[dockerize] Building image...');
       await executeBuild(
@@ -165,11 +170,13 @@ Future<void> _killProcess(
   Directory workingDir, {
   bool shouldExit = true,
   bool silent = false,
+  required Logger logger,
 }) async {
   await stopImage(
     mainProjectName: mainProjectName,
     workingDirectory: workingDir,
     silent: silent,
+    logger: logger,
   );
   if (process != null) process.kill();
   if (shouldExit) exit(1);

@@ -3,12 +3,13 @@ import 'package:sidekick_core/sidekick_core.dart';
 
 /// Checks if docker is installed
 /// Exit the process if docker is not installed
-void checkDockerInstall() {
-  final Logger logger = Logger();
+void checkDockerInstall(Logger logger) {
   if (which('docker').notfound) {
     logger.err(
       '[dockerize] Docker is not installed. Please install docker and try again.',
     );
-    exit(0);
+    throw NotInstalledException();
   }
 }
+
+class NotInstalledException implements Exception {}
