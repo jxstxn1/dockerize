@@ -16,11 +16,10 @@ Future<void> runImage({
   required String environmentName,
   required DartPackage? mainProject,
   String? port,
-  bool background = false,
 }) async {
   final mainProjectName = mainProject?.name ?? 'app';
-  final requiredEntryPointPath = Repository.requiredEntryPoint.path;
   final repositoryRoot = repository.root;
+  final requiredEntryPoint = Repository.requiredEntryPoint;
   final workingDir = repository.root.directory('server');
   final DirectoryWatcher watcher = DirectoryWatcher(repository.root.path);
   final Logger logger = Logger();
@@ -33,13 +32,12 @@ Future<void> runImage({
       'docker',
       [
         'run',
-        if (background) ...['-d'],
         '--rm',
         '-p',
         '$port:8080',
         '--name',
-        mainProject!.name,
-        '${mainProject.name}:$environmentName',
+        mainProjectName,
+        '$mainProjectName:$environmentName',
       ],
     );
 
@@ -132,19 +130,23 @@ Future<void> runImage({
         logger: logger,
       );
       progress.update('[dockerize] Building image...');
-      await executeBuild(
-        progressLogger: progress,
-        buildContainer: !reloadAll,
-        envName: environmentName,
-        path: requiredEntryPointPath,
+      print('reloadAll: $reloadAll');
+      await createDockerImage(
+        environmentName,
+        logger: logger,
+        mainProjectName: mainProjectName,
+        buildFlutter: !reloadAll,
+        workingDirectoryPath: repositoryRoot,
+        entryPoint: requiredEntryPoint.path,
       );
       progress.update('[dockerize] Starting image...');
       runImage();
       progress.complete('[dockerize] Reload complete.');
       cooldown();
-    } catch (e) {
+    } catch (e, stack) {
       progress.fail('[dockerize] Failed to reload');
       logger.err('[dockerize] $e');
+      logger.err('[dockerize] $stack');
     }
   }
 
@@ -175,7 +177,7 @@ Future<void> _killProcess(
   await stopImage(
     mainProjectName: mainProjectName,
     workingDirectory: workingDir,
-    silent: silent,
+    silent: true,
     logger: logger,
   );
   if (process != null) process.kill();
