@@ -37,6 +37,8 @@ class BuildImageCommand extends Command {
   @override
   Future<void> run() async {
     final logger = Logger();
+    final bool buildApp = argResults!['build-app'] as bool;
+    final bool buildScripts = argResults!['build-scripts'] as bool;
     final String environmentName = argResults!['env'] as String? ?? 'dev';
     final DockerizeEnvironment env =
         _environments.firstWhere((it) => it.name == environmentName);
@@ -44,6 +46,8 @@ class BuildImageCommand extends Command {
     await createDockerImage(
       env.name,
       logger: logger,
+      buildFlutter: buildApp,
+      buildScripts: buildScripts,
     );
   }
 }
