@@ -1,5 +1,14 @@
 FROM dart:stable AS build
+ARG build_flutter=false
+ARG build_scripts=false
+ARG environment=dev
 # Copy shared submodule package
+
+RUN if $build_flutter ; then echo "Running Flutter Build" ; fi
+RUN if $build_scripts ; then echo "Running Build Scripts" ; fi
+RUN echo "${environment}"
+
+
 WORKDIR /app
 COPY pubspec.* ./
 COPY /bin/ ./bin/

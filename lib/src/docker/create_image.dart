@@ -4,14 +4,31 @@ import 'package:mason_logger/mason_logger.dart';
 import 'package:sidekick_core/sidekick_core.dart' hide Progress;
 
 /// Creates a docker image
-Future<void> createDockerImage(String environmentName, {Logger? logger}) async {
+Future<void> createDockerImage(
+  String environmentName, {
+  Logger? logger,
+  bool buildScripts = true,
+  bool buildFlutter = true,
+}) async {
   final Logger buildLogger = logger ?? Logger();
   buildLogger.info(
     '[dockerize] Creating image ${mainProject!.name}:$environmentName',
   );
   await commandRunner(
     'docker',
-    ['buildx', 'build', '-t', '${mainProject!.name}:$environmentName', '.'],
+    [
+      'buildx',
+      'build',
+      '--build-arg',
+      'enviroment=$environmentName',
+      '--build-arg',
+      'build_flutter=$buildFlutter',
+      '--build-arg',
+      'build_scripts=$buildScripts',
+      '-t',
+      '${mainProject!.name}:$environmentName',
+      '.',
+    ],
     logger: buildLogger,
     workingDirectory: repository.root.directory('server'),
     successMessage: 'Created image ${mainProject!.name}:$environmentName 🎉',

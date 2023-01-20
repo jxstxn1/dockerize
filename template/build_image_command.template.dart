@@ -22,6 +22,16 @@ class BuildImageCommand extends Command {
       allowed: _environments.map((it) => it.name),
       help: 'The environment to build the docker image for',
     );
+    argParser.addFlag(
+      'build-app',
+      help: 'Runs build app before',
+      defaultsTo: true,
+    );
+    argParser.addFlag(
+      'build-scripts',
+      help: 'Runs build scripts before',
+      defaultsTo: true,
+    );
   }
 
   @override
