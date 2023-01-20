@@ -34,27 +34,4 @@ class BuildCommand extends Command {
       help: 'The environment to build the docker image for',
     );
   }
-
-  @override
-  Future<void> run() async {
-    final logger = Logger();
-    final process = logger.progress('Building docker image');
-    final String environmentName = argResults!['env'] as String? ?? 'dev';
-    final DockerizeEnvironment env =
-        _environments.firstWhere((it) => it.name == environmentName);
-    final ioProcess = await io.Process.run(
-      Repository.requiredEntryPoint.path,
-      [
-        'docker',
-        'build',
-        'image',
-        '--env=${env.name}',
-      ],
-    );
-    if (ioProcess.exitCode == 0) {
-      process.complete('[dockerize] Build successful');
-    } else {
-      process.fail('[dockerize] Build failed');
-    }
-  }
 }
