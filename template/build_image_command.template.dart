@@ -43,6 +43,7 @@ class BuildImageCommand extends Command {
     final DockerizeEnvironment env =
         _environments.firstWhere((it) => it.name == environmentName);
     checkDockerInstall(logger);
+
     await createDockerImage(
       env.name,
       logger: logger,
