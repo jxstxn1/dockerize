@@ -6,18 +6,24 @@ void main() {
     'Should return the correct usage of dockerize as String with the right cli name',
     () {
       expect(
-          printUsage('testName'),
-          '\nUsage: You can execute the following commands:\n'
-          '• testName docker\n'
-          '   • build\t\t Builds your project and the docker container\n'
-          '      --docker-only\t Builds only the Docker Container\n'
-          '      --env\t Choose between the existing environments\n'
-          '   • run\t\t Runs the Docker Container on localhost:8000\n'
-          '      -b, --build-all\t Builds the Flutter Web App and the Container before running\n'
-          '      --build-docker\t Builds only the Docker Container before running\n'
-          '      -p, --port\t Set a custom entry port for the container\n'
-          '      --env\t Choose between the existing environments\n'
-          '   • stop\t\t Stops the currently running docker container\n');
+        printUsage('testName'),
+        '''
+Usage: testName docker [command] [flags]
+
+Commands:
+  build [app|scripts|image]  Build the Docker image or run specific build commands
+  stop                       Stop the Docker container
+  run                        Runs the Docker image locally
+
+Flags:
+  -h, --help                 Show this message
+  -b, --build-all            Execute all build commands before running the container
+  --build-scripts            Execute the scripts build command before running the container
+  --build-image              Execute the image build command before running the container
+  -p, --port                 Specify the port on which the app is accessible
+  --env                      Specify the environment to use (default is "dev")
+''',
+      );
     },
   );
 }
