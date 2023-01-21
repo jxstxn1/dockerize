@@ -17,7 +17,7 @@ Future<void> commandRunner(
     workingDirectory: workingDirectory.path,
     runInShell: true,
   );
-  if (process.stderr.toString().isEmpty) {
+  if (process.exitCode == 0) {
     if (!silent) {
       logger.info('[dockerize] ${process.stdout}');
       logger.success('[dockerize] $successMessage');

@@ -19,15 +19,15 @@ class RunCommand extends Command {
     argParser.addFlag(
       'build-all',
       abbr: 'b',
-      help: 'Call the docker build command before running',
+      help: 'Calls all build commands before running',
     );
     argParser.addFlag(
-      'build-container',
-      help: 'Builds the docker container before running',
+      'build-scripts',
+      help: 'Runs the build scripts before running',
     );
     argParser.addFlag(
-      'background',
-      help: 'Run the app in the background',
+      'build-image',
+      help: 'Builds the docker image before running',
     );
     argParser.addOption(
       'env',
@@ -48,8 +48,8 @@ class RunCommand extends Command {
     final DockerizeEnvironment env =
         _environments.firstWhere((it) => it.name == environmentName);
     final withBuildAll = argResults!['build-all'] as bool;
-    final withBuildContainer = argResults!['build-container'] as bool;
-    final background = argResults!['background'] as bool;
+    final withBuildScripts = argResults!['build-scripts'] as bool;
+    final withBuildImage = argResults!['build-image'] as bool;
     final port = argResults?['port'] as String? ?? '8000';
 
     checkDockerInstall(logger);
@@ -66,21 +66,29 @@ class RunCommand extends Command {
       workingDirectory: repository.root.directory('server'),
     );
 
-    if (withBuildAll || withBuildContainer) {
-      await executeBuild(
-        buildContainer: withBuildContainer,
-        envName: env.name,
+    if (withBuildAll || withBuildScripts) {
+      await createDockerImage(
+        env.name,
+        logger: logger,
+        buildFlutter: !withBuildScripts,
+      );
+    } else if (withBuildImage) {
+      await createDockerImage(
+        env.name,
+        logger: logger,
+        buildScripts: false,
+        buildFlutter: false,
       );
     }
 
     logger.info(
       '[dockerize] Running ${mainProject!.name} on http://localhost:$port',
     );
+    logger.info('[dockerize] Hot-Reload is enabled');
     logger.warn('[dockerize] Press ctrl-c to stop the app');
 
     runImage(
       port: port,
-      background: background,
       mainProject: mainProject,
       environmentName: env.name,
     );

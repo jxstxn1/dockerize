@@ -31,37 +31,35 @@ To run this locally you need [Docker](https://docs.docker.com/get-docker/) insta
 <<your_cli>> sidekick plugins install dockerize_sidekick_plugin
 ```
 
-#### Build the docker image
+#### Build the Docker Image
 
-```bash
-<<your_cli>> docker build
-```
+There are multiple build commands available for this plugin. Here is a brief overview:
 
-With the `--docker-only` flag you just build the docker container without the flutter build command.
+- `<<your_cli>> docker build app`: Runs a basic Flutter build web command
+- `<<your_cli>> docker build scripts`: Runs all the required scripts to move files to the right place or hash scripts from the index.html
+- `<<your_cli>> docker build image`: Builds the Docker image and also executes the app and scripts build commands
+You can choose between different environments using the --env flag. The default environment is dev. You can customize the build process in the commands/build folder.
 
-The build command can choose between different environments.
-The default environment is `dev`.
-You can change the environment with the `--env` flag.
+#### Run the Docker Image Locally
 
-You can customize the build process in the commands/docker/build_command.dart file.
-
-#### Run the docker image locally
+To run the Docker image locally, use the following command:
 
 ```bash
 <<your_cli>> docker run
 ```
 
-You can detach and kill the container by pressing `Ctrl + C`.
+This will run the app and make it accessible at `localhost:8000`.
 
-This will run your app and makes it accessible at `localhost:8000`.
-With the `--background` flag you can run the container in the background.
-With the `-b, --build-all` flag you can execute the build command before running the container.
-With the `-p, --port` flag you can specify the port on which the app is accessible.
-With the `--build-docker` flag you just build the docker container without the flutter build command.
+Notice:
+A hot-reload is enabled, which will rerun the required build commands if you change a file. You can detach and kill the container by pressing `Ctrl + C`.
 
-The build command can choose between different environments.
-The default environment is `dev`.
-You can change the environment with the `--env` flag.
+You can use the following flags to customize the run command:
+
+- `-b, --build-all`: Executes all build commands before running the container (Recommended if you just changed something in the project)
+- `-build-scripts`: Executes the scripts build command before running the container (Recommended if you just changed something in the server/ folder)
+- `--build-image`: Executes the image build command before running the container (Recommended if you just changed something in the Dockerfile)
+- `-p, --port`: Specifies the port on which the app is accessible.
+The build command can choose between different environments. The default environment is `dev`. You can change the environment with the `--env` flag.
 
 #### Stop the container
 
