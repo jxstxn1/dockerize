@@ -24,6 +24,7 @@ void hashScripts({
   progress.complete('[dockerize]  Finished hashing scripts');
 }
 
+/// Inserting the hashed scripts into the middlewares.dart file
 void insertScripts(List<String> hashedScript) {
   final middlewareFile = repository.root.file('server/bin/middlewares.dart');
   final middlewareFileContent = middlewareFile.readAsStringSync();
@@ -39,6 +40,7 @@ void insertScripts(List<String> hashedScript) {
   middlewareFile.writeAsStringSync(newContent);
 }
 
+/// Get all the scripts from the html file
 List<String> getScripts(Document htmlFile) {
   final hashScripts = <String>[];
   final List<Element> scripts = htmlFile.getElementsByTagName('script');
@@ -57,22 +59,28 @@ List<String> hasher(
   required Logger logger,
 }) {
   final hashScripts = <String>[];
+  final hashTypeString = hashType.typeToString;
   for (int i = 0; i < scripts.length; i++) {
     if (scripts[i].isNotEmpty) {
+      // Hasing the UTF-8 encoded script
+      final hashedScriptBytes = hashType.convert(utf8.encode(scripts[i])).bytes;
+      // Encoding the hashed script to base64
+      final base64String = base64.encode(hashedScriptBytes);
+      // Adding the hashed script to the list
+      // The format is '<HashType>-<base64String>'
+      // Example: 'sha256-<base64String>'
+      hashScripts.add(
+        '''"'$hashTypeString-$base64String'"''',
+      );
       logger.info(
         '[dockerize] - Hashing index.html:${getLineNumber(file, scripts[i])} <script>',
-      );
-
-      final hashedScriptBytes = hashType.convert(utf8.encode(scripts[i])).bytes;
-      final base64String = base64.encode(hashedScriptBytes);
-      hashScripts.add(
-        '''"'${hashType.typeToString}-$base64String'"''',
       );
     }
   }
   return hashScripts;
 }
 
+/// Returns the line number of the script in the html file
 int getLineNumber(String htmlFile, String script) {
   const slashN = 0x0A;
   const slashR = 0x0D;
