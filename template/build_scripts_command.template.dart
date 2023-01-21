@@ -24,25 +24,26 @@ class BuildScriptsCommand extends Command {
 
   @override
   Future<void> run() async {
+    final logger = Logger();
     final String environmentName = argResults!['env'] as String? ?? 'dev';
     final DockerizeEnvironment env =
         _environments.firstWhere((it) => it.name == environmentName);
 
-    // You can disable the hashScripts() function if you don't want to use CSP
-    // You can change the hashType to sha384 or sha512 if you want
+    // The hashScripts() function can be disabled if CSP is not desired.
+    // The hashType can also be changed to sha384 or sha512 for added security.
 
-    hashScripts(hashType: sha256);
+    hashScripts(hashType: sha256, logger: logger);
 
-    // Setting enforceCSP to true will enforce the CSP rules in the template/middlewares.template.dart file
-    if (env.shouldEnforceCSP) {
-      enforceCSP(
-        shouldEnforce: env.shouldEnforceCSP,
-        middlewareFile: repository.root.file('server/bin/middlewares.dart'),
-      );
-    }
+    // Enabling the enforceCSP flag will enforce the Content Security Policy
+    // rules defined in the template/middlewares.template.dart file
+    enforceCSP(
+      shouldEnforce: env.shouldEnforceCSP,
+      middlewareFile: repository.root.file('server/bin/middlewares.dart'),
+    );
 
-    // You can insert your own logic here after moving the Flutter app to the server directory (packages/server/www)
-    // and before building the Docker image
+    // Custom logic can be added here after the Flutter application has been
+    // moved to the server directory (packages/server/www)
+    // but before building the Docker image.
 
     writeToVersionFile(
       versionFile: repository.root.file('server/www/version.json'),
