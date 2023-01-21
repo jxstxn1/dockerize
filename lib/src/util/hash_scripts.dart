@@ -6,8 +6,10 @@ import 'package:html/parser.dart' show parse;
 import 'package:mason_logger/mason_logger.dart';
 import 'package:sidekick_core/sidekick_core.dart' hide Progress;
 
-void hashScripts({required Hash hashType}) {
-  final Logger logger = Logger();
+void hashScripts({
+  required Hash hashType,
+  required Logger logger,
+}) {
   final htmlString = repository.root
       .directory('server/www')
       .file('index.html')
@@ -16,7 +18,7 @@ void hashScripts({required Hash hashType}) {
   final scripts = getScripts(htmlFile);
   final progress =
       logger.progress('[dockerize] Detected ${scripts.length} scripts to hash');
-  final hashedScripts = hasher(scripts, hashType, htmlString);
+  final hashedScripts = hasher(scripts, hashType, htmlString, logger: logger);
   progress.update('[dockerize]  Inserting Scripts into middlewares.dart');
   insertScripts(hashedScripts);
   progress.complete('[dockerize]  Finished hashing scripts');
@@ -52,20 +54,14 @@ List<String> hasher(
   List<String> scripts,
   Hash hashType,
   String file, {
-  Logger? logger,
+  required Logger logger,
 }) {
   final hashScripts = <String>[];
   for (int i = 0; i < scripts.length; i++) {
     if (scripts[i].isNotEmpty) {
-      if (logger != null) {
-        logger.info(
-          '[dockerize] - Hashing index.html:${getLineNumber(file, scripts[i])} <script>',
-        );
-      } else {
-        print(
-          '[dockerize] - Hashing index.html:${getLineNumber(file, scripts[i])} <script>',
-        );
-      }
+      logger.info(
+        '[dockerize] - Hashing index.html:${getLineNumber(file, scripts[i])} <script>',
+      );
 
       final hashedScriptBytes = hashType.convert(utf8.encode(scripts[i])).bytes;
       final base64String = base64.encode(hashedScriptBytes);
