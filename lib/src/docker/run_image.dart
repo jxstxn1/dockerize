@@ -130,12 +130,11 @@ Future<void> runImage({
         logger: logger,
       );
       progress.update('[dockerize] Building image...');
-      print('reloadAll: $reloadAll');
       await createDockerImage(
         environmentName,
         logger: logger,
         mainProjectName: mainProjectName,
-        buildFlutter: !reloadAll,
+        buildFlutter: reloadAll,
         workingDirectoryPath: repositoryRoot,
         entryPoint: requiredEntryPoint.path,
       );
