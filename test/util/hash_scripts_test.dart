@@ -23,13 +23,19 @@ void main() {
     test('Should find three scripts in sample.html', () async {
       final Document htmlFile = loadSampleHTML;
       final scripts = getScripts(htmlFile);
-      expect(scripts.length, 3);
+      expect(scripts.length, 2);
     });
 
     test('Should find three scripts in sample.html', () async {
       final Document htmlFile = loadSampleWithNonceHTML;
       final scripts = getScripts(htmlFile);
-      expect(scripts.length, 2);
+      expect(scripts.length, 1);
+    });
+
+    test('Should find no scripts in sample_with_no_scripts.html', () async {
+      final Document htmlFile = loadSampleHTMLWithEmptyScripts;
+      final scripts = getScripts(htmlFile);
+      expect(scripts.length, 0);
     });
   });
 
@@ -384,11 +390,11 @@ const List<String> hashes = ["'sha512-8G4uS0MdZrs5ptGyDN5bhZbOqsESg6ZMyM1KOcBior
         ),
       );
     });
-    test('Should return if 0 script were detected', () {
+    test('Should return if 0 scripts were detected', () {
       hashScripts(
         hashType: sha256,
         logger: logger,
-        htmlFile: loadSampleHTMLWithNoScripts,
+        htmlFile: loadSampleHTMLWithEmptyScriptsFile,
         middlewareFile: middlewareFile,
       );
       verify(() => logger.info('[dockerize] No scripts found to hash'));
