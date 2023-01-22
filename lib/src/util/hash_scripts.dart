@@ -20,6 +20,10 @@ void hashScripts({
 
   // getting all the scripts from the html file
   final scripts = getScripts(htmlDocumentFile);
+  if (scripts.isEmpty) {
+    logger.info('[dockerize] No scripts found to hash');
+    return;
+  }
   final progress =
       logger.progress('[dockerize] Detected ${scripts.length} scripts to hash');
 
@@ -53,7 +57,12 @@ List<String> getScripts(Document htmlFile) {
   final List<Element> scripts = htmlFile.getElementsByTagName('script');
   for (final script in scripts) {
     if (!script.attributes.containsKey('nonce')) {
-      hashScripts.add(script.innerHtml);
+      final scriptString = script.innerHtml;
+      // Only adding the script if it is not empty
+      // Example: <script></script>
+      if (scriptString.isNotEmpty) {
+        hashScripts.add(script.innerHtml);
+      }
     }
   }
   return hashScripts;

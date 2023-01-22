@@ -11,6 +11,8 @@ import '../helper/load_html.dart';
 
 class _MockLogger extends Mock implements Logger {}
 
+class _MockProgress extends Mock implements Progress {}
+
 void main() {
   late Logger logger;
 
@@ -221,6 +223,175 @@ const List<String> hashes = ["testScript"];
         ..writeAsStringSync('');
       insertScripts(['"testScript"'], tempMiddlewareFile);
       expect(tempMiddlewareFile.readAsStringSync(), '');
+    });
+  });
+  group('hashScripts', () {
+    late Progress progress;
+    late Directory tempDir;
+    late File middlewareFile;
+
+    setUp(() {
+      progress = _MockProgress();
+      when(() => logger.progress(any())).thenReturn(progress);
+      tempDir = Directory.systemTemp.createTempSync();
+      middlewareFile = File('${tempDir.path}/middleware.dart')
+        ..createSync()
+        ..writeAsStringSync(
+          '''
+const List<String> hashes = [];
+''',
+        );
+    });
+
+    tearDown(() {
+      try {
+        tempDir.deleteSync(recursive: true);
+      } catch (_) {}
+    });
+
+    group('sha256', () {
+      test('Should hash the scripts from sample.html', () {
+        hashScripts(
+          hashType: sha256,
+          logger: logger,
+          htmlFile: loadSampleHTMLFile,
+          middlewareFile: middlewareFile,
+        );
+        expect(middlewareFile.readAsStringSync(), '''
+const List<String> hashes = ["'sha256-DYE2F9R1zqzhJwChIaBDWw4p1FtYuRhkYTCsJwEni1o='", "'sha256-7kkT0t17vF4Bgf54wBSjuZO3pORc3aibNdISkVdNrnk='"];
+''');
+        verifyInOrder([
+          () => logger.progress('[dockerize] Detected 2 scripts to hash'),
+          () => logger.info('[dockerize] - Hashing index.html:35 <script>'),
+          () => logger.info('[dockerize] - Hashing index.html:43 <script>'),
+          () => progress
+              .update('[dockerize]  Inserting Scripts into middlewares.dart'),
+          () => progress.complete('[dockerize]  Finished hashing scripts'),
+        ]);
+      });
+
+      test('Should hash the scripts from sample_with_nonce.html', () {
+        hashScripts(
+          hashType: sha256,
+          logger: logger,
+          htmlFile: loadSampleWithNonceHTMLFile,
+          middlewareFile: middlewareFile,
+        );
+        expect(middlewareFile.readAsStringSync(), '''
+const List<String> hashes = ["'sha256-7kkT0t17vF4Bgf54wBSjuZO3pORc3aibNdISkVdNrnk='"];
+''');
+        verifyInOrder([
+          () => logger.progress('[dockerize] Detected 1 scripts to hash'),
+          () => logger.info('[dockerize] - Hashing index.html:43 <script>'),
+          () => progress
+              .update('[dockerize]  Inserting Scripts into middlewares.dart'),
+          () => progress.complete('[dockerize]  Finished hashing scripts'),
+        ]);
+      });
+    });
+
+    group('sha384', () {
+      test('Should hash the scripts from sample.html', () {
+        hashScripts(
+          hashType: sha384,
+          logger: logger,
+          htmlFile: loadSampleHTMLFile,
+          middlewareFile: middlewareFile,
+        );
+        expect(middlewareFile.readAsStringSync(), '''
+const List<String> hashes = ["'sha384-SXUxNfAG3vW81Xqzlv28ndONmqQezL+RnITpGhbuXcJPpx5JW2grzy8hGK3h8/JS'", "'sha384-LIj/+KEHaedkn1bv3oYh05IeZDmbgFA68WbaYYokwK2S7zqFMy8JimN1ciBngTJx'"];
+''');
+        verifyInOrder([
+          () => logger.progress('[dockerize] Detected 2 scripts to hash'),
+          () => logger.info('[dockerize] - Hashing index.html:35 <script>'),
+          () => logger.info('[dockerize] - Hashing index.html:43 <script>'),
+          () => progress
+              .update('[dockerize]  Inserting Scripts into middlewares.dart'),
+          () => progress.complete('[dockerize]  Finished hashing scripts'),
+        ]);
+      });
+
+      test('Should hash the scripts from sample_with_nonce.html', () {
+        hashScripts(
+          hashType: sha384,
+          logger: logger,
+          htmlFile: loadSampleWithNonceHTMLFile,
+          middlewareFile: middlewareFile,
+        );
+        expect(middlewareFile.readAsStringSync(), '''
+const List<String> hashes = ["'sha384-LIj/+KEHaedkn1bv3oYh05IeZDmbgFA68WbaYYokwK2S7zqFMy8JimN1ciBngTJx'"];
+''');
+        verifyInOrder([
+          () => logger.progress('[dockerize] Detected 1 scripts to hash'),
+          () => logger.info('[dockerize] - Hashing index.html:43 <script>'),
+          () => progress
+              .update('[dockerize]  Inserting Scripts into middlewares.dart'),
+          () => progress.complete('[dockerize]  Finished hashing scripts'),
+        ]);
+      });
+    });
+
+    group('sha512', () {
+      test('Should hash the scripts from sample.html', () {
+        hashScripts(
+          hashType: sha512,
+          logger: logger,
+          htmlFile: loadSampleHTMLFile,
+          middlewareFile: middlewareFile,
+        );
+        expect(middlewareFile.readAsStringSync(), '''
+const List<String> hashes = ["'sha512-PT8zhJrdQWDWlmFD0JnXQNhhhcSaWv2QkYJQR0e0/bpMRXQjFdmrHUCt2VD/F3ODSSkAymTk7U+Ioke6Mz2O/A=='", "'sha512-8G4uS0MdZrs5ptGyDN5bhZbOqsESg6ZMyM1KOcBiorhrmFiCHOWqXShljGD7dO3E40EeyPlq3os5ureB5EBZRA=='"];
+''');
+        verifyInOrder([
+          () => logger.progress('[dockerize] Detected 2 scripts to hash'),
+          () => logger.info('[dockerize] - Hashing index.html:35 <script>'),
+          () => logger.info('[dockerize] - Hashing index.html:43 <script>'),
+          () => progress
+              .update('[dockerize]  Inserting Scripts into middlewares.dart'),
+          () => progress.complete('[dockerize]  Finished hashing scripts'),
+        ]);
+      });
+
+      test('Should hash the scripts from sample_with_nonce.html', () {
+        hashScripts(
+          hashType: sha512,
+          logger: logger,
+          htmlFile: loadSampleWithNonceHTMLFile,
+          middlewareFile: middlewareFile,
+        );
+        expect(middlewareFile.readAsStringSync(), '''
+const List<String> hashes = ["'sha512-8G4uS0MdZrs5ptGyDN5bhZbOqsESg6ZMyM1KOcBiorhrmFiCHOWqXShljGD7dO3E40EeyPlq3os5ureB5EBZRA=='"];
+''');
+        verifyInOrder([
+          () => logger.progress('[dockerize] Detected 1 scripts to hash'),
+          () => logger.info('[dockerize] - Hashing index.html:43 <script>'),
+          () => progress
+              .update('[dockerize]  Inserting Scripts into middlewares.dart'),
+          () => progress.complete('[dockerize]  Finished hashing scripts'),
+        ]);
+      });
+    });
+    test('Should throw Argument Error if the Wrong hash type was passed', () {
+      expect(
+        () => hashScripts(
+          hashType: sha224,
+          logger: logger,
+          htmlFile: loadSampleHTMLFile,
+          middlewareFile: middlewareFile,
+        ),
+        throwsA(
+          isA<ArgumentError>(),
+        ),
+      );
+    });
+    test('Should return if 0 script were detected', () {
+      hashScripts(
+        hashType: sha256,
+        logger: logger,
+        htmlFile: loadSampleHTMLWithNoScripts,
+        middlewareFile: middlewareFile,
+      );
+      verify(() => logger.info('[dockerize] No scripts found to hash'));
     });
   });
 }
