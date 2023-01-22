@@ -9,24 +9,31 @@ import 'package:sidekick_core/sidekick_core.dart' hide Progress;
 void hashScripts({
   required Hash hashType,
   required Logger logger,
+  required File htmlFile,
+  required File middlewareFile,
 }) {
-  final htmlString = repository.root
-      .directory('server/www')
-      .file('index.html')
-      .readAsStringSync();
-  final Document htmlFile = parse(htmlString);
-  final scripts = getScripts(htmlFile);
+  // reading html file as string
+  final htmlString = htmlFile.readAsStringSync();
+
+  // parsing the html file into a document
+  final Document htmlDocumentFile = parse(htmlString);
+
+  // getting all the scripts from the html file
+  final scripts = getScripts(htmlDocumentFile);
   final progress =
       logger.progress('[dockerize] Detected ${scripts.length} scripts to hash');
+
+  // hashing the scripts
   final hashedScripts = hasher(scripts, hashType, htmlString, logger: logger);
   progress.update('[dockerize]  Inserting Scripts into middlewares.dart');
-  insertScripts(hashedScripts);
+
+  // inserting the hashed scripts into the middlewares.dart file
+  insertScripts(hashedScripts, middlewareFile);
   progress.complete('[dockerize]  Finished hashing scripts');
 }
 
 /// Inserting the hashed scripts into the middlewares.dart file
-void insertScripts(List<String> hashedScript) {
-  final middlewareFile = repository.root.file('server/bin/middlewares.dart');
+void insertScripts(List<String> hashedScript, File middlewareFile) {
   final middlewareFileContent = middlewareFile.readAsStringSync();
   final RegExp regex = RegExp(
     r'const List<String> hashes = \[(.*?)\]',

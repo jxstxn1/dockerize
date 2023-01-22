@@ -32,7 +32,12 @@ class BuildScriptsCommand extends Command {
     // The hashScripts() function can be disabled if CSP is not desired.
     // The hashType can also be changed to sha384 or sha512 for added security.
 
-    hashScripts(hashType: sha256, logger: logger);
+    hashScripts(
+      hashType: sha256,
+      logger: logger,
+      htmlFile: repository.root.directory('server/www').file('index.html'),
+      middlewareFile: repository.root.file('server/bin/middlewares.dart'),
+    );
 
     // Enabling the enforceCSP flag will enforce the Content Security Policy
     // rules defined in the template/middlewares.template.dart file

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:crypto/crypto.dart';
 import 'package:dockerize_sidekick_plugin/dockerize_sidekick_plugin.dart';
 import 'package:dockerize_sidekick_plugin/src/util/hash_scripts.dart';
@@ -146,6 +148,79 @@ void main() {
           () => logger.info('[dockerize] - Hashing index.html:43 <script>'),
         );
       });
+    });
+  });
+  group('insertScripts', () {
+    late Directory tempDir;
+
+    setUp(() {
+      tempDir = Directory.systemTemp.createTempSync();
+    });
+
+    tearDown(() {
+      try {
+        tempDir.deleteSync(recursive: true);
+      } catch (_) {}
+    });
+
+    test('Should insert the hashed scripts into the empty hash list', () {
+      final tempMiddlewareFile = File('${tempDir.path}/middleware.dart')
+        ..createSync()
+        ..writeAsStringSync(
+          '''
+const List<String> hashes = [];
+''',
+        );
+      insertScripts(['"testScript"'], tempMiddlewareFile);
+      expect(
+        tempMiddlewareFile.readAsStringSync(),
+        '''
+const List<String> hashes = ["testScript"];
+''',
+      );
+    });
+
+    test('Should overwrite the existing entry', () {
+      final tempMiddlewareFile = File('${tempDir.path}/middleware.dart')
+        ..createSync()
+        ..writeAsStringSync(
+          '''
+const List<String> hashes = ["helloWorld"];
+''',
+        );
+      insertScripts(['"testScript"'], tempMiddlewareFile);
+      expect(
+        tempMiddlewareFile.readAsStringSync(),
+        '''
+const List<String> hashes = ["testScript"];
+''',
+      );
+    });
+
+    test('Should overwrite the existing entry multiline', () {
+      final tempMiddlewareFile = File('${tempDir.path}/middleware.dart')
+        ..createSync()
+        ..writeAsStringSync(
+          '''
+const List<String> hashes = [
+  "helloWorld"
+  ];
+''',
+        );
+      insertScripts(['"testScript"'], tempMiddlewareFile);
+      expect(
+        tempMiddlewareFile.readAsStringSync(),
+        '''
+const List<String> hashes = ["testScript"];
+''',
+      );
+    });
+    test('Should not overwrite if the var doesnt exist', () {
+      final tempMiddlewareFile = File('${tempDir.path}/middleware.dart')
+        ..createSync()
+        ..writeAsStringSync('');
+      insertScripts(['"testScript"'], tempMiddlewareFile);
+      expect(tempMiddlewareFile.readAsStringSync(), '');
     });
   });
 }
