@@ -15,6 +15,7 @@ typedef DirectoryWatcherBuilder = DirectoryWatcher Function(
 Future<void> runImage({
   required String environmentName,
   required DartPackage? mainProject,
+  required bool withoutHotReload,
   String? port,
 }) async {
   final mainProjectName = mainProject?.name ?? 'app';
@@ -69,99 +70,98 @@ Future<void> runImage({
 
   runImage();
 
-  /// Checks if the lib dir of the main project is changed
-  /// If so, it will reload the whole project
-  bool shouldReloadAll(WatchEvent event) {
-    if (reloading) return false;
-    final mainProjectPath = mainProject?.libDir.path;
-    if (mainProjectPath == null) return false;
-    final withinSidekick = () {
-      if (Repository.cliPackageDir == null) return false;
-      return path.isWithin(
-        Repository.cliPackageDir!.path,
-        event.path,
-      );
-    }();
-    return (path.isWithin(mainProjectPath, event.path) ||
-            path.isWithin(
-              repositoryRoot.directory('packages').path,
-              event.path,
-            )) &&
-        !withinSidekick;
-  }
-
-  /// Checks if the server dir is changed
-  bool shouldReloadDocker(WatchEvent event) {
-    if (reloading) return false;
-    return path.isWithin(
-          repositoryRoot.directory('server').path,
-          event.path,
-        ) &&
-        !path.isWithin(
-          repositoryRoot.directory('server/www').path,
+  if (!withoutHotReload) {
+    /// Checks if the lib dir of the main project is changed
+    /// If so, it will reload the whole project
+    bool shouldReloadAll(WatchEvent event) {
+      if (reloading) return false;
+      final mainProjectPath = mainProject?.libDir.path;
+      if (mainProjectPath == null) return false;
+      final withinSidekick = () {
+        if (Repository.cliPackageDir == null) return false;
+        return path.isWithin(
+          Repository.cliPackageDir!.path,
           event.path,
         );
-  }
-
-  /// Checks if the event should trigger a reload
-  bool shouldReload(WatchEvent event) {
-    if (reloading) return false;
-    return shouldReloadAll(event) || shouldReloadDocker(event);
-  }
-
-  Future<void> cooldown() async {
-    await Future.delayed(const Duration(seconds: 1));
-    reloading = false;
-  }
-
-  /// Reloads the image
-  Future<void> reload({required bool reloadAll}) async {
-    // blocking watcher from triggering reload multiple times after build is done
-    reloading = true;
-    final progress = logger.progress('[dockerize] Reloading...');
-    try {
-      progress.update('[dockerize] Stopping image...');
-      _killProcess(
-        process,
-        mainProjectName,
-        workingDir,
-        shouldExit: false,
-        silent: true,
-        logger: logger,
-      );
-      progress.update('[dockerize] Building image...');
-      await createDockerImage(
-        environmentName,
-        logger: logger,
-        mainProjectName: mainProjectName,
-        buildFlutter: reloadAll,
-        workingDirectoryPath: repositoryRoot,
-        entryPoint: requiredEntryPoint.path,
-      );
-      progress.update('[dockerize] Starting image...');
-      runImage();
-      progress.complete('[dockerize] Reload complete.');
-      cooldown();
-    } catch (e, stack) {
-      progress.fail('[dockerize] Failed to reload');
-      logger.err('[dockerize] $e');
-      logger.err('[dockerize] $stack');
+      }();
+      return (path.isWithin(mainProjectPath, event.path) ||
+              path.isWithin(
+                repositoryRoot.directory('packages').path,
+                event.path,
+              )) &&
+          !withinSidekick;
     }
-  }
 
-  final subscription = watcher.events
-      .where(shouldReload)
-      .debounce(Duration.zero)
-      .listen((WatchEvent event) {
-    if (shouldReloadDocker(event) && !reloading) {
-      reload(reloadAll: false);
-    } else if (shouldReloadAll(event)) {
-      reload(reloadAll: true);
+    /// Checks if the server dir is changed
+    bool shouldReloadDocker(WatchEvent event) {
+      if (reloading) return false;
+      return path.isWithin(
+            repositoryRoot.directory('server').path,
+            event.path,
+          ) &&
+          !path.isWithin(
+            repositoryRoot.directory('server/www').path,
+            event.path,
+          );
     }
-  });
 
-  await subscription.asFuture<void>();
-  await subscription.cancel();
+    /// Checks if the event should trigger a reload
+    bool shouldReload(WatchEvent event) {
+      if (reloading) return false;
+      return shouldReloadAll(event) || shouldReloadDocker(event);
+    }
+
+    Future<void> cooldown() async {
+      await Future.delayed(const Duration(seconds: 1));
+      reloading = false;
+    }
+
+    /// Reloads the image
+    Future<void> reload({required bool reloadAll}) async {
+      // blocking watcher from triggering reload multiple times after build is done
+      reloading = true;
+      final progress = logger.progress('[dockerize] Reloading...');
+      try {
+        progress.update('[dockerize] Stopping image...');
+        _killProcess(
+          process,
+          mainProjectName,
+          workingDir,
+          shouldExit: false,
+          silent: true,
+          logger: logger,
+        );
+        progress.update('[dockerize] Building image...');
+        await createDockerImage(
+          environmentName,
+          logger: logger,
+          mainProjectName: mainProjectName,
+          buildFlutter: reloadAll,
+          workingDirectoryPath: repositoryRoot,
+          entryPoint: requiredEntryPoint.path,
+        );
+        progress.update('[dockerize] Starting image...');
+        runImage();
+        progress.complete('[dockerize] Reload complete.');
+        cooldown();
+      } catch (e, stack) {
+        progress.fail('[dockerize] Failed to reload');
+        logger.err('[dockerize] $e');
+        logger.err('[dockerize] $stack');
+      }
+    }
+
+    final subscription = watcher.events.where(shouldReload).debounce(Duration.zero).listen((WatchEvent event) {
+      if (shouldReloadDocker(event) && !reloading) {
+        reload(reloadAll: false);
+      } else if (shouldReloadAll(event)) {
+        reload(reloadAll: true);
+      }
+    });
+
+    await subscription.asFuture<void>();
+    await subscription.cancel();
+  }
 }
 
 /// kills the Process and exits the application

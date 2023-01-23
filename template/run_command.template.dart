@@ -29,6 +29,10 @@ class RunCommand extends Command {
       'build-image',
       help: 'Builds the docker image before running',
     );
+    argParser.addFlag(
+      'without-hot-reload',
+      help: 'Run the app without hot reload',
+    );
     argParser.addOption(
       'env',
       allowed: _environments.map((it) => it.name),
@@ -45,12 +49,12 @@ class RunCommand extends Command {
   Future<void> run() async {
     final Logger logger = Logger();
     final String environmentName = argResults!['env'] as String? ?? 'dev';
-    final DockerizeEnvironment env =
-        _environments.firstWhere((it) => it.name == environmentName);
+    final DockerizeEnvironment env = _environments.firstWhere((it) => it.name == environmentName);
     final withBuildAll = argResults!['build-all'] as bool;
     final withBuildScripts = argResults!['build-scripts'] as bool;
     final withBuildImage = argResults!['build-image'] as bool;
     final port = argResults?['port'] as String? ?? '8000';
+    final withoutHotReload = argResults!['without-hot-reload'] as bool;
 
     checkDockerInstall(logger);
 
@@ -91,6 +95,7 @@ class RunCommand extends Command {
       port: port,
       mainProject: mainProject,
       environmentName: env.name,
+      withoutHotReload: withoutHotReload,
     );
   }
 }
