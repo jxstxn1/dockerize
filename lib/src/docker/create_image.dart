@@ -1,4 +1,5 @@
 import 'dart:io' as io;
+
 import 'package:mason_logger/mason_logger.dart';
 import 'package:sidekick_core/sidekick_core.dart' hide Progress;
 
@@ -7,17 +8,15 @@ Future<void> createDockerImage(
   String environmentName, {
   String? mainProjectName,
   String? entryPoint,
-  Logger? logger,
+  required Logger logger,
   bool buildScripts = true,
   bool buildFlutter = true,
   Directory? workingDirectoryPath,
 }) async {
   final entryPointPath = entryPoint ?? Repository.requiredEntryPoint.path;
   final containerName = mainProjectName ?? mainProject!.name;
-  final Logger buildLogger = logger ?? Logger();
-
   if (buildFlutter) {
-    final buildProgess = buildLogger.progress(
+    final buildProgess = logger.progress(
       '[dockerize] Building Flutter App',
     );
     final process = await io.Process.run(
@@ -33,12 +32,12 @@ Future<void> createDockerImage(
       buildProgess.complete('[dockerize] Built flutter app 🎉');
     } else {
       buildProgess.fail('[dockerize] Failed to build flutter app 😢');
-      buildLogger.err(process.stdout.toString());
-      buildLogger.err(process.stderr.toString());
+      logger.err(process.stdout.toString());
+      logger.err(process.stderr.toString());
     }
   }
   if (buildScripts) {
-    final buildProgess = buildLogger.progress(
+    final buildProgess = logger.progress(
       '[dockerize] Running BuildScripts',
     );
     final process = await io.Process.run(
@@ -54,23 +53,24 @@ Future<void> createDockerImage(
       buildProgess.complete('[dockerize] Executed Build Scripts 🎉');
     } else {
       buildProgess.fail('[dockerize] Failed to execute BuildScripts 😢');
-      buildLogger.err(process.stdout.toString());
-      buildLogger.err(process.stderr.toString());
+      logger.err(process.stdout.toString());
+      logger.err(process.stderr.toString());
     }
   }
 
-  final buildProgess = buildLogger.progress(
+  final buildProgess = logger.progress(
     '[dockerize] Creating image $containerName:$environmentName',
   );
   final workingDir =
       (workingDirectoryPath ?? repository.root).directory('server');
+
   final process = await io.Process.run(
     'docker',
     [
       'buildx',
       'build',
       '-t',
-      '$mainProjectName:$environmentName',
+      '$containerName:$environmentName',
       '.',
     ],
     workingDirectory: workingDir.path,
@@ -79,7 +79,9 @@ Future<void> createDockerImage(
     buildProgess.complete('[dockerize] Built Docker Image 🎉');
   } else {
     buildProgess.fail('[dockerize] Failed to build Docker Image 😢');
-    buildLogger.err(process.stdout.toString());
-    buildLogger.err(process.stderr.toString());
+    logger.err(process.stdout.toString());
+    logger.err(process.stderr.toString());
   }
+  logger.info(
+      '${lightGreen.wrap('✓')} [dockerize] image name: ${lightGreen.wrap(styleBold.wrap('$containerName:$environmentName'))}');
 }
