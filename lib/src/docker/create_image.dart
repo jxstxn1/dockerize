@@ -83,5 +83,6 @@ Future<void> createDockerImage(
     logger.err(process.stderr.toString());
   }
   logger.info(
-      '${lightGreen.wrap('✓')} [dockerize] image name: ${lightGreen.wrap(styleBold.wrap('$containerName:$environmentName'))}');
+    '${lightGreen.wrap('✓')} [dockerize] image name: ${lightGreen.wrap(styleBold.wrap('$containerName:$environmentName'))}',
+  );
 }
