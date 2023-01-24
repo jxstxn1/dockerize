@@ -49,7 +49,8 @@ class RunCommand extends Command {
   Future<void> run() async {
     final Logger logger = Logger();
     final String environmentName = argResults!['env'] as String? ?? 'dev';
-    final DockerizeEnvironment env = _environments.firstWhere((it) => it.name == environmentName);
+    final DockerizeEnvironment env =
+        _environments.firstWhere((it) => it.name == environmentName);
     final withBuildAll = argResults!['build-all'] as bool;
     final withBuildScripts = argResults!['build-scripts'] as bool;
     final withBuildImage = argResults!['build-image'] as bool;
@@ -88,7 +89,11 @@ class RunCommand extends Command {
     logger.info(
       '[dockerize] Running ${mainProject!.name} on http://localhost:$port',
     );
-    logger.info('[dockerize] Hot-Reload is enabled');
+    logger.info(
+      withoutHotReload
+          ? '[dockerize] Hot-Reload is not enabled'
+          : '[dockerize] Hot-Reload is enabled',
+    );
     logger.warn('[dockerize] Press ctrl-c to stop the app');
 
     runImage(

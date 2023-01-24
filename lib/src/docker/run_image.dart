@@ -151,7 +151,10 @@ Future<void> runImage({
       }
     }
 
-    final subscription = watcher.events.where(shouldReload).debounce(Duration.zero).listen((WatchEvent event) {
+    final subscription = watcher.events
+        .where(shouldReload)
+        .debounce(Duration.zero)
+        .listen((WatchEvent event) {
       if (shouldReloadDocker(event) && !reloading) {
         reload(reloadAll: false);
       } else if (shouldReloadAll(event)) {
