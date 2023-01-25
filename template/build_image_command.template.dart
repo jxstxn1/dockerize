@@ -50,6 +50,8 @@ class BuildImageCommand extends Command {
       entryPointPath: SidekickContext.entryPoint.path,
       buildFlutter: buildApp,
       buildScripts: buildScripts,
+      workingDirectoryPath:
+          SidekickContext.projectRoot.directory('server').path,
     );
   }
 }

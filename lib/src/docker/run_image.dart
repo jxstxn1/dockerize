@@ -137,7 +137,8 @@ Future<void> runImage({
           logger: logger,
           mainProjectName: mainProjectName,
           buildFlutter: reloadAll,
-          workingDirectoryPath: projectRoot,
+          workingDirectoryPath:
+              SidekickContext.projectRoot.directory('server').path,
         );
         progress.update('[dockerize] Starting image...');
         runImage();

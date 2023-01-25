@@ -77,6 +77,8 @@ class RunCommand extends Command {
         entryPointPath: SidekickContext.entryPoint.path,
         logger: logger,
         buildFlutter: !withBuildScripts,
+        workingDirectoryPath:
+            SidekickContext.projectRoot.directory('server').path,
       );
     } else if (withBuildImage) {
       await createDockerImage(
@@ -85,6 +87,8 @@ class RunCommand extends Command {
         logger: logger,
         buildScripts: false,
         buildFlutter: false,
+        workingDirectoryPath:
+            SidekickContext.projectRoot.directory('server').path,
       );
     }
 
