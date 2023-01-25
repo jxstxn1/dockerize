@@ -95,6 +95,11 @@ By default we are adding a default Set of CSP rules to the `server/bin/middlewar
 You can change the rules or disable them in the `commands/docker/build_command.dart` file.
 You can find more informations about CSP Rules [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP).
 
+#### Docker Garbage Collection
+
+We are currently collecting all dangling images and containers after the build process to keep your docker environment clean.
+If you dont want to have this Feature feel free to open an Issue.
+
 ### Help
 
 If you need help, you can always use the help command.

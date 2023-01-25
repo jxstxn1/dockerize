@@ -1,3 +1,18 @@
+## 0.3.0
+
+- **Breaking: You have to reinstall dockerize_sidekick_plugin to use this version.**
+- BuildCommand
+  - Use dockerx for builds
+  - Improved Build Output
+  - Add build information to version file
+- Run Command
+  - Kill with ctrl c once
+  - Hot rebuild
+- General:
+  - Add www Folder to .gitignore* Remove dcli
+  - Use Sidekick Core 1.0.0
+  - Add Docker Garbage Collector
+
 ## 0.2.1
 
 - Fixed a bug where the CSP Rules where enforced instead of reportOnly
