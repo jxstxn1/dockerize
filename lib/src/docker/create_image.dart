@@ -1,5 +1,6 @@
 import 'dart:io' as io;
 
+import 'package:dockerize_sidekick_plugin/src/docker/collect_garbage.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:sidekick_core/sidekick_core.dart' hide Progress;
 
@@ -79,6 +80,7 @@ Future<void> createDockerImage(
     logger.err(process.stdout.toString());
     logger.err(process.stderr.toString());
   }
+  garbageCollector(logger: logger);
   logger.info(
     '${lightGreen.wrap('✓')} [dockerize] image name: ${lightGreen.wrap(styleBold.wrap('$containerName:$environmentName'))}',
   );
