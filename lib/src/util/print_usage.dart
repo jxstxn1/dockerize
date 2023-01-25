@@ -13,6 +13,7 @@ Flags:
   -b, --build-all            Execute all build commands before running the container
   --build-scripts            Execute the scripts build command before running the container
   --build-image              Execute the image build command before running the container
+  --without-hot-reload       Run the app without hot reload
   -p, --port                 Specify the port on which the app is accessible
   --env                      Specify the environment to use (default is "dev")
 ''';
