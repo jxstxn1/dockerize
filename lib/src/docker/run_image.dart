@@ -119,9 +119,8 @@ Future<void> runImage({
     Future<void> reload({required bool reloadAll}) async {
       // blocking watcher from triggering reload multiple times after build is done
       reloading = true;
-      final progress = logger.progress('[dockerize] Reloading...');
+
       try {
-        progress.update('[dockerize] Stopping image...');
         _killProcess(
           process,
           mainProjectName,
@@ -130,7 +129,6 @@ Future<void> runImage({
           silent: true,
           logger: logger,
         );
-        progress.update('[dockerize] Building image...');
         await createDockerImage(
           environmentName,
           entryPointPath: requiredEntryPoint.path,
@@ -140,12 +138,12 @@ Future<void> runImage({
           workingDirectoryPath:
               SidekickContext.projectRoot.directory('server').path,
         );
-        progress.update('[dockerize] Starting image...');
+        final progress = logger.progress('[dockerize] Starting image...');
         runImage();
         progress.complete('[dockerize] Reload complete.');
         cooldown();
       } catch (e, stack) {
-        progress.fail('[dockerize] Failed to reload');
+        logger.err('[dockerize] Failed to reload');
         logger.err('[dockerize] $e');
         logger.err('[dockerize] $stack');
       }
