@@ -15,7 +15,7 @@ class StopCommand extends Command {
     await stopImage(
       logger: logger,
       mainProjectName: mainProject!.name,
-      workingDirectory: repository.root.directory('server'),
+      workingDirectory: SidekickContext.projectRoot.directory('server'),
     );
   }
 }
