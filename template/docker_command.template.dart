@@ -24,5 +24,5 @@ class DockerCommand extends Command {
   }
 
   @override
-  String get usage => printUsage(cliName);
+  String get usage => printUsage(SidekickContext.cliName);
 }
