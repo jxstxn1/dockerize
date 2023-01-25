@@ -74,14 +74,14 @@ class RunCommand extends Command {
     if (withBuildAll || withBuildScripts) {
       await createDockerImage(
         env.name,
-        entryPointPath: SidekickContext.projectRoot.path,
+        entryPointPath: SidekickContext.entryPoint.path,
         logger: logger,
         buildFlutter: !withBuildScripts,
       );
     } else if (withBuildImage) {
       await createDockerImage(
         env.name,
-        entryPointPath: SidekickContext.projectRoot.path,
+        entryPointPath: SidekickContext.entryPoint.path,
         logger: logger,
         buildScripts: false,
         buildFlutter: false,

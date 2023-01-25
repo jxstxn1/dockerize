@@ -19,10 +19,10 @@ Future<void> runImage({
   String? port,
 }) async {
   final mainProjectName = mainProject?.name ?? 'app';
-  final repositoryRoot = repository.root;
-  final requiredEntryPoint = Repository.requiredEntryPoint;
-  final workingDir = repository.root.directory('server');
-  final DirectoryWatcher watcher = DirectoryWatcher(repository.root.path);
+  final projectRoot = SidekickContext.projectRoot;
+  final requiredEntryPoint = SidekickContext.entryPoint;
+  final workingDir = projectRoot.directory('server');
+  final DirectoryWatcher watcher = DirectoryWatcher(projectRoot.path);
   final Logger logger = Logger();
   Process? process;
   bool reloading = false;
@@ -78,15 +78,14 @@ Future<void> runImage({
       final mainProjectPath = mainProject?.libDir.path;
       if (mainProjectPath == null) return false;
       final withinSidekick = () {
-        if (Repository.cliPackageDir == null) return false;
         return path.isWithin(
-          Repository.cliPackageDir!.path,
+          SidekickContext.sidekickPackage.root.path,
           event.path,
         );
       }();
       return (path.isWithin(mainProjectPath, event.path) ||
               path.isWithin(
-                repositoryRoot.directory('packages').path,
+                projectRoot.directory('packages').path,
                 event.path,
               )) &&
           !withinSidekick;
@@ -96,11 +95,11 @@ Future<void> runImage({
     bool shouldReloadDocker(WatchEvent event) {
       if (reloading) return false;
       return path.isWithin(
-            repositoryRoot.directory('server').path,
+            projectRoot.directory('server').path,
             event.path,
           ) &&
           !path.isWithin(
-            repositoryRoot.directory('server/www').path,
+            projectRoot.directory('server/www').path,
             event.path,
           );
     }
@@ -134,11 +133,11 @@ Future<void> runImage({
         progress.update('[dockerize] Building image...');
         await createDockerImage(
           environmentName,
+          entryPointPath: requiredEntryPoint.path,
           logger: logger,
           mainProjectName: mainProjectName,
           buildFlutter: reloadAll,
-          workingDirectoryPath: repositoryRoot,
-          entryPoint: requiredEntryPoint.path,
+          workingDirectoryPath: projectRoot,
         );
         progress.update('[dockerize] Starting image...');
         runImage();
