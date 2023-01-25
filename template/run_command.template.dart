@@ -68,18 +68,20 @@ class RunCommand extends Command {
       silent: true,
       logger: logger,
       mainProjectName: mainProject!.name,
-      workingDirectory: repository.root.directory('server'),
+      workingDirectory: SidekickContext.projectRoot.directory('server'),
     );
 
     if (withBuildAll || withBuildScripts) {
       await createDockerImage(
         env.name,
+        entryPointPath: SidekickContext.projectRoot.path,
         logger: logger,
         buildFlutter: !withBuildScripts,
       );
     } else if (withBuildImage) {
       await createDockerImage(
         env.name,
+        entryPointPath: SidekickContext.projectRoot.path,
         logger: logger,
         buildScripts: false,
         buildFlutter: false,
