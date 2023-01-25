@@ -35,15 +35,19 @@ class BuildScriptsCommand extends Command {
     hashScripts(
       hashType: sha256,
       logger: logger,
-      htmlFile: repository.root.directory('server/www').file('index.html'),
-      middlewareFile: repository.root.file('server/bin/middlewares.dart'),
+      htmlFile: SidekickContext.projectRoot
+          .directory('server/www')
+          .file('index.html'),
+      middlewareFile:
+          SidekickContext.projectRoot.file('server/bin/middlewares.dart'),
     );
 
     // Enabling the enforceCSP flag will enforce the Content Security Policy
     // rules defined in the template/middlewares.template.dart file
     enforceCSP(
       shouldEnforce: env.shouldEnforceCSP,
-      middlewareFile: repository.root.file('server/bin/middlewares.dart'),
+      middlewareFile:
+          SidekickContext.projectRoot.file('server/bin/middlewares.dart'),
     );
 
     // Custom logic can be added here after the Flutter application has been
@@ -51,7 +55,7 @@ class BuildScriptsCommand extends Command {
     // but before building the Docker image.
 
     writeToVersionFile(
-      versionFile: repository.root.file('server/www/version.json'),
+      versionFile: SidekickContext.projectRoot.file('server/www/version.json'),
       entries: {
         'environment': env.name,
         // You can add any other information you want to the version.json file here

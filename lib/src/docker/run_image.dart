@@ -19,10 +19,10 @@ Future<void> runImage({
   String? port,
 }) async {
   final mainProjectName = mainProject?.name ?? 'app';
-  final repositoryRoot = repository.root;
-  final requiredEntryPoint = Repository.requiredEntryPoint;
-  final workingDir = repository.root.directory('server');
-  final DirectoryWatcher watcher = DirectoryWatcher(repository.root.path);
+  final projectRoot = SidekickContext.projectRoot;
+  final requiredEntryPoint = SidekickContext.entryPoint;
+  final workingDir = projectRoot.directory('server');
+  final DirectoryWatcher watcher = DirectoryWatcher(projectRoot.path);
   final Logger logger = Logger();
   Process? process;
   bool reloading = false;
@@ -78,15 +78,14 @@ Future<void> runImage({
       final mainProjectPath = mainProject?.libDir.path;
       if (mainProjectPath == null) return false;
       final withinSidekick = () {
-        if (Repository.cliPackageDir == null) return false;
         return path.isWithin(
-          Repository.cliPackageDir!.path,
+          SidekickContext.sidekickPackage.root.path,
           event.path,
         );
       }();
       return (path.isWithin(mainProjectPath, event.path) ||
               path.isWithin(
-                repositoryRoot.directory('packages').path,
+                projectRoot.directory('packages').path,
                 event.path,
               )) &&
           !withinSidekick;
@@ -96,11 +95,11 @@ Future<void> runImage({
     bool shouldReloadDocker(WatchEvent event) {
       if (reloading) return false;
       return path.isWithin(
-            repositoryRoot.directory('server').path,
+            projectRoot.directory('server').path,
             event.path,
           ) &&
           !path.isWithin(
-            repositoryRoot.directory('server/www').path,
+            projectRoot.directory('server/www').path,
             event.path,
           );
     }
@@ -120,9 +119,8 @@ Future<void> runImage({
     Future<void> reload({required bool reloadAll}) async {
       // blocking watcher from triggering reload multiple times after build is done
       reloading = true;
-      final progress = logger.progress('[dockerize] Reloading...');
+
       try {
-        progress.update('[dockerize] Stopping image...');
         _killProcess(
           process,
           mainProjectName,
@@ -131,21 +129,21 @@ Future<void> runImage({
           silent: true,
           logger: logger,
         );
-        progress.update('[dockerize] Building image...');
         await createDockerImage(
           environmentName,
+          entryPointPath: requiredEntryPoint.path,
           logger: logger,
           mainProjectName: mainProjectName,
           buildFlutter: reloadAll,
-          workingDirectoryPath: repositoryRoot,
-          entryPoint: requiredEntryPoint.path,
+          workingDirectoryPath:
+              SidekickContext.projectRoot.directory('server').path,
         );
-        progress.update('[dockerize] Starting image...');
+        final progress = logger.progress('[dockerize] Starting image...');
         runImage();
         progress.complete('[dockerize] Reload complete.');
         cooldown();
       } catch (e, stack) {
-        progress.fail('[dockerize] Failed to reload');
+        logger.err('[dockerize] Failed to reload');
         logger.err('[dockerize] $e');
         logger.err('[dockerize] $stack');
       }

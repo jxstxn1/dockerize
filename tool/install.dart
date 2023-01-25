@@ -8,6 +8,7 @@ import 'replace_template_dependencies.dart';
 
 Future<void> main() async {
   final SidekickPackage package = PluginContext.sidekickPackage;
+
   addSelfAsDependency();
   await createServerFolder(package);
 

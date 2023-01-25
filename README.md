@@ -1,6 +1,7 @@
 # dockerize_sidekick_plugin
 
 [![codecov](https://codecov.io/gh/jxstxn1/dockerize_sidekick_plugin/branch/main/graph/badge.svg?token=PXZ5RFYXCL)](https://codecov.io/gh/jxstxn1/dockerize_sidekick_plugin)
+[![License: Apache2](https://img.shields.io/badge/license-Apache2.0-purple.svg)](https://opensource.org/licenses/Apache-2.0)
 
 A plugin for [sidekick CLIs](https://pub.dev/packages/sidekick).  
 
