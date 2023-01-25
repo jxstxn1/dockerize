@@ -47,6 +47,7 @@ class BuildImageCommand extends Command {
     await createDockerImage(
       env.name,
       logger: logger,
+      entryPointPath: SidekickContext.projectRoot.path,
       buildFlutter: buildApp,
       buildScripts: buildScripts,
     );

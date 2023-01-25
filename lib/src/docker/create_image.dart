@@ -7,13 +7,12 @@ import 'package:sidekick_core/sidekick_core.dart' hide Progress;
 Future<void> createDockerImage(
   String environmentName, {
   String? mainProjectName,
-  String? entryPoint,
+  required String entryPointPath,
   required Logger logger,
   bool buildScripts = true,
   bool buildFlutter = true,
   Directory? workingDirectoryPath,
 }) async {
-  final entryPointPath = entryPoint ?? Repository.requiredEntryPoint.path;
   final containerName = mainProjectName ?? mainProject!.name;
   if (buildFlutter) {
     final buildProgess = logger.progress(
@@ -61,8 +60,7 @@ Future<void> createDockerImage(
   final buildProgess = logger.progress(
     '[dockerize] Creating image $containerName:$environmentName',
   );
-  final workingDir =
-      (workingDirectoryPath ?? repository.root).directory('server');
+  final workingDir = Directory('$entryPointPath/server');
 
   final process = await io.Process.run(
     'docker',
