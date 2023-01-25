@@ -5,7 +5,7 @@ repository: https://github.com/jxstxn1/dockerize_sidekick_plugin/tree/main
 issue_tracker: https://github.com/jxstxn1/dockerize_sidekick_plugin/issues
 
 environment:
-  sdk: '>=2.14.0 <3.0.0'
+  sdk: '>=2.16.0 <3.0.0'
 
 dependencies:
   crypto: ^3.0.2
