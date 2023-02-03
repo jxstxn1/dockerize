@@ -1,3 +1,7 @@
+## 0.3.2
+
+- Fix: Automatically ignored build-folder
+
 ## 0.3.1
 
 - Fix: .gitignore install error
