@@ -1,3 +1,7 @@
+## 0.3.1
+
+- Fix: .gitignore install error
+
 ## 0.3.0
 
 - **Breaking: You have to reinstall dockerize_sidekick_plugin to use this version.**
