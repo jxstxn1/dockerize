@@ -63,7 +63,7 @@ class RunCommand extends Command {
       exit(1);
     }
 
-    /// Stoping all other running containers from the project
+    /// Stopping all other running containers from the project
     await stopImage(
       silent: true,
       logger: logger,
