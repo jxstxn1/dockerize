@@ -6,9 +6,9 @@ import 'build_scripts_command.template.dart'; //template import
 import 'environment.template.dart'; //template import
 /* installed import
 
-import 'package:<<packageName>>/src/commands/dockerize/build/build_app_command.dart';
-import 'package:<<packageName>>/src/commands/dockerize/build/build_image_command.dart';
-import 'package:<<packageName>>/src/commands/dockerize/build/build_scripts_command.dart';
+import 'package:<<packageName>>/src/commands/dockerize/build_commands/build_app_command.dart';
+import 'package:<<packageName>>/src/commands/dockerize/build_commands/build_image_command.dart';
+import 'package:<<packageName>>/src/commands/dockerize/build_commands/build_scripts_command.dart';
 import 'package:<<packageName>>/src/commands/dockerize/environment.dart';
 installed import */
 
