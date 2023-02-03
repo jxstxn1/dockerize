@@ -31,9 +31,10 @@ Future<void> main() async {
       .file('template/environment.template.dart')
       .copySync(environmentFile.path);
 
-  commandFolder.directory('build').createIfNotExists();
+  commandFolder.directory('build_commands').createIfNotExists();
 
-  final buildCommandFile = commandFolder.file('build/build_command.dart');
+  final buildCommandFile =
+      commandFolder.file('build_commands/build_command.dart');
   buildCommandFile.writeAsStringSync(
     replaceTemplateDependencies(
       PluginContext.installerPlugin.root
@@ -44,7 +45,7 @@ Future<void> main() async {
   );
 
   final buildAppCommandFile =
-      commandFolder.file('build/build_app_command.dart');
+      commandFolder.file('build_commands/build_app_command.dart');
   buildAppCommandFile.writeAsStringSync(
     replaceTemplateDependencies(
       PluginContext.installerPlugin.root
@@ -55,7 +56,7 @@ Future<void> main() async {
   );
 
   final buildImageCommandFile =
-      commandFolder.file('build/build_image_command.dart');
+      commandFolder.file('build_commands/build_image_command.dart');
   buildImageCommandFile.writeAsStringSync(
     replaceTemplateDependencies(
       PluginContext.installerPlugin.root
@@ -66,7 +67,7 @@ Future<void> main() async {
   );
 
   final buildScriptsCommandFile =
-      commandFolder.file('build/build_scripts_command.dart');
+      commandFolder.file('build_commands/build_scripts_command.dart');
   buildScriptsCommandFile.writeAsStringSync(
     replaceTemplateDependencies(
       PluginContext.installerPlugin.root
