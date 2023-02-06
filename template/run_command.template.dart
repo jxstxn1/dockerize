@@ -60,7 +60,13 @@ class RunCommand extends Command {
     checkDockerInstall(logger);
 
     if (!isPortValid(port, logger)) {
-      exit(1);
+      exitCode = 1;
+      return;
+    }
+
+    if (!isDockerRunning(logger)) {
+      exitCode = 1;
+      return;
     }
 
     /// Stopping all other running containers from the project
