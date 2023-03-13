@@ -70,8 +70,8 @@ Future<void> createDockerImage(
     [
       'buildx',
       'build',
-      '-t',
       ...buildArgs,
+      '-t',
       '$containerName:$environmentName',
       '.',
     ],
