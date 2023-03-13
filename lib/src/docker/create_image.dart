@@ -5,6 +5,8 @@ import 'package:mason_logger/mason_logger.dart';
 import 'package:sidekick_core/sidekick_core.dart' hide Progress;
 
 /// Creates a docker image
+///
+/// Use [buildArgs] to pass additional arguments to the docker build command.
 Future<void> createDockerImage(
   String environmentName, {
   String? mainProjectName,
@@ -13,6 +15,7 @@ Future<void> createDockerImage(
   required Logger logger,
   bool buildScripts = true,
   bool buildFlutter = true,
+  List<String> buildArgs = const [],
 }) async {
   final containerName = mainProjectName ?? mainProject!.name;
   if (buildFlutter) {
@@ -68,6 +71,7 @@ Future<void> createDockerImage(
       'buildx',
       'build',
       '-t',
+      ...buildArgs,
       '$containerName:$environmentName',
       '.',
     ],
