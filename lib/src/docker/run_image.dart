@@ -17,6 +17,7 @@ Future<void> runImage({
   required DartPackage? mainProject,
   required bool withoutHotReload,
   String? port,
+  List<String> buildArgs = const [],
 }) async {
   final mainProjectName = mainProject?.name ?? 'app';
   final projectRoot = SidekickContext.projectRoot;
@@ -137,6 +138,7 @@ Future<void> runImage({
           buildFlutter: reloadAll,
           workingDirectoryPath:
               SidekickContext.projectRoot.directory('server').path,
+          buildArgs: buildArgs,
         );
         final progress = logger.progress('[dockerize] Starting image...');
         runImage();
