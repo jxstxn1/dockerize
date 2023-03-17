@@ -84,6 +84,11 @@ Here are the official guides for the biggest cloud providers:
 By default we are generating a very simple way of handling different environments.
 You can change the environments in the `commands/docker/environment.dart` file.
 
+#### Build args
+
+You can easily pass arguments to your docker file.
+To do this you can just pass the build args into the `createDockerImage` function in the `commands/docker/build_image_command.dart` file.
+
 #### Script hashes
 
 By default we are generating script hashes for each script tag in your index.html file.

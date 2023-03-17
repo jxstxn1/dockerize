@@ -15,6 +15,9 @@ Future<void> createDockerImage(
   required Logger logger,
   bool buildScripts = true,
   bool buildFlutter = true,
+
+  /// Build arguments to pass into the docker command
+  /// `--build-arg` will be added to each argument automatically
   List<String> buildArgs = const [],
 }) async {
   final containerName = mainProjectName ?? mainProject!.name;
@@ -70,7 +73,7 @@ Future<void> createDockerImage(
     [
       'buildx',
       'build',
-      ...buildArgs,
+      for (final buildArg in buildArgs) ...['--build-arg', buildArg],
       '-t',
       '$containerName:$environmentName',
       '.',
