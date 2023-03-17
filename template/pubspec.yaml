@@ -19,3 +19,6 @@ dependencies:
 
 dev_dependencies: 
   lint: '>=1.7.0 <2.0.0'
+
+format:
+  line-length: 80
