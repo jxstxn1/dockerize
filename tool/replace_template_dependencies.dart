@@ -14,6 +14,7 @@ List<String> replaceTemplateDependencies(
     ..removeWhere(
       (element) =>
           element.contains('//template import') ||
+          element.contains('// template import') ||
           element.contains('installed import'),
     );
 }
