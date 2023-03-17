@@ -20,7 +20,7 @@ final appDirectory = runsLocally
     ? Directory('server/www').path
     : Platform.environment['APP_DIRECTORY'] ?? 'www';
 
-void main(List<String> args) async {
+Future<void> serverMain(List<String> args) async {
   final app = Router();
   // For Google Cloud Run, we respect the PORT environment variable
   final portStr = Platform.environment['PORT'];

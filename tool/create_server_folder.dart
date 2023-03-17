@@ -9,8 +9,9 @@ Future<void> createServerFolder(SidekickPackage package) async {
   final serverFolder =
       SidekickContext.projectRoot.directory('server').createIfNotExists();
   serverFolder.directory('bin').createIfNotExists();
+  serverFolder.directory('lib/src').createIfNotExists();
 
-  serverFolder.file('bin/server.dart').writeAsStringSync(
+  serverFolder.file('lib/src/server.dart').writeAsStringSync(
         replaceTemplateDependencies(
           PluginContext.installerPlugin.root
               .file('template/server.template.dart')
@@ -19,7 +20,16 @@ Future<void> createServerFolder(SidekickPackage package) async {
         ).join('\n'),
       );
 
-  serverFolder.file('bin/middlewares.dart').writeAsStringSync(
+  serverFolder.file('bin/main.dart').writeAsStringSync(
+        replaceTemplateDependencies(
+          PluginContext.installerPlugin.root
+              .file('template/main.template.dart')
+              .readAsLinesSync(),
+          package.cliName,
+        ).join('\n'),
+      );
+
+  serverFolder.file('lib/src/middlewares.dart').writeAsStringSync(
         PluginContext.installerPlugin.root
             .file('template/middlewares.template.dart')
             .readAsStringSync(),
