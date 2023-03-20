@@ -98,6 +98,7 @@ Future<void> main() async {
         "import 'package:${package.name}/src/commands/dockerize/docker_command.dart';",
     command: 'DockerCommand()',
   );
+
   print(
     'Run: ${package.cliName} docker --help to see all commands and options',
   );

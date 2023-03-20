@@ -37,6 +37,7 @@ Future<void> createDockerImage(
       buildProgess.fail('[dockerize] Failed to build flutter app 😢');
       logger.err(process.stdout.toString());
       logger.err(process.stderr.toString());
+      exit(1);
     }
   }
   if (buildScripts) {
@@ -58,6 +59,7 @@ Future<void> createDockerImage(
       buildProgess.fail('[dockerize] Failed to execute BuildScripts 😢');
       logger.err(process.stdout.toString());
       logger.err(process.stderr.toString());
+      exit(1);
     }
   }
 
@@ -83,6 +85,7 @@ Future<void> createDockerImage(
     buildProgess.fail('[dockerize] Failed to build Docker Image 😢');
     logger.err(process.stdout.toString());
     logger.err(process.stderr.toString());
+    exit(1);
   }
   garbageCollector(logger: logger);
   logger.info(

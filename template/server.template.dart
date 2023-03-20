@@ -7,7 +7,7 @@ import 'package:shelf_static/shelf_static.dart';
 
 import 'middlewares.template.dart'; //template import
 /* installed import
-import 'middlewares.dart';
+import 'package:dockerize_server/src/middlewares.dart';
 installed import */
 
 /// Whether the app runs locally or on Google Cloud Run
