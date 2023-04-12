@@ -39,7 +39,7 @@ class BuildScriptsCommand extends Command {
           .directory('server/www')
           .file('index.html'),
       middlewareFile:
-          SidekickContext.projectRoot.file('server/bin/middlewares.dart'),
+          SidekickContext.projectRoot.file('server/lib/src/middlewares.dart'),
     );
 
     // Enabling the enforceCSP flag will enforce the Content Security Policy
@@ -47,7 +47,7 @@ class BuildScriptsCommand extends Command {
     enforceCSP(
       shouldEnforce: env.shouldEnforceCSP,
       middlewareFile:
-          SidekickContext.projectRoot.file('server/bin/middlewares.dart'),
+          SidekickContext.projectRoot.file('server/lib/src/middlewares.dart'),
     );
 
     // Custom logic can be added here after the Flutter application has been

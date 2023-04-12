@@ -7,7 +7,7 @@ import 'package:shelf_static/shelf_static.dart';
 
 import 'middlewares.template.dart'; //template import
 /* installed import
-import 'middlewares.dart';
+import 'package:dockerize_server/src/middlewares.dart';
 installed import */
 
 /// Whether the app runs locally or on Google Cloud Run
@@ -20,7 +20,7 @@ final appDirectory = runsLocally
     ? Directory('server/www').path
     : Platform.environment['APP_DIRECTORY'] ?? 'www';
 
-void main(List<String> args) async {
+Future<void> serverMain(List<String> args) async {
   final app = Router();
   // For Google Cloud Run, we respect the PORT environment variable
   final portStr = Platform.environment['PORT'];
