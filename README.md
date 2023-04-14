@@ -17,7 +17,7 @@ with having [docker](https://www.docker.com/) and [sidekick](https://pub.dev/pac
 
 ```bash
 <<your_cli>> sidekick plugins install dockerize_sidekick_plugin
-<<your_cli>> docker run -b
+<<your_cli>> docker run
 ```
 
 ### Docker
@@ -37,8 +37,7 @@ To run this locally you need [Docker](https://docs.docker.com/get-docker/) insta
 There are multiple build commands available for this plugin. Here is a brief overview:
 
 - `<<your_cli>> docker build app`: Runs a basic Flutter build web command
-- `<<your_cli>> docker build scripts`: Runs all the required scripts to move files to the right place or hash scripts from the index.html
-- `<<your_cli>> docker build image`: Builds the Docker image and also executes the app and scripts build commands
+- `<<your_cli>> docker build image`: Builds the Docker image and also executes the app
 You can choose between different environments using the --env flag. The default environment is dev. You can customize the build process in the commands/build folder.
 
 #### Run the Docker Image Locally
@@ -54,11 +53,6 @@ This will run the app and make it accessible at `localhost:8000`.
 Notice:
 A hot-reload is enabled, which will rerun the required build commands if you change a file. You can detach and kill the container by pressing `Ctrl + C`.
 
-You can use the following flags to customize the run command:
-
-- `-b, --build-all`: Executes all build commands before running the container (Recommended if you just changed something in the project)
-- `-build-scripts`: Executes the scripts build command before running the container (Recommended if you just changed something in the server/ folder)
-- `--build-image`: Executes the image build command before running the container (Recommended if you just changed something in the Dockerfile)
 - `-p, --port`: Specifies the port on which the app is accessible.
 The build command can choose between different environments. The default environment is `dev`. You can change the environment with the `--env` flag.
 
@@ -120,7 +114,7 @@ Feel free to open an issue or send a pull request.
 ### License
 
    ```Text
-   Copyright 2022 Justin Baumann, Robin Schönau
+   Copyright 2023 Justin Baumann, Robin Schönau
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
