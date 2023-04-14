@@ -8,8 +8,7 @@ installed import */
 
 class BuildImageCommand extends Command {
   @override
-  String get description =>
-      'Build the docker image and runs build app and build scripts before';
+  String get description => 'Build the docker image and runs build app';
 
   @override
   String get name => 'image';

@@ -3,8 +3,7 @@ import 'package:sidekick_core/sidekick_core.dart';
 
 class BuildAppCommand extends Command {
   @override
-  String get description =>
-      'Build the Flutter Web App and runs the build scripts';
+  String get description => 'Build the Flutter Web App';
 
   @override
   String get name => 'app';
