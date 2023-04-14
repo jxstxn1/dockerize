@@ -6,3 +6,7 @@
 # Test Related Files
 
 coverage/
+
+# Build Related Files
+
+build/

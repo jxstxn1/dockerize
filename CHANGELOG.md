@@ -1,3 +1,14 @@
+## 0.5.0
+
+- Add dockerize_data
+
+## 0.4.0
+
+- **Breaking: You have to reinstall dockerize_sidekick_plugin to use this version.**
+- Refactored server folder
+- Allow injecting docker build arguments by @passsy
+- Check if docker engine is running by @passsy
+
 ## 0.3.2
 
 - Fix: Automatically ignored build-folder
