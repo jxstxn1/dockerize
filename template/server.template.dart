@@ -1,6 +1,6 @@
 import 'dart:io';
 /* installed import
-import 'package:dockerize_server/src/middlewares.dart';
+import 'package:dockerize_server/src/server/middlewares.dart';
 installed import */
 import 'package:shelf/shelf.dart' as shelf;
 import 'package:shelf/shelf_io.dart' as io;
