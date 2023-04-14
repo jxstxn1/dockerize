@@ -2,7 +2,7 @@ FROM dart:stable AS build
 # Copy shared submodule package
 WORKDIR /app
 COPY pubspec.* ./
-COPY /bin/ ./bin/
+COPY /.dockerize_build/ ./bin/
 COPY /lib/ ./lib/
 
 RUN dart pub get
