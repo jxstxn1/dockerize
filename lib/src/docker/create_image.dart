@@ -2,6 +2,7 @@ import 'dart:io' as io;
 
 import 'package:dockerize_sidekick_plugin/dockerize_sidekick_plugin.dart';
 import 'package:dockerize_sidekick_plugin/src/docker/collect_garbage.dart';
+import 'package:dockerize_sidekick_plugin/src/util/create_registrant.dart';
 import 'package:sidekick_core/sidekick_core.dart' hide Progress;
 
 /// Creates a docker image
@@ -42,18 +43,29 @@ Future<void> createDockerImage({
     }
   }
 
+  writeToVersionFile(
+    versionFile: SidekickContext.projectRoot.file('server/www/version.json'),
+    entries: environment.versionFileEntries,
+  );
   final hashes = hashScripts(
     hashType: sha256,
     logger: logger,
     htmlFile:
         SidekickContext.projectRoot.directory('server/www').file('index.html'),
-    middlewareFile:
-        SidekickContext.projectRoot.file('server/bin/middlewares.dart'),
   );
 
-  writeToVersionFile(
-    versionFile: SidekickContext.projectRoot.file('server/www/version.json'),
-    entries: environment.versionFileEntries,
+  final dockerizeBuildDir =
+      SidekickContext.projectRoot.directory('server/.dockerize_build');
+  if (dockerizeBuildDir.existsSync()) {
+    dockerizeBuildDir.deleteSync(recursive: true);
+  }
+  dockerizeBuildDir.createSync();
+
+  createDockerizeRegistrant(
+    registrantDir: dockerizeBuildDir,
+    cspHashes: hashes,
+    shouldEnforceCsp: environment.shouldEnforceCSP,
+    logger: logger,
   );
 
   final buildProgess = logger.progress(

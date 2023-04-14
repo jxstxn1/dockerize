@@ -10,7 +10,6 @@ List<String> hashScripts({
   required Hash hashType,
   required Logger logger,
   required File htmlFile,
-  required File middlewareFile,
 }) {
   // reading html file as string
   final htmlString = htmlFile.readAsStringSync();
@@ -25,7 +24,7 @@ List<String> hashScripts({
     return [];
   }
 
-  logger.progress('[dockerize] Detected ${scripts.length} scripts to hash');
+  logger.info('[dockerize] Detected ${scripts.length} scripts to hash');
 
   // hashing the scripts
   return hasher(scripts, hashType, htmlString, logger: logger);
