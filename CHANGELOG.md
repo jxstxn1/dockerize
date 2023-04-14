@@ -1,3 +1,7 @@
+## 0.5.0
+
+- Add dockerize_data
+
 ## 0.4.0
 
 - **Breaking: You have to reinstall dockerize_sidekick_plugin to use this version.**
