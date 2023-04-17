@@ -29,7 +29,7 @@ class DockerizeEnvironments {
   static const DockerizeEnvironment prod = DockerizeEnvironment(
     'prod',
     versionFileEntries: {
-      'environment': 'staging',
+      'environment': 'prod',
       // You can add any other information you want to the version.json file here
     },
     shouldEnforceCSP: true,
