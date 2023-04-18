@@ -17,19 +17,6 @@ class RunCommand extends Command {
 
   RunCommand() {
     argParser.addFlag(
-      'build-all',
-      abbr: 'b',
-      help: 'Calls all build commands before running',
-    );
-    argParser.addFlag(
-      'build-scripts',
-      help: 'Runs the build scripts before running',
-    );
-    argParser.addFlag(
-      'build-image',
-      help: 'Builds the docker image before running',
-    );
-    argParser.addFlag(
       'without-hot-reload',
       help: 'Run the app without hot reload',
     );
@@ -51,9 +38,6 @@ class RunCommand extends Command {
     final String environmentName = argResults!['env'] as String? ?? 'dev';
     final DockerizeEnvironment env =
         _environments.firstWhere((it) => it.name == environmentName);
-    final withBuildAll = argResults!['build-all'] as bool;
-    final withBuildScripts = argResults!['build-scripts'] as bool;
-    final withBuildImage = argResults!['build-image'] as bool;
     final port = argResults?['port'] as String? ?? '8000';
     final withoutHotReload = argResults!['without-hot-reload'] as bool;
 
@@ -76,27 +60,13 @@ class RunCommand extends Command {
       mainProjectName: mainProject!.name,
       workingDirectory: SidekickContext.projectRoot.directory('server'),
     );
-
-    if (withBuildAll || withBuildScripts) {
-      await createDockerImage(
-        env.name,
-        entryPointPath: SidekickContext.entryPoint.path,
-        logger: logger,
-        buildFlutter: !withBuildScripts,
-        workingDirectoryPath:
-            SidekickContext.projectRoot.directory('server').path,
-      );
-    } else if (withBuildImage) {
-      await createDockerImage(
-        env.name,
-        entryPointPath: SidekickContext.entryPoint.path,
-        logger: logger,
-        buildScripts: false,
-        buildFlutter: false,
-        workingDirectoryPath:
-            SidekickContext.projectRoot.directory('server').path,
-      );
-    }
+    await createDockerImage(
+      entryPointPath: SidekickContext.entryPoint.path,
+      logger: logger,
+      workingDirectoryPath:
+          SidekickContext.projectRoot.directory('server').path,
+      environment: env,
+    );
 
     logger.info(
       '[dockerize] Running ${mainProject!.name} on http://localhost:$port',
@@ -109,9 +79,9 @@ class RunCommand extends Command {
     logger.warn('[dockerize] Press ctrl-c to stop the app');
 
     runImage(
+      environment: env,
       port: port,
       mainProject: mainProject,
-      environmentName: env.name,
       withoutHotReload: withoutHotReload,
     );
   }

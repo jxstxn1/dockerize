@@ -13,9 +13,9 @@ typedef DirectoryWatcherBuilder = DirectoryWatcher Function(
 
 /// Starting the docker image
 Future<void> runImage({
-  required String environmentName,
   required DartPackage? mainProject,
   required bool withoutHotReload,
+  required EnvironmentBase environment,
   String? port,
   List<String> buildArgs = const [],
 }) async {
@@ -39,7 +39,7 @@ Future<void> runImage({
         '$port:8080',
         '--name',
         mainProjectName,
-        '$mainProjectName:$environmentName',
+        '$mainProjectName:${environment.name}',
       ],
     );
 
@@ -131,13 +131,13 @@ Future<void> runImage({
           logger: logger,
         );
         await createDockerImage(
-          environmentName,
           entryPointPath: requiredEntryPoint.path,
           logger: logger,
           mainProjectName: mainProjectName,
           buildFlutter: reloadAll,
           workingDirectoryPath:
               SidekickContext.projectRoot.directory('server').path,
+          environment: environment,
           buildArgs: buildArgs,
         );
         final progress = logger.progress('[dockerize] Starting image...');

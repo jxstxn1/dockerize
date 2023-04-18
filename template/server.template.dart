@@ -1,14 +1,13 @@
 import 'dart:io';
-
+/* installed import
+import 'package:dockerize_server/src/server/middlewares.dart';
+installed import */
 import 'package:shelf/shelf.dart' as shelf;
 import 'package:shelf/shelf_io.dart' as io;
 import 'package:shelf_router/shelf_router.dart';
 import 'package:shelf_static/shelf_static.dart';
 
 import 'middlewares.template.dart'; //template import
-/* installed import
-import 'package:dockerize_server/src/middlewares.dart';
-installed import */
 
 /// Whether the app runs locally or on Google Cloud Run
 const bool runsLocally = bool.fromEnvironment('runs-locally');
@@ -35,11 +34,11 @@ Future<void> serverMain(List<String> args) async {
     useHeaderBytesForContentType: true,
   );
 
-  final handleGet = const shelf.Pipeline()
+  final handle = const shelf.Pipeline()
       .addMiddleware(middlewares([]))
       .addHandler(serveApp);
 
-  app.get('/<anything|.*>', handleGet);
+  app.all('/<anything|.*>', handle);
 
   await io.serve(
     app,

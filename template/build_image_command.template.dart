@@ -8,8 +8,7 @@ installed import */
 
 class BuildImageCommand extends Command {
   @override
-  String get description =>
-      'Build the docker image and runs build app and build scripts before';
+  String get description => 'Build the docker image and runs build app';
 
   @override
   String get name => 'image';
@@ -27,29 +26,22 @@ class BuildImageCommand extends Command {
       help: 'Runs build app before',
       defaultsTo: true,
     );
-    argParser.addFlag(
-      'build-scripts',
-      help: 'Runs build scripts before',
-      defaultsTo: true,
-    );
   }
 
   @override
   Future<void> run() async {
     final logger = Logger();
     final bool buildApp = argResults!['build-app'] as bool;
-    final bool buildScripts = argResults!['build-scripts'] as bool;
     final String environmentName = argResults!['env'] as String? ?? 'dev';
     final DockerizeEnvironment env =
         _environments.firstWhere((it) => it.name == environmentName);
     checkDockerInstall(logger);
 
     await createDockerImage(
-      env.name,
       logger: logger,
       entryPointPath: SidekickContext.entryPoint.path,
       buildFlutter: buildApp,
-      buildScripts: buildScripts,
+      environment: env,
       workingDirectoryPath:
           SidekickContext.projectRoot.directory('server').path,
     );

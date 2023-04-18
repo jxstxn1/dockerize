@@ -66,17 +66,6 @@ Future<void> main() async {
     ).join('\n'),
   );
 
-  final buildScriptsCommandFile =
-      commandFolder.file('build_commands/build_scripts_command.dart');
-  buildScriptsCommandFile.writeAsStringSync(
-    replaceTemplateDependencies(
-      PluginContext.installerPlugin.root
-          .file('template/build_scripts_command.template.dart')
-          .readAsLinesSync(),
-      package.cliName,
-    ).join('\n'),
-  );
-
   final runCommandFile = commandFolder.file('run_command.dart');
   runCommandFile.writeAsStringSync(
     replaceTemplateDependencies(

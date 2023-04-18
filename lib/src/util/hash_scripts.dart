@@ -6,11 +6,10 @@ import 'package:html/parser.dart' show parse;
 import 'package:mason_logger/mason_logger.dart';
 import 'package:sidekick_core/sidekick_core.dart' hide Progress;
 
-void hashScripts({
+List<String> hashScripts({
   required Hash hashType,
   required Logger logger,
   required File htmlFile,
-  required File middlewareFile,
 }) {
   // reading html file as string
   final htmlString = htmlFile.readAsStringSync();
@@ -22,33 +21,13 @@ void hashScripts({
   final scripts = getScripts(htmlDocumentFile);
   if (scripts.isEmpty) {
     logger.info('[dockerize] No scripts found to hash');
-    return;
+    return [];
   }
-  final progress =
-      logger.progress('[dockerize] Detected ${scripts.length} scripts to hash');
+
+  logger.info('[dockerize] Detected ${scripts.length} scripts to hash');
 
   // hashing the scripts
-  final hashedScripts = hasher(scripts, hashType, htmlString, logger: logger);
-  progress.update('[dockerize]  Inserting Scripts into middlewares.dart');
-
-  // inserting the hashed scripts into the middlewares.dart file
-  insertScripts(hashedScripts, middlewareFile);
-  progress.complete('[dockerize]  Finished hashing scripts');
-}
-
-/// Inserting the hashed scripts into the middlewares.dart file
-void insertScripts(List<String> hashedScript, File middlewareFile) {
-  final middlewareFileContent = middlewareFile.readAsStringSync();
-  final RegExp regex = RegExp(
-    r'const List<String> hashes = \[(.*?)\]',
-    multiLine: true,
-    dotAll: true,
-  );
-  final String newContent = middlewareFileContent.replaceAll(
-    regex,
-    'const List<String> hashes = $hashedScript',
-  );
-  middlewareFile.writeAsStringSync(newContent);
+  return hasher(scripts, hashType, htmlString, logger: logger);
 }
 
 /// Get all the scripts from the html file
