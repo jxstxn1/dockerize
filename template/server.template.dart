@@ -38,7 +38,7 @@ Future<void> serverMain(List<String> args) async {
       .addMiddleware(middlewares([]))
       .addHandler(serveApp);
 
-  app.get('/<anything|.*>', handleGet);
+  app.all('/<anything|.*>', handleGet);
 
   await io.serve(
     app,
