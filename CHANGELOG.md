@@ -1,3 +1,13 @@
+## 0.6.0
+
+- **Breaking: You have to reinstall dockerize_sidekick_plugin to use this version.**
+- Environments are now abstract
+- run will automatically call build
+- removed build_scripts command
+- Solved the issue that every build changes your git diff
+- add dockerize_registrant
+- handle handles all requests
+
 ## 0.5.0
 
 - Add dockerize_data
