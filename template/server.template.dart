@@ -34,11 +34,11 @@ Future<void> serverMain(List<String> args) async {
     useHeaderBytesForContentType: true,
   );
 
-  final handleGet = const shelf.Pipeline()
+  final handle = const shelf.Pipeline()
       .addMiddleware(middlewares([]))
       .addHandler(serveApp);
 
-  app.all('/<anything|.*>', handleGet);
+  app.all('/<anything|.*>', handle);
 
   await io.serve(
     app,
