@@ -1,7 +1,6 @@
 name: dockerize_server
 description: A new Dockerized Flutter App
 
-
 publish_to: 'none'
 
 version: 1.0.0+1
