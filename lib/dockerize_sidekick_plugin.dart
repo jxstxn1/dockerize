@@ -1,5 +1,3 @@
-library dockerize_sidekick_plugin;
-
 export 'package:crypto/crypto.dart' show sha256, sha384, sha512;
 export 'package:mason_logger/mason_logger.dart';
 
