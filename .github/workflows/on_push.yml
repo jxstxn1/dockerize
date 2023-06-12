@@ -8,7 +8,7 @@ jobs:
   build:
       uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/dart_package.yml@v1
       with:
-        dart_sdk: "2.19.0"
+        dart_sdk: "3.0.0"
         platform: "vm"
         min_coverage: 0
   coverage:
@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     
     container:
-      image:  dart:2.19
+      image:  dart:3.0.0
     
     steps:
     - uses: actions/checkout@v2
