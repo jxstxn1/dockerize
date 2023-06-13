@@ -75,7 +75,6 @@ Future<void> createDockerImage({
   final process = await io.Process.run(
     'docker',
     [
-      'buildx',
       'build',
       for (final buildArg in buildArgs) ...['--build-arg', buildArg],
       '-t',
