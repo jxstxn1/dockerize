@@ -1,3 +1,7 @@
+## 0.8.1
+
+- use max. 5 topics in pubspec.yaml
+
 ## 0.8.0
 
 - **Breaking: You have to reinstall dockerize_sidekick_plugin to use this version.**
