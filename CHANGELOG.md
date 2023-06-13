@@ -1,3 +1,7 @@
+## 0.7.0
+
+- Upgrade to Dart 3.0.0
+
 ## 0.6.0
 
 - **Breaking: You have to reinstall dockerize_sidekick_plugin to use this version.**
