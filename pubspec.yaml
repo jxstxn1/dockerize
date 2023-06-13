@@ -4,6 +4,12 @@ version: 0.7.0
 repository: https://github.com/jxstxn1/dockerize_sidekick_plugin/tree/main
 issue_tracker: https://github.com/jxstxn1/dockerize_sidekick_plugin/issues
 
+topics:
+  - sidekick
+  - cli
+  - docker
+  - sidekick-plugin
+
 environment:
   sdk: '>=3.0.0 <4.0.0'
 
@@ -20,4 +26,4 @@ dev_dependencies:
   lint: ^2.0.0
   mocktail: ^0.3.0
   sidekick_plugin_installer: ^1.1.0
-  test: ^1.22.0
+  test: ^1.24.0
