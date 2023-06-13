@@ -41,7 +41,7 @@ Future<void> serverMain(List<String> args) async {
   app.all('/<anything|.*>', handle);
 
   await io.serve(
-    app,
+    app.call,
     _hostname,
     port!,
     poweredByHeader: null,

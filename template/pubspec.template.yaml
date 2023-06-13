@@ -6,17 +6,19 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  dockerize_sidekick_plugin: ">=0.5.0 <1.0.0"
+  dockerize_sidekick_plugin: 
+    git:
+      url: https://github.com/robiness/dockerize_sidekick_plugin.git
   shelf: ^1.4.0
-  shelf_helmet: ^1.1.0
+  shelf_helmet: ^2.1.0
   shelf_router: ^1.1.3
   shelf_static: ^1.1.0
 
 dev_dependencies: 
-  lint: '>=1.7.0 <2.0.0'
+  lint: '>=2.1.0 <3.0.0'
 
 format:
   line_length: 120
