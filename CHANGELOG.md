@@ -1,3 +1,10 @@
+## 0.8.0
+
+- **Breaking: You have to reinstall dockerize_sidekick_plugin to use this version.**
+- Migrate Server folder to Dart >3.0.0
+- Use newest helmet version
+- Go back to build
+
 ## 0.7.0
 
 - Upgrade to Dart 3.0.0
