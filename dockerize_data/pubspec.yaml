@@ -1,5 +1,5 @@
 name: dockerize_data
-description: Simple Data Package to release dockerize_data independent of dockerize
+description: Simple Data Package to release dockerize_data independent of dockerize.
 version: 0.0.1
 repository: https://github.com/jxstxn1/dockerize_sidekick_plugin/tree/main
 issue_tracker: https://github.com/jxstxn1/dockerize_sidekick_plugin/issues
