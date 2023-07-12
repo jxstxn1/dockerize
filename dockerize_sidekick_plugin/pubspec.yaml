@@ -16,6 +16,9 @@ environment:
 
 dependencies:
   crypto: ^3.0.2
+  # TODO: replace as soon as dockerize_data is published
+  dockerize_data:
+    path: ../dockerize_data
   html: ^0.15.1
   mason_logger: ^0.2.3
   path: ^1.8.3

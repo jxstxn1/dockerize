@@ -1,4 +1,4 @@
-import 'package:dockerize_sidekick_plugin/dockerize_sidekick_plugin.dart';
+import 'package:dockerize_data/dockerize_data.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_helmet/shelf_helmet.dart';
 

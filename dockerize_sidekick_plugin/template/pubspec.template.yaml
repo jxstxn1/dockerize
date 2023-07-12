@@ -9,6 +9,8 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
+  dockerize_data: 
+    path: ../../dockerize_data
   dockerize_sidekick_plugin: ^0.7.0
   shelf: ^1.4.0
   shelf_helmet: ^2.1.0

@@ -1,13 +1,21 @@
-name: On Push
-on: [push]
+name: On Push Dockerize Plugin
+on:
+  push:
+    paths-ignore:
+      - 'dockerize_data/**'
+      - 'dockerize_cli/**'
+      - 'dockerize/**'
+      - 'dockerize_sidekick/**'
 jobs:
   check_pana_score:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/pana.yml@v1
     with:
       min_score: 130
+      working_directory: "./dockerize_sidekick_plugin"
   build:
       uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/dart_package.yml@v1
       with:
+        working_directory: "./dockerize_sidekick_plugin"
         dart_sdk: "3.0.0"
         platform: "vm"
         min_coverage: 0
@@ -17,6 +25,10 @@ jobs:
     
     container:
       image:  dart:3.0.0
+    
+    defaults:
+      run:
+        working-directory: ./dockerize_sidekick_plugin
     
     steps:
     - uses: actions/checkout@v2

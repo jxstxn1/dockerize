@@ -1,0 +1,11 @@
+# OS Related Files
+
+.DS_Store
+
+# Test Related Files
+
+coverage/
+
+# Build Related Files
+
+build/
