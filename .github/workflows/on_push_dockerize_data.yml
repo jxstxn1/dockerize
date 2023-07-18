@@ -1,4 +1,4 @@
-name: On Push Dockerize Data
+name: On Push dockerize_data
 on:
   push:
     paths-ignore:

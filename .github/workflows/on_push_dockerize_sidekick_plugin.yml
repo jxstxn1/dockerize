@@ -1,4 +1,4 @@
-name: On Push Dockerize Plugin
+name: On Push dockerize_sidekick_plugin
 on:
   push:
     paths-ignore:
