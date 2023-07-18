@@ -9,8 +9,7 @@ environment:
 
 dependencies:
   dcli: ^2.0.0
-  dockerize_data: 
-    path: ../../dockerize_data
+  dockerize_data: ^0.0.1
   dockerize_sidekick_plugin:
     path: ../
   shelf: ^1.4.0

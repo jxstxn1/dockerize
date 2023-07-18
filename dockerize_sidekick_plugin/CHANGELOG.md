@@ -1,3 +1,8 @@
+## 0.9.0
+
+- **Breaking: You have to reinstall dockerize_sidekick_plugin to use this version.**
+- Using dockerize_data as data container
+
 ## 0.8.0
 
 - **Breaking: You have to reinstall dockerize_sidekick_plugin to use this version.**
