@@ -1,3 +1,6 @@
+/// Library which is containing the source code for the dockerize data package
+library dockerize_data;
+
 class DockerizeData {
   DockerizeData._();
 

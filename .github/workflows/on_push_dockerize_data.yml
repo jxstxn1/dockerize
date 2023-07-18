@@ -1,0 +1,46 @@
+name: On Push Dockerize Data
+on:
+  push:
+    paths-ignore:
+      - 'dockerize_sidekick_plugin/**'
+      - 'dockerize_cli/**'
+      - 'dockerize/**'
+      - 'dockerize_sidekick/**'
+jobs:
+  check_pana_score:
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/pana.yml@v1
+    with:
+      working_directory: "./dockerize_data"
+      min_score: 130
+  build:
+      uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/dart_package.yml@v1
+      with:
+        working_directory: "./dockerize_data"
+        dart_sdk: "3.0.0"
+        platform: "vm"
+        min_coverage: 0
+  coverage:
+
+    runs-on: ubuntu-latest
+    
+    container:
+      image:  dart:3.0.0
+    defaults:
+        run:
+          working-directory: ./dockerize_data
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install coverage
+      run: dart pub global activate coverage 1.2.0
+    - name: Install dependencies
+      run: dart pub get    
+    - name: Run tests with coverage
+      run: dart run test --coverage="coverage"
+    - name: Convert coverage to ICOV
+      run: dart run coverage:format_coverage --lcov --in=coverage --out=coverage.lcov --report-on=lib
+    - name: Upload coverage to Codecov  
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{secrets.CODECOV_TOKEN}}
+        file: coverage.lcov

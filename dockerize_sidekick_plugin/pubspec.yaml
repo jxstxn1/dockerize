@@ -1,7 +1,7 @@
 name: dockerize_sidekick_plugin
 description: Lets you easily generate a Docker Container for your Flutter Web App.
 version: 0.8.0
-repository: https://github.com/jxstxn1/dockerize_sidekick_plugin/tree/main
+repository: https://github.com/jxstxn1/dockerize_sidekick_plugin/dockerize_sidekick_plugin/
 issue_tracker: https://github.com/jxstxn1/dockerize_sidekick_plugin/issues
 
 topics:
@@ -16,6 +16,9 @@ environment:
 
 dependencies:
   crypto: ^3.0.2
+  # TODO: replace as soon as dockerize_data is published
+  dockerize_data:
+    path: ../dockerize_data
   html: ^0.15.1
   mason_logger: ^0.2.3
   path: ^1.8.3
